@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { cookie } from '@/lib/cookie';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function LoginForm() {
 
     // Set fake auth cookie (expires in 1 day)
     const expires = new Date(Date.now() + 86400_000).toUTCString();
-    document.cookie = `auth-token=fake-token-abc123; path=/; expires=${expires}`;
+    cookie.set('auth-token', 'fake-token-abc123', 1);
 
     router.push('/dashboard');
   };

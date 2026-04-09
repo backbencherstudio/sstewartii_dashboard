@@ -3,9 +3,11 @@ import SidebarMenu from './SidebarMenu';
 
 const Sidebar: React.FC = () => {
   return (
-    <aside className='w-64 bg-gray-100 h-full p-4'>
-      <h2 className='text-xl font-bold mb-4'>Dashboard</h2>
+    <aside className='w-64 bg-gray-100 h-screen'>
+      <h2 className='text-xl font-bold h-14 border'>Dashboard</h2>
       <SidebarMenu />
+
+
     </aside>
   );
 };

@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -20,4 +18,8 @@
     color: var(--foreground);
     font-family: var(--font-inter), var(--font-lora);
   }
+}
+
+button {
+  cursor: pointer;
 }

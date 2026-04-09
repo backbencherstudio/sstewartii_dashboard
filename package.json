@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "generate:auth": "powershell ./scripts/createAuthPages.ps1"
+    "generate:auth": "powershell ./scripts/createAuthPages.ps1",
+    "g:page": "powershell -File ./scripts/createDashboardPage.ps1"
+
   },
   "dependencies": {
     "next": "16.2.3",
