@@ -1,16 +1,14 @@
 import DashboardLayout from "@/components/layout/DashboardLayout/DashboardLayout";
-
+import { Providers } from "@/components/Providers";
 
 export default function DashboardRootLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    return (
-        <DashboardLayout>
-
-            {children}
-
-        </DashboardLayout>
-    );
+  return (
+    <Providers>
+      <DashboardLayout>{children}</DashboardLayout>
+    </Providers>
+  );
 }
