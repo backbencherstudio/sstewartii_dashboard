@@ -13,7 +13,7 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   
-  const token = request.cookies.get('auth-token')?.value ;
+  const token = request.cookies.get("access-token")?.value;
 
   const isPublicPath = PUBLIC_PATHS.some((path) =>
     pathname.startsWith(path)
