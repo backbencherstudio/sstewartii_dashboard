@@ -67,28 +67,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
             ${open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}
           `}
                 >
-                    {/* <div className="ml-4 mt-1 flex flex-col gap-1  border-gray-300 pl-3 relative">
-            <div className="absolute left-0 top-0 w-0.5 h-[calc(100%-1rem)] bg-gray-300 mt-0.5" />
-            {children.map((child) => {
-              const isChildItemActive = pathname === child.href;
-              return (
-                <Link
-                  key={child.label}
-                  href={child.href}
-                  className={`
-                    text-sm px-2 py-1.5 rounded-md transition-colors duration-150 relative
-                    ${isChildItemActive
-                        ? 'text-gray-900 font-medium'
-                        : 'text-gray-500 hover:text-gray-900 hover:bg-gray-200'
-                      }
-                    ${isChildItemActive ? 'before:content-[""] before:absolute before:left-0 before:top-0 before:w-0.5 before:h-[calc(100%-1rem)] before:bg-gray-300 before:mt-0.5' : ''}
-                  `}
-                >
-                  {child.label}
-                </Link>
-              );
-            })}
-          </div> */}
+                   
 
                     <div className="ml-6 flex flex-col relative">
                         {/* The main vertical line - stops early to avoid overhang */}
@@ -98,23 +77,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                             const isActive = pathname === child.href;
 
                             return (
-                                <Link
-                                    key={child.label}
-                                    href={child.href}
-                                    className={`
-              relative flex items-center py-2 pl-6 text-sm transition-colors duration-150
-              ${isActive ? 'text-gray-800 font-semibold' : 'text-gray-600  hover:text-gray-800'}
-              
-              /* The horizontal curved connector */
-            
-              before:absolute before:left-0 before:top-1/3 
-              before:-translate-y-1/2 before:w-5 before:h-4 
-              before:border-l before:border-b before:border-gray-600 
-              before:rounded-bl-md
-            `}
-                                >
-                                    {child.label}
-                                </Link>
+                              <ChildItem key={child.label} label={child.label} href={child.href} isActive={isActive} />
                             );
                         })}
                     </div>
@@ -143,3 +106,32 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
 };
 
 export default SidebarItem;
+
+
+// Child Item Component
+interface ChildItemProps {
+    label: string;
+    href: string;
+    isActive: boolean;
+}
+const ChildItem: React.FC<ChildItemProps> = ({ label, href, isActive }) => {
+    return (
+        <Link
+            key={label}
+            href={href}
+            className={`
+relative flex items-center py-2 pl-6 text-sm transition-colors duration-150
+${isActive ? 'text-gray-800 font-semibold' : 'text-gray-600  hover:text-gray-800'}
+
+/* The horizontal curved connector */
+
+before:absolute before:left-0 before:top-1/3 
+before:-translate-y-1/2 before:w-5 before:h-4 
+before:border-l before:border-b before:border-gray-600 
+before:rounded-bl-md
+`}
+        >
+            {label}
+        </Link>
+    );
+};
