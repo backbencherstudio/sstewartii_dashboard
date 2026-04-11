@@ -5,8 +5,8 @@ import useAuth from "@/hooks/useAuth";
 
 export default function LoginForm() {
   const { login, isLoading } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@example.com");
+  const [password, setPassword] = useState("12345678");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
