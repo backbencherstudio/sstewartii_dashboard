@@ -7,13 +7,13 @@
 // }: {
 //   children: React.ReactNode;
 // }) {
-  
+
 //   return (
 //     <div className='flex h-full w-full  '   >
 
 //       <Sidebar />
 //       <main className='flex-1 '>
-      
+
 //         <Topbar />
 
 //         {children}
@@ -35,36 +35,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    // <div className="flex flex-col h-screen bg-white">
-     
-    //   {/* Below topbar */}
-    //   <div className="flex flex-1 overflow-hidden">
-    //     <Sidebar
-    //       open={sidebarOpen}
-    //       onClose={() => setSidebarOpen(false)}
-    //     />
-    //     <main className="flex-1 overflow-auto p-6 bg-gray-50 w-full ">
-    //        {/* Topbar — full width */}
-    //   <Topbar onMenuClick={() => setSidebarOpen(true)} />
+  
 
-    //       {children}
-    //     </main>
-    //   </div>
-    // </div>
+    <div className='flex h-full w-full bg-white'   >
 
-    <div className='flex h-full w-full  '   >
+      <div className='h-screen'>
+        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} variant='collapsible' />
+      </div>
+      <main className='flex-1 overflow-auto  bg-gray-50 w-full'>
 
-            <div className='h-screen'>
-            <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-            </div>
-            <main className='flex-1 '>
-          
-            <Topbar onMenuClick={() => setSidebarOpen(true)} />
-    
-            {children}
-    
-    
-              </main>
-        </div>
+        <Topbar onMenuClick={() => setSidebarOpen(true)} />
+
+        {children}
+
+
+      </main>
+    </div>
   );
 }
+
+

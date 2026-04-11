@@ -1,66 +1,77 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import SidebarMenu from './SidebarMenu';
+import { ChevronLeft } from 'lucide-react';
+import SidebarHeader from './SidebarHeader';
 
+type SidebarVariant = 'basic' | 'collapsible';
 
 interface SidebarProps {
-    open: boolean;
-    onClose: () => void;
+  open: boolean;
+  onClose: () => void;
+  variant?: SidebarVariant;  // ← single prop to switch mode
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
-    // Close on Escape key
-    useEffect(() => {
-        const handler = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') onClose();
-        };
-        document.addEventListener('keydown', handler);
-        return () => document.removeEventListener('keydown', handler);
-    }, [onClose]);
+const Sidebar: React.FC<SidebarProps> = ({ 
+  open, 
+  onClose, 
+  variant = 'basic'  // ← default is your current basic version
+}) => {
+  const [collapsed, setCollapsed] = useState(false);
 
-    return (
-        <>
-            {/* Backdrop — mobile only */}
-            {open && <div className='fixed inset-0 z-40 bg-black/40 md:hidden transition-opacity ' onClick={onClose} />}
+  // Reset collapsed when switching variant
+  useEffect(() => {
+    if (variant === 'basic') setCollapsed(false);
+  }, [variant]);
 
-            {/* Sidebar panel */}
-            <aside
-                className={`
-          fixed inset-y-0 left-0 z-50 w-64 bg-gray-100 flex flex-col
-          border-r border-gray-200
-          transform transition-transform duration-400 ease-in-out h-full
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [onClose]);
+
+  const isCollapsible = variant === 'collapsible';
+
+  return (
+    <>
+      {/* Backdrop — mobile only */}
+      {open && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 md:hidden transition-opacity"
+          onClick={onClose}
+        />
+      )}
+
+      <aside
+        className={`
+          fixed inset-y-0 left-0 z-50 bg-gray-100 flex flex-col
+          border-r border-gray-200 h-full
+          transform transition-all duration-300 ease-in-out
           ${open ? 'translate-x-0' : '-translate-x-full'}
+          ${isCollapsible && collapsed ? 'w-16' : 'w-64'}
           md:relative md:translate-x-0 md:z-auto
         `}
-            >
-                <SidebarHeader />
+      >
+        <SidebarHeader
+          collapsed={isCollapsible && collapsed}
+          showCollapseButton={isCollapsible}
+          onToggleCollapse={() => setCollapsed((prev) => !prev)}
+        />
 
-                {/* Menu grows to fill space */}
-                <div className="flex-1 overflow-y-auto h-full">
-                    <SidebarMenu />
-                </div>
-
-                {/* <SidebarFooter /> */}
-            </aside>
-        </>
-    );
+        <div className="flex-1 overflow-y-auto overflow-x-hidden h-full">
+          <SidebarMenu
+            collapsed={isCollapsible && collapsed}
+            onRequestExpand={() => setCollapsed(false)}
+          />
+        </div>
+      </aside>
+    </>
+  );
 };
 
 export default Sidebar;
-
-
-
-
-
-const SidebarHeader: React.FC = () => {
-    return (
-        <div className="h-16 flex items-center px-4 border-b border-gray-200">
-            <span className="text-xl font-bold text-gray-800">Dashboard</span>
-        </div>
-    );
-};
-
-
 
 
 
