@@ -1,8 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import SidebarMenu from './SidebarMenu';
-import { ChevronLeft } from 'lucide-react';
 import SidebarHeader from './SidebarHeader';
+import SidebarMenu from './SidebarMenu';
+
 
 type SidebarVariant = 'basic' | 'collapsible';
 
