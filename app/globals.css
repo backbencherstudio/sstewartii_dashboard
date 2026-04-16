@@ -66,6 +66,41 @@
 
 button {
   cursor: pointer;
+  @apply disabled:cursor-not-allowed ;
+}
+
+@layer components {
+
+  .auth-input {
+    @apply flex h-[50px] md:h-[70px] w-full px-4 md:px-6 rounded-xl 
+           border border-solid border-[#D9D9D9] 
+           bg-[#F3FAFD] text-slate-900 
+           placeholder:text-[#C2C3CB]  placeholder:font-semibold
+           placeholder:leading-[160%]
+           outline-none transition-all duration-200
+           focus:bg-white 
+           focus:border-[#F9B01A] 
+           focus:ring-4 focus:ring-[#F9B01A]/10 focus:shadow-sm
+           hover:border-[#F9B01A];
+  }
+
+  .btn-primary {
+    /* Layout & Sizing */
+    @apply flex h-10 md:h-14 w-full justify-center items-center gap-2 px-4 md:px-6 py-3 md:py-4 md:rounded-2xl rounded-xl;
+
+    /* Typography */
+    @apply text-[#070707] font-medium text-base leading-[120%];
+
+    /* Background Gradient */
+    @apply bg-[linear-gradient(136deg,#FFBB1C_0%,#E28611_100%)];
+
+    /* Hover & Active */
+    @apply transition-all duration-200 active:scale-[0.98]
+           hover:opacity-90 hover:shadow-lg hover:shadow-orange-500/20;
+
+    /* Disabled */
+    @apply disabled:opacity-80 disabled:cursor-not-allowed disabled:grayscale-[0.5] opacity-95;
+  }
 }
 
 :root {

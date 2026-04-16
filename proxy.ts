@@ -7,6 +7,7 @@ const PUBLIC_PATHS = [
   '/forgot-password',
   '/verify-otp',
   '/set-password',
+  '/success',
 ];
 
 export function proxy(request: NextRequest) {
