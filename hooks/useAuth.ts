@@ -6,15 +6,15 @@ import { useAuthStore } from "@/store/authStore";
 
 const useAuth = () => {
   const router = useRouter();
-  
+
   // Grab state and methods from the store
-  const { 
-    login: storeLogin, 
-    logout: storeLogout, 
+  const {
+    login: storeLogin,
+    logout: storeLogout,
     fetchMe: storeFetchMe,
     user,
     isLoading,
-    isHydrated 
+    isHydrated
   } = useAuthStore();
 
   const login = useCallback(async (credentials: { email: string; password: string }) => {
@@ -31,13 +31,22 @@ const useAuth = () => {
     await storeFetchMe();
   }, [storeFetchMe]);
 
-  return { 
-    user, 
-    isLoading, 
-    isHydrated, 
-    login, 
-    logout, 
-    fetchMe 
+
+  const forgotPassword = useCallback(async (data: { email: string }) => {
+    // await storeForgotPassword(email);
+    (async () => {
+      // await storeForgotPassword(data);
+    })();
+  }, []);
+
+  return {
+    user,
+    isLoading,
+    isHydrated,
+    login,
+    logout,
+    fetchMe,
+    forgotPassword
   };
 };
 
