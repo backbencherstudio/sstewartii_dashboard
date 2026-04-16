@@ -3,26 +3,20 @@ import React, { useEffect, useState } from 'react';
 import SidebarHeader from './SidebarHeader';
 import SidebarMenu from './SidebarMenu';
 
-
 type SidebarVariant = 'basic' | 'collapsible';
 
 interface SidebarProps {
   open: boolean;
   onClose: () => void;
-  variant?: SidebarVariant;  // ← single prop to switch mode
+  variant?: SidebarVariant;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ 
-  open, 
-  onClose, 
-  variant = 'basic'  // ← default is your current basic version
+const Sidebar: React.FC<SidebarProps> = ({
+  open,
+  onClose,
+  variant = 'basic',
 }) => {
   const [collapsed, setCollapsed] = useState(false);
-
-  // Reset collapsed when switching variant
-  useEffect(() => {
-    if (variant === 'basic') setCollapsed(false);
-  }, [variant]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -36,7 +30,6 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <>
-      {/* Backdrop — mobile only */}
       {open && (
         <div
           className="fixed inset-0 z-40 bg-black/40 md:hidden transition-opacity"

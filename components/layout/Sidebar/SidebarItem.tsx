@@ -18,7 +18,6 @@ interface SidebarItemProps {
   isCollapsible?: boolean;
   children?: ChildItem[];
   collapsed?: boolean;
-  /** When collapsed, clicking a group (collapsible + children, no href) expands the sidebar. */
   onRequestExpand?: () => void;
 }
 
@@ -77,7 +76,6 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
     );
   }
 
-  // ✅ Normal mode — your existing code, untouched
   if (isCollapsible && children) {
     return (
       <div>
@@ -125,7 +123,6 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
 };
 
 export default SidebarItem;
-
 
 interface ChildItemProps {
   label: string;

@@ -2,7 +2,7 @@ import { ChevronLeft } from 'lucide-react';
 
 interface SidebarHeaderProps {
   collapsed: boolean;
-  showCollapseButton: boolean;  // ← only true when variant=collapsible
+  showCollapseButton: boolean;
   onToggleCollapse: () => void;
 }
 
@@ -13,14 +13,12 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
 }) => {
   return (
     <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200 shrink-0">
-      {/* Title — always show in basic, hide when collapsed in collapsible */}
       {!collapsed && (
         <span className="text-xl font-bold text-gray-800 truncate">
           Dashboard
         </span>
       )}
 
-      {/* Collapse button — only in collapsible variant */}
       {showCollapseButton && (
         <button
           onClick={onToggleCollapse}

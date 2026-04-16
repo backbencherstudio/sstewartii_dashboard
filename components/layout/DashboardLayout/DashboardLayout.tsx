@@ -27,8 +27,9 @@
 
 'use client';
 import React, { useState } from 'react';
-import { Topbar } from '../Topbar/Topbar';
+
 import Sidebar from '../Sidebar/Sidebar';
+import { Topbar } from '../Topbar/Topbar';
 
 
 
@@ -45,7 +46,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
       <main className='flex-1 overflow-auto  bg-gray-50 w-full'>
 
-        <Topbar onMenuClick={() => setSidebarOpen(true)} />
+        <Topbar name="John Doe" onMenuClick={() => setSidebarOpen(true)} />
 
         {children}
 

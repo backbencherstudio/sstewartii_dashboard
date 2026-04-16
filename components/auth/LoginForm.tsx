@@ -10,14 +10,10 @@ import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
 import Checkbox from "../form/Checkbox";
 import { Form } from "@/components/form/Form";
 import Link from "next/link";
+import { cookie } from "@/lib/cookie";
+import { useRouter } from "next/navigation";
 
 
-// email: z
-// .string()
-// .email("Please enter a valid email address")
-// .min(1, "Email is required"),
-// password: z.string().min(6, "Password must be at least 6 characters"),
-// rememberMe: z.boolean().optional(),
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address.").min(1, "Email is required"),
@@ -123,11 +119,13 @@ function LoginFormFields({
 export default function LoginForm() {
   const { login, isLoading } = useAuth();
   const [submitError, setSubmitError] = useState("");
-
+  const router = useRouter();
   const onSubmit = async (data: LoginFormValues) => {
     setSubmitError("");
     try {
-      await login(data);
+      // await login(data);
+      cookie.set("access-token", "1234567890");
+      router.push("/dashboard");
     } catch (err) {
       console.log(err);
       setSubmitError(err instanceof Error ? err.message : "Login failed");
