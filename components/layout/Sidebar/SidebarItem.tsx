@@ -21,6 +21,13 @@ interface SidebarItemProps {
   onRequestExpand?: () => void;
 }
 
+/** True when pathname equals href or is a nested segment under it (e.g. /vendors/add under /vendors). */
+function isRouteActive(pathname: string, href: string) {
+  if (pathname === href) return true;
+  if (href === '/') return false;
+  return pathname.startsWith(`${href}/`);
+}
+
 const SidebarItem: React.FC<SidebarItemProps> = ({
   label,
   href,
@@ -32,16 +39,18 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   onRequestExpand,
 }) => {
   const pathname = usePathname();
-  const isActive = href ? pathname === href : false;
-  const isChildActive = children?.some((child) => pathname === child.href);
+  const isActive = href ? isRouteActive(pathname, href) : false;
+  const isChildActive = children?.some((child) => isRouteActive(pathname, child.href));
   const [open, setOpen] = useState(isChildActive ?? false);
 
+
+  //  px-5 py-3 rounded-xl
   const baseClass = `
-    flex items-center gap-3 w-full text-left px-3 py-2 rounded-md text-sm
+    flex items-center gap-3 w-full text-left pl-5 pr-5 py-3 rounded-xl text-sm text-nowrap
     transition-colors duration-150 cursor-pointer
     ${collapsed ? 'justify-center px-2' : ''}
     ${isActive || isChildActive
-      ? 'bg-gray-900 text-white font-medium'
+      ? '[background:var(--Primary-Linear,linear-gradient(136deg,#FFBB1C_0%,#E28611_100%))]  font-medium hover:bg-primary-linear/80 text-black font-medium '
       : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900'
     }
   `;
@@ -58,7 +67,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
           className={baseClass}
           title={label}
         >
-          {icon && <span className="shrink-0">{icon}</span>}
+          {icon && <span className="shrink-0 text-inherit">{icon}</span>}
         </button>
       );
     }
@@ -71,7 +80,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
         className={baseClass}
         title={label}
       >
-        {icon && <span className="shrink-0">{icon}</span>}
+        {icon && <span className="shrink-0 text-inherit [&_svg]:shrink-0">{icon}</span>}
       </El>
     );
   }
@@ -80,7 +89,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
     return (
       <div>
         <button onClick={() => setOpen((prev) => !prev)} className={baseClass}>
-          {icon && <span className="shrink-0">{icon}</span>}
+          {icon && <span className="shrink-0 text-inherit [&_svg]:shrink-0">{icon}</span>}
           <span className="flex-1">{label}</span>
           <ChevronDown
             size={16}
@@ -96,7 +105,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                 key={child.label}
                 label={child.label}
                 href={child.href}
-                isActive={pathname === child.href}
+                isActive={isRouteActive(pathname, child.href)}
               />
             ))}
           </div>
@@ -108,7 +117,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   if (href) {
     return (
       <Link href={href} className={baseClass}>
-        {icon && <span className="shrink-0">{icon}</span>}
+        {icon && <span className="shrink-0 text-inherit [&_svg]:shrink-0">{icon}</span>}
         <span>{label}</span>
       </Link>
     );
@@ -116,7 +125,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
 
   return (
     <button onClick={onClick} className={baseClass}>
-      {icon && <span className="shrink-0">{icon}</span>}
+      {icon && <span className="shrink-0 text-inherit [&_svg]:shrink-0">{icon}</span>}
       <span>{label}</span>
     </button>
   );
@@ -140,7 +149,7 @@ const ChildItem: React.FC<ChildItemProps> = ({ label, href, isActive }) => {
         before:absolute before:left-0 before:top-1/3
         before:-translate-y-1/2 before:w-5 before:h-4
         before:border-l before:border-b before:border-gray-600
-        before:rounded-bl-md
+        // before:rounded-bl-md
       `}
     >
       {label}

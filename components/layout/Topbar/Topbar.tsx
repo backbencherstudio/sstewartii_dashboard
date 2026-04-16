@@ -21,7 +21,7 @@ export const Topbar = ({ name, onMenuClick }: Props) => {
   const role = user?.type || "Admin";
 
   return (
-    <header className="h-16 bg-white border-b border-[#EAECF0] flex items-center justify-between md:px-8 px-4  shrink-0">
+    <header className="md:h-20 h-16 bg-white border-b border-[#EAECF0] flex items-center justify-between md:px-8 px-4  shrink-0">
 
       {/* menu icon */}
       <div className="flex items-center gap-3 min-w-0">

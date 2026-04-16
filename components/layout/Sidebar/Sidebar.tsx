@@ -17,6 +17,14 @@ const Sidebar: React.FC<SidebarProps> = ({
   variant = 'basic',
 }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -27,6 +35,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   }, [onClose]);
 
   const isCollapsible = variant === 'collapsible';
+  // On mobile the sidebar is always fully expanded
+  const effectiveCollapsed = isCollapsible && collapsed && !isMobile;
 
   return (
     <>
@@ -39,23 +49,26 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       <aside
         className={`
-          fixed inset-y-0 left-0 z-50 bg-gray-100 flex flex-col
+          fixed inset-y-0 left-0 z-50 flex flex-col bg-white
           border-r border-gray-200 h-full
           transform transition-all duration-300 ease-in-out
           ${open ? 'translate-x-0' : '-translate-x-full'}
-          ${isCollapsible && collapsed ? 'w-16' : 'w-64'}
+          ${effectiveCollapsed ? 'w-16' : 'w-70'}
           md:relative md:translate-x-0 md:z-auto
         `}
       >
         <SidebarHeader
-          collapsed={isCollapsible && collapsed}
+          collapsed={effectiveCollapsed}
           showCollapseButton={isCollapsible}
+          isMobile={isMobile}
           onToggleCollapse={() => setCollapsed((prev) => !prev)}
+          onClose={onClose}
         />
 
+        <hr className={`${effectiveCollapsed ? 'mx-3' : 'mx-6'} border-gray-200`} />
         <div className="flex-1 overflow-y-auto overflow-x-hidden h-full">
           <SidebarMenu
-            collapsed={isCollapsible && collapsed}
+            collapsed={effectiveCollapsed}
             onRequestExpand={() => setCollapsed(false)}
           />
         </div>

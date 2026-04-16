@@ -3,6 +3,7 @@ import React from 'react';
 import { Home, Store, Settings, LogOut, User } from 'lucide-react';
 import SidebarItem from './SidebarItem';
 import useAuth from '@/hooks/useAuth';
+import SidebarIcons from '@/components/icons/SidebarIcons';
 
 interface SidebarMenuProps {
   collapsed: boolean;
@@ -14,35 +15,50 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ collapsed, onRequestExpand })
 
   const menuItems = [
     {
-      label: 'Home',
+      label: 'Dashboard',
       href: '/dashboard',
-      icon: <Home size={18} />,
+      icon: <SidebarIcons.DashboardIcon className="w-4 h-4" />,
     },
     {
       label: 'Vendors',
-      icon: <Store size={18} />,
+      icon: <SidebarIcons.VendorIcon className="w-4 h-4" />,
       isCollapsible: true,
       children: [
-        { label: 'All Vendors', href: '/vendors' },
-        { label: 'Add Vendor', href: '/vendors/add' },
-        { label: 'Pending', href: '/vendors/pending' },
+        { label: 'Manage Verification', href: '/vendors/verification' },
+        { label: 'Manage Vendor Account', href: '/vendors/account' },
       ],
+    },
+    {
+      label: 'Customers',
+      href: '/customers',
+      icon: <SidebarIcons.CustomersIcon className="w-4 h-4" />,
+    },
+    {
+      label: 'Analytics',
+      href: '/analytics',
+      icon: <SidebarIcons.AnalyticsIcon className="" />,
+    },
+    {
+      label: 'Subscription Management',
+      href: '/subscriptions',
+      icon: <SidebarIcons.SubscriptionsIcon className="w-4 h-4" />,
+    },
+    {
+      label: 'Event Management',
+      href: '/event',
+      icon: <SidebarIcons.EventIcon className="w-4 h-4" />,
     },
     {
       label: 'Settings',
       href: '/settings',
-      icon: <Settings size={18} />,
-    },
-    {
-      label: 'Profile',
-      href: '/profile',
-      icon: <User size={18} />,
+      icon: <Settings size={16} />,
       isBottom: true,
     },
+    
     {
       label: 'Logout',
       onClick: logout,
-      icon: <LogOut size={18} />,
+      icon: <LogOut size={16} />,
       isBottom: true,
     },
   ];
@@ -51,7 +67,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ collapsed, onRequestExpand })
   const bottomItems = menuItems.filter((item) => item.isBottom);
 
   return (
-    <nav className="flex flex-col px-3 py-4 justify-between h-full">
+    <nav className={`flex flex-col  ${collapsed ? 'px-3' : 'px-6 pt-6'}  justify-between h-full`}>  
       <div className="flex flex-col gap-1">
         {topItems.map((item) => (
           <SidebarItem
