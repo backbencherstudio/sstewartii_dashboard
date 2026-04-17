@@ -1,4 +1,5 @@
 import React from 'react';
+import EmptyState from '@/components/reusable/EmptyState';
 
 const verifications = [
   { id: '#834759', name: 'David John', date: 'May 10, 2026' },
@@ -25,32 +26,38 @@ export default function PendingVendorVerifications() {
       </div>
 
       {/* Table Body */}
-      <div className='flex flex-col'>
-        {verifications.map((vendor, index) => (
-          <div 
-            key={vendor.id} 
-            className={`grid grid-cols-3 items-center px-6 py-4 border-b border-[#ECEFF3] last:border-0 hover:bg-slate-50 transition-colors`}
-          >
-            {/* Name and ID */}
+     {
+        verifications.length > 0 ? (
             <div className='flex flex-col'>
-              <span className='text-base font-semibold text-[#1e293b]'>{vendor.name}</span>
-              <span className='text-sm text-[#94a3b8]'>ID: {vendor.id}</span>
-            </div>
-
-            {/* Date */}
-            <div className='text-[#475569] text-base'>
-              {vendor.date}
-            </div>
-
-            {/* Action Button */}
-            <div className='flex justify-end '>
-              <button className='px-4 py-2 rounded-xl font-bold text-[#1a1a2e] text-lg bg-gradient-to-b from-[#FFBB1C] to-[#F29D00] shadow-sm hover:opacity-90 transition-opacity'>
-                Review
-              </button>
-            </div>
+            {verifications.map((vendor, index) => (
+              <div 
+                key={vendor.id} 
+                className={`grid grid-cols-3 items-center px-6 py-4 border-b border-[#ECEFF3] last:border-0 hover:bg-slate-50 transition-colors`}
+              >
+                {/* Name and ID */}
+                <div className='flex flex-col'>
+                  <span className='text-base font-semibold text-[#1e293b]'>{vendor.name}</span>
+                  <span className='text-sm text-[#94a3b8]'>ID: {vendor.id}</span>
+                </div>
+    
+                {/* Date */}
+                <div className='text-[#475569] text-base'>
+                  {vendor.date}
+                </div>
+    
+                {/* Action Button */}
+                <div className='flex justify-end '>
+                  <button className='px-4 py-2 rounded-xl font-bold text-[#1a1a2e] text-lg bg-gradient-to-b from-[#FFBB1C] to-[#F29D00] shadow-sm hover:opacity-90 transition-opacity'>
+                    Review
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        ) : (
+            <EmptyState imageSrc="/images/empty-data/pending-vendor.png" title="No reports to show" description="Vendor reports will appear in here." />
+        )
+     }
     </div>
   );
 }

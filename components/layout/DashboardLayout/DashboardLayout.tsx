@@ -1,29 +1,3 @@
-// import React from 'react'
-// import Sidebar from '../Sidebar2/Sidebar'
-
-// import { Topbar } from '../Topbar/Topbar';
-// export default function DashboardLayout({
-//   children,
-// }: {
-//   children: React.ReactNode;
-// }) {
-
-//   return (
-//     <div className='flex h-full w-full  '   >
-
-//       <Sidebar />
-//       <main className='flex-1 '>
-
-//         <Topbar />
-
-//         {children}
-
-
-//       </main>
-//     </div>
-//   );
-// }
-
 
 'use client';
 import React, { useState } from 'react';
@@ -37,23 +11,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-  
+    <div className='flex h-screen w-full overflow-hidden bg-white'>
 
-    <div className='flex h-full w-full bg-white'   >
-
-      <div className='h-screen'>
+      <div className='h-screen shrink-0'>
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} variant='collapsible' />
       </div>
-      <main className='flex-1 overflow-auto  bg-gray-50 w-full'>
 
+      <div className='flex flex-col flex-1 h-screen overflow-hidden bg-gray-50'>
         <Topbar name="John Doe" onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className='px-3.5 pt-5 md:px-6 md:py-8 '>
-        {children}
-        </div>
+        <main className='flex-1 overflow-y-auto w-full'>
+          <div className='px-3.5 pt-5 md:px-6 md:py-4'>
+            {children}
+          </div>
+        </main>
+      </div>
 
-
-      </main>
     </div>
   );
 }

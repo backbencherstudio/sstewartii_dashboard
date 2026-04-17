@@ -7,6 +7,8 @@ import { RefreshCcwIcon } from "lucide-react";
 ;
 import { PendingVendorVerifications, VendorsByStatus, TopVendors, PlatformRevenueChart ,DashboardStats, DashboardGraph} from "./_components";
 
+
+
 export default function DashboardPage() {
 
     const [selectedOption, setSelectedOption] = useState("this-month");
@@ -16,7 +18,7 @@ export default function DashboardPage() {
             <div className="flex md:flex-row flex-col md:items-center md:justify-between gap-6">
                 {/* Left Side - Welcome Text */}
                 <div>
-                    <h1 className="self-stretch text-[#03070C] text-4xl font-bold leading-[129%] tracking-[-0.72px]">
+                    <h1 className="self-stretch text-[#03070C] text-4xl font-bold leading-[129%] tracking-[-0.72px] font-lora">
                         Welcome, Sedric Stewart 👋
                     </h1>
                     <p className="self-stretch text-[#697586] text-base font-normal leading-[160%]">
