@@ -6,7 +6,7 @@ import { useState } from "react";
 import { RefreshCcwIcon } from "lucide-react";
 ;
 import { PendingVendorVerifications, VendorsByStatus, TopVendors, PlatformRevenueChart ,DashboardStats, DashboardGraph} from "./_components";
-
+import PageTitle from "@/components/reusable/PageTitle";
 
 
 export default function DashboardPage() {
@@ -17,14 +17,7 @@ export default function DashboardPage() {
             {/* Header Section */}
             <div className="flex md:flex-row flex-col md:items-center md:justify-between gap-6">
                 {/* Left Side - Welcome Text */}
-                <div>
-                    <h1 className="self-stretch text-[#03070C] text-4xl font-bold leading-[129%] tracking-[-0.72px] font-lora">
-                        Welcome, Sedric Stewart 👋
-                    </h1>
-                    <p className="self-stretch text-[#697586] text-base font-normal leading-[160%]">
-                        Manage your platform data, operational health and vendor ecosystem status.
-                    </p>
-                </div>
+                <PageTitle title="Welcome, Sedric Stewart 👋" description="Manage your platform data, operational health and vendor ecosystem status." />
 
                 {/* Right Side - Action Buttons */}
                 <div className="flex items-center gap-4">
