@@ -48,7 +48,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         <Topbar name="John Doe" onMenuClick={() => setSidebarOpen(true)} />
 
+        <div className='px-3.5 pt-5 md:px-6 md:py-8 '>
         {children}
+        </div>
 
 
       </main>

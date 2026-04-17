@@ -1,11 +1,79 @@
+"use client";
+
+import HeaderNotifyIcons from "@/components/icons/HeaderNotifyIcons";
 import { DashboardStats, DashboardGraph } from "./_components";
+import { ReusableSelect } from "@/components/form/CustomSelect";
+import { useState } from "react";
+import { RefreshCcwIcon } from "lucide-react";
 
 export default function DashboardPage() {
+
+    const [selectedOption, setSelectedOption] = useState("this-month");
     return (
-        <div>
-            <h1>Dashboard</h1>
+        <div className="md:space-y-6 space-y-4">
+            {/* Header Section */}
+            <div className="flex md:flex-row flex-col md:items-center md:justify-between gap-6">
+                {/* Left Side - Welcome Text */}
+                <div>
+                    <h1 className="self-stretch text-[#03070C] text-4xl font-bold leading-[129%] tracking-[-0.72px]">
+                        Welcome, Sedric Stewart 👋
+                    </h1>
+                    <p className="self-stretch text-[#697586] text-base font-normal leading-[160%]">
+                        Manage your platform data, operational health and vendor ecosystem status.
+                    </p>
+                </div>
+
+                {/* Right Side - Action Buttons */}
+                <div className="flex items-center gap-4">
+                    <ReusableSelect
+                        variant="outline"
+                        // placeholder="Select an option"
+                        // className="bg-white"
+                        value={selectedOption}
+                        options={[{ label: "This Month", value: "this-month" }, { label: "this-week", value: "this-week" }]}
+                        onValueChange={(value) => {
+                            setSelectedOption(value);
+                        }}   
+                    />
+
+                    <button className="btn-primary flex items-center gap-2">
+                        <span className="text-nowrap">Today's Sync</span>
+
+                        <RefreshCcwIcon className="w-4 h-4" />
+                    </button>
+                </div>
+            </div>
+
+            {/* Notification Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 border border-solid  bg-white shadow-[0_2px_20px_0_rgba(0,0,0,0.10)] p-4 rounded-2xl">
+                <HeaderNotifyCard icon={<HeaderNotifyIcons.Issue />} title="1 Issue needs attention" color="#F9DD8E" />
+                <HeaderNotifyCard icon={<HeaderNotifyIcons.Onboarding />} title="1 Onboarding pending" color="#FCEFC9" />
+                <HeaderNotifyCard icon={<HeaderNotifyIcons.Inactive />} title="1 Inactive vendor" color="#FEFAEC" />
+                <HeaderNotifyCard icon={<HeaderNotifyIcons.Revenue />} title="Revenue updated" color="#ECEFF3" />
+            </div>
+
             <DashboardStats />
             <DashboardGraph />
         </div>
     );
 }
+
+interface HeaderNotifyCardProps {
+    icon: React.ReactNode;
+    title: string;
+    color: string;
+}
+
+const HeaderNotifyCard = ({ icon, title, color }: HeaderNotifyCardProps) => {
+    return (
+        <div
+            className="flex items-center gap-2 flex-[1_0_0] px-4 py-3 rounded-lg"
+            style={{ backgroundColor: color }}
+        >
+            {icon}
+            <p className="text-[#2A3542] font-inter text-base font-medium leading-[160%]">
+                {title}
+            </p>
+        </div>
+    );
+};

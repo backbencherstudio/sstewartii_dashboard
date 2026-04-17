@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "generate:auth": "powershell ./scripts/createAuthPages.ps1",
-    "page": "powershell -File ./scripts/createDashboardPage.ps1"
+    "page": "powershell -File ./scripts/createDashboardPage.ps1",
+    "g:icons": "powershell -File ./scripts/createIconFile.ps1"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
