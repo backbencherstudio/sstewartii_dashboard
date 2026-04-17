@@ -13,14 +13,14 @@ import { cn } from "@/lib/utils";
 
 // 1. Trigger Variants (The Button)
 const selectTriggerVariants = cva(
-  "flex  min-w-[180px] items-center justify-between transition-all duration-200",
+  "flex items-center justify-between transition-all duration-200",
   {
     variants: {
       variant: {
-        default: "h-10 rounded-md border border-input bg-background px-3 py-2 text-sm",
-        outline: "h-10 md:h-14 justify-center gap-2 px-4 md:px-6 py-3 md:py-4 md:rounded-2xl rounded-xl text-[#070707] font-medium text-base ",
-
-        primary: "h-10 md:h-14 justify-center gap-2 px-4 md:px-6 py-3 md:py-4 md:rounded-2xl rounded-xl text-[#070707] font-medium text-base bg-[linear-gradient(136deg,#FFBB1C_0%,#E28611_100%)] hover:opacity-90 active:scale-[0.98] hover:shadow-lg hover:shadow-orange-500/20 border-none [&>svg]:text-[#070707]",
+        small: "w-full max-w-[120px] rounded-sm text-sm focus:bg-accent focus:text-accent-foreground rounded-lg",
+        default: "min-w-[180px] h-10 rounded-md border border-input bg-background px-3 py-2 text-sm",
+        outline: "min-w-[180px] h-10 md:h-14 justify-center gap-2 px-4 md:px-6 py-3 md:py-4 md:rounded-2xl rounded-xl text-[#070707] font-medium text-base",
+        primary: "min-w-[180px] h-10 md:h-14 justify-center gap-2 px-4 md:px-6 py-3 md:py-4 md:rounded-2xl rounded-xl text-[#070707] font-medium text-base bg-[linear-gradient(136deg,#FFBB1C_0%,#E28611_100%)] hover:opacity-90 active:scale-[0.98] hover:shadow-lg hover:shadow-orange-500/20 border-none [&>svg]:text-[#070707]",
       },
     },
     defaultVariants: {
@@ -30,9 +30,10 @@ const selectTriggerVariants = cva(
 );
 
 // 2. Content Variants (The Dropdown Menu)
-const selectContentVariants = cva("w-full max-w-[180px]  ", {
+const selectContentVariants = cva("", {
   variants: {
     variant: {
+        small: "w-full max-w-[200px] rounded-sm text-sm p-0",
       default: "rounded-md border bg-popover text-popover-foreground shadow-md",
       outline: "rounded-2xl border-2 border-[#FFBB1C] bg-white p-1 shadow-xl rounded-[14px] border-2 border-[#FFBB1C] p-2",
       // Match the primary theme: rounded corners and maybe a subtle orange border
@@ -49,6 +50,7 @@ const selectItemVariants = cva(
     {
       variants: {
         variant: {
+            small: "rounded-sm text-xs focus:bg-accent focus:text-accent-foreground p-1",
           default: "rounded-sm text-sm focus:bg-accent focus:text-accent-foreground",
           // Items should NOT have borders, only rounded corners and hover backgrounds
           outline: "rounded-[12px] text-base font-medium text-[#070707] focus:bg-orange-50 focus:text-[#E28611]",

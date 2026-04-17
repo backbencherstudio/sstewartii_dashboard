@@ -1,10 +1,11 @@
 "use client";
 
 import HeaderNotifyIcons from "@/components/icons/HeaderNotifyIcons";
-import { DashboardStats, DashboardGraph } from "./_components";
 import { ReusableSelect } from "@/components/form/CustomSelect";
 import { useState } from "react";
 import { RefreshCcwIcon } from "lucide-react";
+;
+import { PendingVendorVerifications, VendorsByStatus, TopVendors, PlatformRevenueChart ,DashboardStats, DashboardGraph} from "./_components";
 
 export default function DashboardPage() {
 
@@ -33,7 +34,7 @@ export default function DashboardPage() {
                         options={[{ label: "This Month", value: "this-month" }, { label: "this-week", value: "this-week" }]}
                         onValueChange={(value) => {
                             setSelectedOption(value);
-                        }}   
+                        }}
                     />
 
                     <button className="btn-primary flex items-center gap-2">
@@ -53,7 +54,25 @@ export default function DashboardPage() {
             </div>
 
             <DashboardStats />
-            <DashboardGraph />
+            <section className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="w-full  flex-1">
+                    <PlatformRevenueChart />
+                </div>
+                <VendorsByStatus />
+            </section>
+
+
+            {/* Pending Vendor Verifications */}
+         <section className="flex flex-col md:flex-row  justify-between gap-4">
+            
+            <div className="w-full  flex-1">
+                <PendingVendorVerifications />
+            </div>
+            <div className="w-full  flex-1">
+               <TopVendors />
+            </div>
+           
+         </section>
         </div>
     );
 }
