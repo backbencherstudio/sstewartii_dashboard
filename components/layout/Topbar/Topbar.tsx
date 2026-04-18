@@ -1,7 +1,10 @@
 "use client";
-import { Bell, Menu, User } from 'lucide-react';
+import { Bell, ChevronRight, Link, Menu, User } from 'lucide-react';
 import { useState } from 'react';
 import useAuth from '@/hooks/useAuth';
+import { usePathname } from 'next/navigation';
+import { getBreadcrumbLabels } from '@/lib/breadcrumb.utils';
+import { cn } from '@/lib/utils';
 
 
 type Props = {
@@ -12,8 +15,12 @@ type Props = {
 export const Topbar = ({ name, onMenuClick }: Props) => {
 
   const [showNotification, setShowNotification] = useState(false);
-
+  const pathname = usePathname();
+  console.log(pathname);
+  const breadcrumbs = getBreadcrumbLabels(pathname);
+  // console.log("breadcrumbs", breadcrumbs);
   const { user } = useAuth();
+
 
 
 
@@ -22,6 +29,16 @@ export const Topbar = ({ name, onMenuClick }: Props) => {
 
   return (
     <header className="md:h-20 h-16 bg-white border-b border-[#EAECF0] flex items-center justify-between md:px-8 px-4  shrink-0">
+
+      <div className="flex items-center gap-2">
+        {breadcrumbs.map((breadcrumb, idx) => (
+          <p key={idx} className={cn("flex items-center gap-2 text-[#697586]   font-lora text-sm font-bold leading-[130%]", idx > 0 && "text-[#2A3542]")}>
+
+            {idx > 0 && <ChevronRight className="w-4 h-4" />} 
+            {breadcrumb.label}
+          </p>
+        ))}
+      </div>
 
       {/* menu icon */}
       <div className="flex items-center gap-3 min-w-0">

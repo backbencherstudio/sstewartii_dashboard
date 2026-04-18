@@ -17,7 +17,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} variant='collapsible' />
       </div>
 
-      <div className='flex flex-col flex-1 h-screen overflow-hidden bg-gray-50'>
+      <div className='flex flex-col flex-1 h-screen overflow-hidden bg-white'>
         <Topbar name="John Doe" onMenuClick={() => setSidebarOpen(true)} />
 
         <main className='flex-1 overflow-y-auto w-full'>

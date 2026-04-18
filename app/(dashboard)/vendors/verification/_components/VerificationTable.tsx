@@ -2,6 +2,7 @@
 import DataTable, { Column } from "@/components/reusable/table/DataTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 import { useState } from "react";
 
 // 1. Define the Vendor type based on your data structure
@@ -43,9 +44,13 @@ const getColumns = (handleReview: (vendor: Vendor) => void): Column<Vendor>[] =>
     {
         header: "Action",
         cell: (row) => (
-            <Button onClick={() => handleReview(row)} className="bg-[#FFBB1C] hover:bg-[#e0a618] text-black font-bold rounded-xl px-6">
-                Review
-            </Button>
+
+
+            <Link href={`/vendors/verification/${row.id}`}>
+                <Button className="bg-[#FFBB1C] hover:bg-[#e0a618] text-black font-bold rounded-xl px-6">
+                    Review
+                </Button>
+            </Link>
         ),
     },
 ];
@@ -54,7 +59,7 @@ const getColumns = (handleReview: (vendor: Vendor) => void): Column<Vendor>[] =>
 // Dummy data
 const data: Vendor[] = [
     {
-        id: "#834759",
+        id: "834759",
         name: "David John",
         date: "May 10, 2026",
         documents: [
@@ -64,7 +69,7 @@ const data: Vendor[] = [
         ],
     },
     {
-        id: "#834758",
+        id: "834758",
         name: "John Doe",
         date: "May 10, 2026",
         documents: [
@@ -86,42 +91,35 @@ export default function PendingApplicationsPage() {
         alert(`Reviewing vendor: ${vendor.name}`);
         setReview(vendor);
     };
-   
+
 
     return (
         <div className="">
 
             <div className="border-x border-t rounded-t-2xl rounded-b-none bg-white p-6">
 
-            <VerificationTableToolbar />
+                <div className="flex justify-between items-center self-stretch w-full" >
+                    <h2 className="section-title">Pending Vendor Applications</h2>
+                    <div>
+
+                        <label className="text-[#697586] text-sm font-normal leading-[160%]" htmlFor="sort">Sort by:</label>
+
+                        <select className=" rounded-md p-1 text-[#2A3542] text-sm font-semibold leading-[160%] hover:bg-gray-50" id="sort">
+                            <option> Newest First</option>
+                            <option> Oldest First</option>
+                        </select>
+                    </div>
+
+
+                </div>
             </div>
-            <DataTable columns={getColumns(handleReview)} data={data} toolbar={<VerificationTableToolbar />} />
+            <DataTable columns={getColumns(handleReview)} data={data}  />
         </div>
     );
 }
 
 
 
-const VerificationTableToolbar = () => {
-    return (
-        <div className="flex justify-between items-center self-stretch w-full" >
-
-
-            <h2 className="section-title">Pending Vendor Applications</h2>
-            <div>
-
-                <label className="text-[#697586] text-sm font-normal leading-[160%]" htmlFor="sort">Sort by:</label>
-                <select className=" rounded-md p-1 text-[#2A3542] text-sm font-semibold leading-[160%] hover:bg-gray-50" id="sort">
-                    <option> Newest First</option>
-                    <option> Oldest First</option>
-                   
-                </select>
-            </div>
-
-
-        </div>
-    );
-};
 
 
 

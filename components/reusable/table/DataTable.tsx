@@ -65,7 +65,7 @@ export default function DataTable<T>({
                             </TableRow>
                         ) : (
                             paginatedData.map((row, i) => (
-                                <TableRow key={i} className="border-b border-white/5 hover:bg-white/5">
+                                <TableRow key={i} className="border-b border-[#ECEFF3] hover:bg-white/5">
                                     {columns.map((col, j) => (
                                         <TableCell key={j} className="px-4 py-2.5">
                                             {col.cell ? col.cell(row) : (col.accessor ? String(row[col.accessor] ?? "—") : "—")}

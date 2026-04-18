@@ -49,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       <aside
         className={`
-          fixed inset-y-0 left-0 z-50 flex flex-col bg-white
+          fixed inset-y-0 left-0 z-50 flex flex-col bg-[#F9F9FB]
           border-r border-gray-200 h-full
           transform transition-all duration-300 ease-in-out
           ${open ? 'translate-x-0' : '-translate-x-full'}
