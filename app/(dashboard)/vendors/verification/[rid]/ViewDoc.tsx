@@ -51,10 +51,10 @@ export default function DocumentViewer({ onClose }: { onClose: () => void }) {
       </div>
 
       {/* 2. The Document Content Area */}
-      <div className="grow flex items-center justify-center p-6 md:p-10 overflow-auto bg-white rounded-b-2xl">
+      <div className="grow flex items-center justify-center p-6 md:p-10  bg-white rounded-b-2xl">
         {/* Document Canvas (or Image) */}
      
-     <div className='w-[800px]  aspect-[84/65] shadow-[0_0_20px_5px_rgba(0,0,0,0.15)]'>
+     <div className='w-[800px] h-[620px] shadow-[0_0_20px_5px_rgba(0,0,0,0.15)]'>
      <Image
         src="/images/document-view.png"
         alt="Document View"
