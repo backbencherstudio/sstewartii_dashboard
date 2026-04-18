@@ -8,6 +8,7 @@ import { ArrowRight, CheckIcon, EyeIcon, } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import ViewDoc from "./ViewDoc";
 
 // 1. Define the Vendor type based on your data structure
 type Document = {
@@ -114,48 +115,24 @@ export default function PendingApplicationsPage() {
             <CustomModal
                 open={view !== null}
                 onOpenChange={() => setView(null)}
-                size="md"
+                size="lg"
                 // title="Document View"
                 closeButtonType="shadcn"
                 closeButtonProps={{
-                    onClick: () => setView(null),
+                onClick: () => {
+                    setView(null);
+                    console.log("close button clicked");
+                },
 
-                }}>
-                <div className="flex flex-col items-center gap-10">
-                    {/* Your Icon/Graphic here */}
-                    <div className="w-[157.907px] h-[159.88px] relative">
-                        <Image
-                            src="/successCommon.svg"
-                            alt="Document View"
-                            fill
-                            className="object-contain"
-                        />
-                    </div>
-
-
-                    <div className="w-full">
-                        <h2 className="self-stretch text-[color:var(--B,#070707)] text-center [font-family:Lora] text-2xl font-bold leading-[130%] tracking-[0.48px]">Vendor Application Successfully
-                            Approved!</h2>
-
-
-                        <p className="b">Vendor has been notified and granted platform access. They are now visible in the curated marketplace.</p>
-                    </div>
-
-
-                    <div className="w-full">
-                        <button className="btn-primary w-full">Back to Manage Verification
-
-
-                            <ArrowRight
-                                className="w-6 h-6 "
-                                onClick={() => setView(null)}
-                            />
-                        </button>
-
-
-                    </div>
-                </div>
+                }}
+                className="p-0"
+                showCloseButton={false}
+                >
+               <ViewDoc onClose={() => setView(null)}/>
             </CustomModal>
         </div >
     );
 }
+
+
+

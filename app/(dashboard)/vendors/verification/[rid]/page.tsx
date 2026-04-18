@@ -1,6 +1,7 @@
 import React from 'react'
 import DocumentTable from './DocumentTable'
 import VendorDetailCard from './VendorDetailCard'
+import ApproveDoc from './ApproveDoc'
 
 export default function page() {
     return (
@@ -19,8 +20,10 @@ export default function page() {
 
             <section className='grid md:grid-cols-[70%_30%] grid-cols-1 gap-6'>
 
-                <div>
+                <div className='space-y-6'>
                     <DocumentTable />
+
+                    <ApproveDoc />
                 </div>
 
 
