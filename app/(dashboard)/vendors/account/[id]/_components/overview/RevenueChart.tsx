@@ -47,8 +47,8 @@ export default function RevenueChart() {
             {/* Gradient definition for fill */}
             <defs>
               <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.15} />
-                <stop offset="95%" stopColor="#F59E0B" stopOpacity={0} />
+                <stop offset="5%" stopColor="#FF5500" stopOpacity={0.25} />
+                <stop offset="95%" stopColor="#FF5500" stopOpacity={0.01} />
               </linearGradient>
             </defs>
 
@@ -75,12 +75,12 @@ export default function RevenueChart() {
             <Area
               type="monotone"
               dataKey="revenue"
-              stroke="#F59E0B"
+              stroke="#FF5500"
               strokeWidth={2}
               fillOpacity={1}
               fill="url(#colorRevenue)"
             //   dot={{ r: 4, fill: "#FEA120", stroke: "#FEA120" }} 
-              activeDot={{ r: 6, fill: "#FEA120", stroke: "#FEA120" }}
+              activeDot={{ r: 5, fill: "#FF5500", stroke: "#FF5500" }}
             />
           </AreaChart>
         </ResponsiveContainer>

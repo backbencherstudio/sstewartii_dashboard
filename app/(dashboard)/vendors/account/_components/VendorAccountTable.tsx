@@ -8,6 +8,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { BadgeCheck, BanIcon, CircleX, ClockIcon, TicketIcon, XIcon } from "lucide-react";
 import { LoadingBoundaryProvider } from "next/dist/client/components/layout-router";
+import Link from "next/link";
 
 // 1. Updated Vendor type to match the data needed for badges
 type Vendor = {
@@ -42,10 +43,13 @@ const getColumns = (): Column<Vendor>[] => [
     },
     {
         header: "Action",
-        cell: () => (
-            <Button size="icon" variant="ghost" className="border border-[#DFE1E7]">
-                <ActionIcons.View className="w-5 h-5 text-[#697586]" />
-            </Button>
+        cell: (row) => (
+            <Link
+                href={`/vendors/account/${row.id}`}>
+                <Button size="icon" variant="ghost" className="border border-[#DFE1E7]">
+                    <ActionIcons.View className="w-5 h-5 text-[#697586]" />
+                </Button>
+                </Link>
         ),
     },
 ];
@@ -53,10 +57,10 @@ const getColumns = (): Column<Vendor>[] => [
 
 // 4. Dummy Data
 const data: Vendor[] = [
-    { id: "#834759", name: "David John", email: "david.john@example.com", status: "VERIFIED", subscriptionStatus: "ACTIVE", date: "May 10, 2026" },
-    { id: "#834454", name: "Rowan Fox", email: "skylar.kai@example.com", status: "SUSPENDED", subscriptionStatus: "INACTIVE", date: "May 10, 2026" },
-    { id: "#834454", name: "Rowan Fox", email: "skylar.kai@example.com", status: "REJECTED", subscriptionStatus: "FREE TRIAL", date: "May 10, 2026" },
-    { id: "#834454", name: "Rowan Fox", email: "skylar.kai@example.com", status: "EXPIRED", subscriptionStatus: "EXPIRED", date: "May 10, 2026" },
+    { id: "834759", name: "David John", email: "david.john@example.com", status: "VERIFIED", subscriptionStatus: "ACTIVE", date: "May 10, 2026" },
+    { id: "834454", name: "Rowan Fox", email: "skylar.kai@example.com", status: "SUSPENDED", subscriptionStatus: "INACTIVE", date: "May 10, 2026" },
+    { id: "834453", name: "Rowan Fox", email: "skylar.kai@example.com", status: "REJECTED", subscriptionStatus: "FREE TRIAL", date: "May 10, 2026" },
+    { id: "83445`", name: "Rowan Fox", email: "skylar.kai@example.com", status: "EXPIRED", subscriptionStatus: "EXPIRED", date: "May 10, 2026" },
 ];
 
 export default function VendorAccountTable() {
@@ -73,7 +77,7 @@ export default function VendorAccountTable() {
                             <option value="suspended">Suspended</option>
                             <option value="expired">Expired</option>
                             <option value="inactive">Inactive</option> */}
-                         
+
                         </select>
                     </div>
 
