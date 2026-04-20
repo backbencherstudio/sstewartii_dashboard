@@ -1,4 +1,5 @@
 "use client";
+import EmptyState from "@/components/reusable/EmptyState";
 import DataTable, { Column } from "@/components/reusable/table/DataTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -96,24 +97,31 @@ export default function PendingApplicationsPage() {
     return (
         <div className="">
 
-            <div className="border-x border-t rounded-t-2xl rounded-b-none bg-white p-6">
+            {
+                data.length === 0 ? (
+                    <EmptyState title="No vendor applications found" description="Please try again later" />
+                ) : (
+                    <>
+                        <div className="border-x border-t rounded-t-2xl rounded-b-none bg-white p-6">
 
-                <div className="flex justify-between items-center self-stretch w-full" >
-                    <h2 className="section-title">Pending Vendor Applications</h2>
-                    <div>
+                            <div className="flex justify-between items-center self-stretch w-full" >
+                                <h2 className="section-title">Pending Vendor Applications</h2>
+                                <div>
 
-                        <label className="text-[#697586] text-sm font-normal leading-[160%]" htmlFor="sort">Sort by:</label>
+                                    <label className="text-[#697586] text-sm font-normal leading-[160%]" htmlFor="sort">Sort by:</label>
 
-                        <select className=" rounded-md p-1 text-[#2A3542] text-sm font-semibold leading-[160%] hover:bg-gray-50" id="sort">
-                            <option> Newest First</option>
-                            <option> Oldest First</option>
-                        </select>
-                    </div>
+                                    <select className=" rounded-md p-1 text-[#2A3542] text-sm font-semibold leading-[160%] hover:bg-gray-50" id="sort">
+                                        <option> Newest First</option>
+                                        <option> Oldest First</option>
+                                    </select>
+                                </div>
 
 
-                </div>
-            </div>
-            <DataTable columns={getColumns(handleReview)} data={data}  />
+                            </div>
+                        </div>
+                        <DataTable columns={getColumns(handleReview)} data={data} /></>
+                )
+            }
         </div>
     );
 }

@@ -50,7 +50,7 @@ export default function PendingVendorVerifications() {
                   <button className='px-4 py-2 rounded-xl font-medium text-[#070707] text-lg bg-gradient-to-b from-[#FFBB1C] to-[#F29D00] shadow-sm hover:opacity-90 transition-opacity'>
                     Review
                   </button>
-                </div>
+                </div>  
               </div>
             ))}
           </div>
