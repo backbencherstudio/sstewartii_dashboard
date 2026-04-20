@@ -9,7 +9,7 @@ import { ArrowRight, CheckIcon, EyeIcon, } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import ViewDoc from "./ViewDoc";
+import ViewDoc from "../_components/ViewDoc";
 
 // 1. Define the Vendor type based on your data structure
 type Document = {

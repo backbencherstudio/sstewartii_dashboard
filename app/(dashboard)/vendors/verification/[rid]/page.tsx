@@ -1,7 +1,7 @@
 import React from 'react'
-import DocumentTable from './DocumentTable'
-import VendorDetailCard from './VendorDetailCard'
-import ApproveDoc from './ApproveDoc'
+import DocumentTable from './_components/DocumentTable'
+import VendorDetailCard from './_components/VendorDetailCard'
+import ApproveDoc from './_components/ApproveDoc'
 
 export default function page() {
     return (

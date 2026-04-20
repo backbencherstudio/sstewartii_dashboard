@@ -95,7 +95,7 @@ export default function VendorAccountTable() {
 
 
 // 3. Status Badge Logic (Matching the colors in your image)
-const StatusBadge = ({ status }: { status: Vendor['status'] }) => {
+export const StatusBadge = ({ status }: { status: Vendor['status'] }) => {
     const styles = {
         VERIFIED: {
             background: "bg-[#9DFF6C]",
