@@ -9,6 +9,7 @@ import { ReusableTabs } from '@/components/reusable/CustomTabs'
 import ProfileInfo from './_components/overview/ProfileInfo'
 import OrderDistribution from './_components/overview/OrderDistribution'
 import OverviewTab from './_components/overview'
+import OrdersTable from './_components/orders/OrdersTable'
 
 export default function page() {
 
@@ -88,7 +89,7 @@ export default function page() {
                 activeTab === 'overview' && <OverviewTab />
             }
             {
-                activeTab === 'orders' && <OrderDistribution />
+                activeTab === 'orders' && <OrdersTable />
             }
         </div>
     )
