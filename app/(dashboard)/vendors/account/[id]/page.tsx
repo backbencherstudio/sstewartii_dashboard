@@ -10,11 +10,13 @@ import ProfileInfo from './_components/overview/ProfileInfo'
 import OrderDistribution from './_components/overview/OrderDistribution'
 import OverviewTab from './_components/overview'
 import OrdersTable from './_components/orders/OrdersTable'
+import DocumentInfoTable from './_components/documents/DocumentInfoTable'
+import SubscriptionTable from './_components/subscription/SubscriptionTable'
 
 export default function page() {
 
     const [isOpen, setIsOpen] = useState(false)
-    const [activeTab, setActiveTab] = useState('overview')
+    const [activeTab, setActiveTab] = useState('subscription')
     const handleOpen = (open: boolean) => {
         setIsOpen(open)
     }
@@ -26,7 +28,7 @@ export default function page() {
         { value: "overview", label: "Overview" },
         { value: "orders", label: "Orders" },
         { value: "documents", label: "Documents" },
-        { value: "settings", label: "Settings" },
+        { value: "subscription", label: "Subscription" },
     ]
 
     return (
@@ -91,6 +93,13 @@ export default function page() {
             {
                 activeTab === 'orders' && <OrdersTable />
             }
+            {
+                activeTab === 'documents' && <DocumentInfoTable />
+            }
+            {
+                activeTab === 'subscription' && <SubscriptionTable />
+            }
+
         </div>
     )
 }

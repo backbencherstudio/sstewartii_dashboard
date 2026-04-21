@@ -4,18 +4,20 @@ import CustomModal from "@/components/reusable/CustomModal";
 import DataTable, { Column } from "@/components/reusable/table/DataTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { StatusBadge } from "@/components/reusable/CustomBadge";
+
 import { ArrowRight, CheckIcon, EyeIcon, } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import ViewDoc from "../_components/ViewDoc";
+import ViewDoc from "@/app/(dashboard)/vendors/verification/[rid]/_components/ViewDoc";
+
 
 // 1. Define the Vendor type based on your data structure
 type Document = {
     id: string;
     documents: string;
     status: string;
+    uploaded_at: string;
     expiry_date: string;
 
 };
@@ -39,11 +41,14 @@ const getColumns = (handleView: (document: Document) => void): Column<Document>[
     {
         header: "Status",
         cell: (row) => (
-            <span className={`inline-flex justify-center items-center gap-2.5 ${row.status === "active" ? "bg-[#1A9844]" : "bg-[#D92D20]"} px-4 py-2 rounded-lg text-white text-sm font-medium leading-[120%]`}>
+            <div className="flex ">
+                    <span className={`flex justify-center items-center gap-2.5 ${row.status === "active" ? "bg-[#1A9844]" : "bg-[#D92D20]"} px-4 py-2 rounded-lg text-white text-sm font-medium leading-[120%]`}>
                         {row.status === "active" ? "ACTIVE" : "INACTIVE"}
                     </span>
+            </div>
         ),
     },
+    { header: "Uploaded At", accessor: "uploaded_at" },
     { header: "Expiration Date", accessor: "expiry_date" },
     {
         header: "Action",
@@ -66,21 +71,26 @@ const data: Document[] = [
         documents: "Business License",
         status: "active",
         expiry_date: "May 10, 2026",
+        uploaded_at: "May 10, 2026",
     },
     {
         id: "834758",
         documents: "Business License",
-        status: "active",
+        status: "pending",
         expiry_date: "May 10, 2026",
+        uploaded_at: "May 10, 2026",
     },
     // ... add more items
 ];
 
 
-// map status to badge color
+// badge
+
+
+
 
 // 3. Usage in your Page
-export default function PendingApplicationsPage() {
+export default function DocumentInfoTable() {
 
 
     // const [review, setReview] = useState<Document | null>(null);
