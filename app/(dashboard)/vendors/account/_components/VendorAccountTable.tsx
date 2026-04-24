@@ -52,6 +52,8 @@ const getColumns = (): Column<Vendor>[] => [
                 </Link>
         ),
     },
+
+    
 ];
 
 

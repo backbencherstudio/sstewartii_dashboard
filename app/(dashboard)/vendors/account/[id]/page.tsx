@@ -16,11 +16,11 @@ import SubscriptionTable from './_components/subscription/SubscriptionTable'
 export default function page() {
 
     const [isOpen, setIsOpen] = useState(false)
-    const [activeTab, setActiveTab] = useState('subscription')
+    const [activeTab, setActiveTab] = useState('overview')
     const handleOpen = (open: boolean) => {
         setIsOpen(open)
     }
-
+ 
     console.log(isOpen)
 
 
@@ -83,8 +83,6 @@ export default function page() {
 
 
             {/* tab content */}
-
-
             <ReusableTabs tabs={vendorTabs} defaultValue="overview" onValueChange={setActiveTab} />
 
             {

@@ -28,7 +28,7 @@ export default function TableToolBar({
               <input
                 placeholder={searchPlaceholder}
                 onChange={(e) => onSearchChange?.(e.target.value)}
-                className="flex justify-center items-start self-stretch [background:var(--background-normal-25,#F6F8FA)] shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] pl-12 pr-4 pt-[13px] pb-3.5 rounded-lg w-[320px] placeholder:text-[#697586] focus:outline-none focus:ring-0 focus:border-none focus:shadow-[0_0_0_2px_rgba(244,171,35,0.80)]"
+                className="flex justify-center items-start self-stretch [background:var(--background-normal-25,#F6F8FA)] shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] pl-12 pr-4 pt-[13px] pb-3.5 rounded-lg w-full max-w-[320px] placeholder:text-[#697586] focus:outline-none focus:ring-0 focus:border-none focus:shadow-[0_0_0_2px_rgba(244,171,35,0.80)]"
               />
 
               {/* flex justify-center items-start self-stretch [background:var(--background-normal-25,#F6F8FA)] shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] pl-12 pr-4 pt-[13px] pb-3.5 rounded-lg */}

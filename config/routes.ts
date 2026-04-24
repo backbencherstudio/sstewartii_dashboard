@@ -17,4 +17,14 @@ export const breadcrumbConfig: Record<string, string[]> = {
     "/vendors/account": [
       "Manage Vendor Account",
     ],
+    "/customers": [
+      "Customers",
+    ],
+    "/customers/": [
+      "Customers",
+      "View Details",
+    ],
+    "/customers/report": [
+      "Reported Customers",
+    ],
   };

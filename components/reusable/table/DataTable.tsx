@@ -16,13 +16,19 @@ type DataTableProps<T> = {
     data: T[];
     pageSize?: number;
     toolbar?: React.ReactNode; // Inject custom search/filter UI
+    selectedId?: string | null; // Changed to single string
+    onSelectionChange?: (id: string | null) => void;
+    idKey?: keyof T;
 };
 
 export default function DataTable<T>({
     columns,
     data,
     pageSize = 5,
-    toolbar
+    toolbar,
+    selectedId,
+    onSelectionChange,
+    idKey
 }: DataTableProps<T>) {
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = Math.ceil(data.length / pageSize);
@@ -31,6 +37,12 @@ export default function DataTable<T>({
         (currentPage - 1) * pageSize,
         currentPage * pageSize
     );
+
+
+    const handleRowClick = (id: string) => {
+        // If the same row is clicked, deselect it. Otherwise, select the new one.
+        onSelectionChange?.(selectedId === id ? null : id);
+    };
 
     return (
         // <div className="border rounded-t-2xl rounded-b-none bg-white">
@@ -57,23 +69,25 @@ export default function DataTable<T>({
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {paginatedData.length === 0 ? (
-                            <TableRow>
-                                <TableCell colSpan={columns.length} className="text-center py-10 text-neutral-500 ">
-                                    No data found
+                    {paginatedData.map((row, i) => {
+                    const rowId = String(row[idKey!]);
+                    const isSelected = selectedId === rowId;
+                    
+                    return (
+                        <TableRow 
+                            key={i} 
+                            onClick={() => handleRowClick(rowId)}
+                            className={isSelected ? "bg-blue-50 hover:bg-blue-50 cursor-pointer" : "cursor-pointer"}
+                        >
+                            {/*  */}
+                            {columns.map((col, j) => (
+                                <TableCell key={j}>
+                                    {col.cell ? col.cell(row) : String(row[col.accessor!])}
                                 </TableCell>
-                            </TableRow>
-                        ) : (
-                            paginatedData.map((row, i) => (
-                                <TableRow key={i} className="border-b border-[#ECEFF3] hover:bg-white/5">
-                                    {columns.map((col, j) => (
-                                        <TableCell key={j} className="px-4 py-2.5">
-                                            {col.cell ? col.cell(row) : (col.accessor ? String(row[col.accessor] ?? "—") : "—")}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            ))
-                        )}
+                            ))}
+                        </TableRow>
+                    );
+                })}
                     </TableBody>
                 </Table>
             </div>
