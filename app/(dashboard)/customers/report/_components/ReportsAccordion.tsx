@@ -73,7 +73,7 @@ const reportUsers: ReportUser[] = [
             { id: "#30125", date: "01-12-2027", reason: "Customer did not arrive", details: "Describe the situation, e.g., waited for 30 mins, tried calling twice but didn’t show on me." },
             { id: "#30126", date: "01-13-2027", reason: "Customer did not arrive", details: "Describe the situation, e.g., waited for 30 mins, tried calling twice but didn’t show on me." },
             { id: "#30127", date: "01-14-2027", reason: "Customer did not arrive", details: "Describe the situation, e.g., waited for 30 mins, tried calling twice but didn’t show on me." },
-           
+
         ],
     },
     {
@@ -162,41 +162,41 @@ export default function ReportsAccordion() {
                                                         <p>Add to library</p>
                                                     </TooltipContent>
                                                 </Tooltip> */}
-                                                                                               
-                                                    <Tooltip>
-                                                        <TooltipTrigger asChild>
-                                                            <button type="button" className="flex items-center">
-                                                                <Info className="h-3.5 w-3.5 text-[#98A2B3]" />
-                                                            </button>
-                                                        </TooltipTrigger>
 
-                                                        <TooltipContent
-  side="left"
-  sideOffset={10}
-  className="max-w-[430px] rounded-lg border border-[#EAECF0] bg-white px-5 py-4 shadow-xl 
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <button type="button" className="flex items-center">
+                                                            <Info className="h-3.5 w-3.5 text-[#98A2B3]" />
+                                                        </button>
+                                                    </TooltipTrigger>
+
+                                                    <TooltipContent
+                                                        side="left"
+                                                        sideOffset={10}
+                                                        className="max-w-[430px] rounded-lg border border-[#EAECF0] bg-white px-5 py-4 shadow-xl 
              [&>svg]:fill-white [&>svg]:stroke-[#EAECF0]"
->
-                                                            <div className="space-y-5">
-                                                                <div>
-                                                                    <p className="mb-2 text-sm font-normal text-[#667085]">
-                                                                        Reason for report
-                                                                    </p>
-                                                                    <p className="m-0 text-base font-normal leading-[150%] text-[#101828]">
-                                                                        {report.reason}
-                                                                    </p>
-                                                                </div>
-
-                                                                <div>
-                                                                    <p className="mb-2 text-sm font-normal text-[#667085]">
-                                                                        Additional Details
-                                                                    </p>
-                                                                    <p className="m-0 text-base font-normal leading-[150%] text-[#101828]">
-                                                                        {report.details}
-                                                                    </p>
-                                                                </div>
+                                                    >
+                                                        <div className="space-y-5">
+                                                            <div>
+                                                                <p className="mb-2 text-sm font-normal text-[#667085]">
+                                                                    Reason for report
+                                                                </p>
+                                                                <p className="m-0 text-base font-normal leading-[150%] text-[#101828]">
+                                                                    {report.reason}
+                                                                </p>
                                                             </div>
-                                                        </TooltipContent>
-                                                    </Tooltip>
+
+                                                            <div>
+                                                                <p className="mb-2 text-sm font-normal text-[#667085]">
+                                                                    Additional Details
+                                                                </p>
+                                                                <p className="m-0 text-base font-normal leading-[150%] text-[#101828]">
+                                                                    {report.details}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </TooltipContent>
+                                                </Tooltip>
 
                                             </div>
 
