@@ -5,15 +5,15 @@ import { XIcon } from "lucide-react";
 import clsx from "clsx";
 
 type CloseButtonConfig =
-    | { closeButtonType: "shadcn"; closeButtonProps?: React.ComponentProps<typeof DialogClose> }
-    | { closeButtonType: "custom"; closeButtonProps?: React.ButtonHTMLAttributes<HTMLButtonElement> };
+    | { closeButtonType?: "shadcn"; closeButtonProps?: React.ComponentProps<typeof DialogClose> }
+    | { closeButtonType?: "custom"; closeButtonProps?: React.ButtonHTMLAttributes<HTMLButtonElement> };
 
 type CustomModalProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     children: React.ReactNode;
     title?: string;
-    size?: "sm" | "md" | "lg";
+    size?: "sm" | "md" | "lg" | "mmd";
     className?: string;
     showCloseButton?: boolean;
 } & CloseButtonConfig;
@@ -37,6 +37,7 @@ export default function CustomModal({
     const sizeClasses = {
         sm: "sm:max-w-[580px]",
         md: "sm:max-w-[620px]",
+        mmd: "sm:max-w-[634px]",
         lg: "sm:max-w-[1000px]"
     };
 
