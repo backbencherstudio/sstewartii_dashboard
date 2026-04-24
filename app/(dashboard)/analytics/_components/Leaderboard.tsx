@@ -7,7 +7,7 @@ export default function Leaderboard() {
 
     const [selectedTab, setSelectedTab] = useState('customers');
     return (
-        <div className='w-[455px] flex-col gap-4 self-stretch border border-[#ECEFF3] [background:var(--text-0,#FFF)] shadow-[0_0_16px_0_rgba(0,0,0,0.06)]   rounded-[10px] border-solid'>
+        <div className='w-full flex-col gap-4 self-stretch border border-[#ECEFF3] [background:var(--text-0,#FFF)] shadow-[0_0_16px_0_rgba(0,0,0,0.06)]   rounded-[10px] border-solid'>
             <div className="mb-4 flex items-center justify-between p-6">
                 <div>
                     <h3 className="section-title">

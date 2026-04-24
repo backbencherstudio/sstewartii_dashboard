@@ -73,7 +73,7 @@ export default function PlatformGrowthChart() {
           </div>
         </div>
 
-        <button className="flex h-[46px] items-center gap-2 rounded-xl bg-white px-5 text-base font-medium text-[#202332] shadow-[0_8px_24px_rgba(16,24,40,0.08)]">
+        <button className="hidden sm:flex h-[46px] items-center gap-2 rounded-xl bg-white px-5 text-base font-medium text-[#202332] shadow-[0_8px_24px_rgba(16,24,40,0.08)]">
           <select>
             <option value="this year">This year</option>
             <option value="last year">Last year</option>

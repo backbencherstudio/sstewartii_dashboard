@@ -19,9 +19,9 @@ export default function page() {
         <div className="w-full  flex-1">
           <PlatformGrothGraph />
         </div>
-        {/* <div className='w-[355px] flex-shrink-0'> */}
+        <div className='w-[385px] flex-shrink-0'>
         <Leaderboard />
-        {/* </div> */}
+        </div>
       </section>
 
 

@@ -36,7 +36,7 @@ export default function RevenueChart() {
           </div>
         </div>
         {/* Toggle buttons */}
-        <div className="bg-gray-50 p-1 rounded-xl flex gap-1">
+        <div className="hidden sm:flex bg-gray-50 p-1 rounded-xl  gap-1">
           {['Daily', 'Weekly', 'Annually'].map((tab) => (
             <button 
               key={tab}
