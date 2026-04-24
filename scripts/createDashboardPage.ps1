@@ -27,7 +27,7 @@ if (-not $pageNames) {
 # -------------------------------
 # Base Path (CHANGE if needed)
 # -------------------------------
-$basePath = "C:\Users\hrido\Desktop\pp\sstewartii_dashboard\app\(dashboard)\"
+$basePath = Join-Path $PSScriptRoot "..\app\(dashboard)"
 
 # -------------------------------
 # Loop through all pages

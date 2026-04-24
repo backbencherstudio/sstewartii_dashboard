@@ -1,7 +1,5 @@
-import React from 'react'
+import { redirect } from "next/navigation";
 
-export default function page() {
-  return (
-    <div>Vendors</div> 
-  )
+export default function VendorsPage() {
+    redirect('/vendors/verification');
 }
