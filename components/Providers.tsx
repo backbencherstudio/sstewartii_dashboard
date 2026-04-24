@@ -3,6 +3,7 @@
 import { AuthProvider } from "@/components/layout/Provider/AuthProvider";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SidebarProvider } from "./ui/sidebar";
+import { TooltipProvider } from "./ui/tooltip";
 
 const queryClient = new QueryClient();
 
@@ -11,7 +12,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <SidebarProvider>
         <AuthProvider>
-          {children}
+          <TooltipProvider>
+            {children}
+          </TooltipProvider>
         </AuthProvider>
       </SidebarProvider>
     </QueryClientProvider>);
