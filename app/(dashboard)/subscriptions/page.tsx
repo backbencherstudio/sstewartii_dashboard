@@ -4,6 +4,7 @@ import PageTitle from '@/components/reusable/PageTitle'
 import OtherIcons from '@/components/icons/OtherIcons'
 import Link from 'next/link'
 import SubscriptionPackagesTable from './_components/SubscriptionPackagesTable'
+import BillingTable from './_components/BillingTable'
 
 export default function page() {
     return (
@@ -27,6 +28,9 @@ export default function page() {
             <AnalyticStats />
 
             <SubscriptionPackagesTable/>
+
+
+            <BillingTable/>
         </div>
     )
 }
