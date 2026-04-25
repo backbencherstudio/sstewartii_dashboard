@@ -91,7 +91,7 @@ export default function AdminInformationPage() {
             <div className="flex flex-col md:flex-row gap-8">
                 <div className="flex-1 space-y-6">
                     <InputField
-                    placeholder="Enter your current password"
+                        placeholder="Enter your current password"
                         label="Current Password"
                         name="currentPassword"
                         value={formData.currentPassword}

@@ -2,6 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import SidebarHeader from './SidebarHeader';
 import SidebarMenu from './SidebarMenu';
+import LogoutModal from '@/components/LogoutModal';
+import { useLogoutModal } from '@/hooks/useLogoutModal';
+import useAuth from '@/hooks/useAuth';
 
 type SidebarVariant = 'basic' | 'collapsible';
 
@@ -18,6 +21,9 @@ const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const { logout } = useAuth();
+
+  const { isOpen, openModal, closeModal, confirmLogout } = useLogoutModal(logout);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -70,9 +76,12 @@ const Sidebar: React.FC<SidebarProps> = ({
           <SidebarMenu
             collapsed={effectiveCollapsed}
             onRequestExpand={() => setCollapsed(false)}
+            openModal={openModal}
           />
         </div>
       </aside>
+
+      <LogoutModal isOpen={isOpen} onClose={closeModal} onConfirm={confirmLogout} />
     </>
   );
 };

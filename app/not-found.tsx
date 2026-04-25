@@ -7,8 +7,8 @@ export default function page() {
     <div className='flex flex-col items-center justify-center h-[90vh] '  >
 
 
-      <div>
-        <Image src="/404.svg" alt="event-bg" width={1000} height={1000} />
+      <div className='w-[1000px] h-[578px] relative'>
+        <Image src="/404.svg" alt="event-bg" fill className='object-contain' />
       </div>
 
       <div className='max-w-[760px] mx-auto mt-20'>
