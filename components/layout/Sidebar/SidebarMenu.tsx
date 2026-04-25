@@ -47,6 +47,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ collapsed, onRequestExpand })
       label: 'Event Management',
       href: '/event',
       icon: <SidebarIcons.EventIcon className="w-4 h-4" />,
+      isBeta: true,
     },
     {
       label: 'Settings',
