@@ -107,7 +107,10 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                 href={child.href}
                 isActive={isRouteActive(pathname, child.href)}
               />
+              
             ))}
+
+          
           </div>
         </div>
       </div>

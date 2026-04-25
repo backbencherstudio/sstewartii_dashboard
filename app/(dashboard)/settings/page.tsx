@@ -1,3 +1,7 @@
-export default function settingsPage() {
-  return <h2>this is settings page</h2>;
+import React from 'react'
+
+export default function page() {
+  return (
+    <div>this is settinpage page</div>
+  )
 }

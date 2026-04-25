@@ -41,6 +41,7 @@ const getColumns = (): Column<Vendor>[] => [
         header: "Subscription Status",
         cell: (row) => <SubscriptionStatusBadge status={row.subscriptionStatus} />
     },
+    
     {
         header: "Action",
         cell: (row) => (

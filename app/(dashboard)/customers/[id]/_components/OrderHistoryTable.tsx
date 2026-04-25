@@ -122,7 +122,7 @@ export default function OrderHistoryTable() {
                 <option> Cancelled</option>
                 <option> Incomplete</option>
               </select>
-            </div>
+            </div> 
 
             {/* Sort by */}
             <div>

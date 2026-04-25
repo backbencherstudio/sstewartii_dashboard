@@ -13,7 +13,7 @@ type CustomModalProps = {
     onOpenChange: (open: boolean) => void;
     children: React.ReactNode;
     title?: string;
-    size?: "sm" | "md" | "lg" | "mmd";
+    size?: "sm" | "md" | "lg" | "mmd" | "xsm";
     className?: string;
     showCloseButton?: boolean;
 } & CloseButtonConfig;
@@ -38,7 +38,8 @@ export default function CustomModal({
         sm: "sm:max-w-[580px]",
         md: "sm:max-w-[620px]",
         mmd: "sm:max-w-[634px]",
-        lg: "sm:max-w-[1000px]"
+        lg: "sm:max-w-[1000px]",
+        xsm: "sm:max-w-[500px]"
     };
 
 

@@ -23,7 +23,7 @@ const SidebarMenu = () => {
 
       {/* Bottom - Logout */}
       <div className="px-3 border-t pt-4">
-        <SidebarItem label="Logout" onClick={logout} icon={<LogOut size={18} />} />
+        <SidebarItem label="Log out" onClick={logout} icon={<LogOut size={18} />} />
       </div>
     </nav>
   );

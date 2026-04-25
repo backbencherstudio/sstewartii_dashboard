@@ -4,14 +4,17 @@ import { Home, Store, Settings, LogOut, User } from 'lucide-react';
 import SidebarItem from './SidebarItem';
 import useAuth from '@/hooks/useAuth';
 import SidebarIcons from '@/components/icons/SidebarIcons';
+import { useLogoutModal } from '@/hooks/useLogoutModal';
+import LogoutModal from '@/components/LogoutModal';
 
 interface SidebarMenuProps {
   collapsed: boolean;
   onRequestExpand?: () => void;
+  openModal: () => void;
 }
 
-const SidebarMenu: React.FC<SidebarMenuProps> = ({ collapsed, onRequestExpand }) => {
-  const { logout } = useAuth();
+const SidebarMenu: React.FC<SidebarMenuProps> = ({ collapsed, onRequestExpand, openModal }) => {
+    
 
   const menuItems = [
     {
@@ -47,6 +50,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ collapsed, onRequestExpand })
       label: 'Event Management',
       href: '/event',
       icon: <SidebarIcons.EventIcon className="w-4 h-4" />,
+      isBeta: true,
     },
     {
       label: 'Settings',
@@ -56,8 +60,8 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ collapsed, onRequestExpand })
     },
     
     {
-      label: 'Logout',
-      onClick: logout,
+      label: 'Log out',
+      onClick: openModal,
       icon: <LogOut size={16} />,
       isBottom: true,
     },
@@ -67,6 +71,8 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ collapsed, onRequestExpand })
   const bottomItems = menuItems.filter((item) => item.isBottom);
 
   return (
+
+    <>
     <nav className={`flex flex-col  ${collapsed ? 'px-3' : 'px-6 pt-6'}  justify-between h-full`}>  
       <div className="flex flex-col gap-1">
         {topItems.map((item) => (
@@ -90,7 +96,11 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ collapsed, onRequestExpand })
           ))}
         </div>
       </div>
+     
     </nav>
+
+   
+    </>
   );
 };
 

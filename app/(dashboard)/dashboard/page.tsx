@@ -22,7 +22,7 @@ export default function DashboardPage() {
                 {/* Right Side - Action Buttons */}
                 <div className="flex items-center gap-4">
                     <ReusableSelect
-                        variant="outline"
+                        variant="outline" 
                         // placeholder="Select an option"
                         // className="bg-white"
                         value={selectedOption}
@@ -57,7 +57,7 @@ export default function DashboardPage() {
             </section>
 
 
-            {/* Pending Vendor Verifications */}
+            {/* Pending         rifications */}
          <section className="flex flex-col md:flex-row  justify-between gap-4">
             
             <div className="w-full  flex-1">
