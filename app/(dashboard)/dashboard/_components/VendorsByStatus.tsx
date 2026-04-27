@@ -45,7 +45,7 @@ const VendorsStatusChart = () => {
                 </div>
 
                 {
-                    data.length < 0 ? (
+                    data.length > 0 ? (
 
                         <>
                             <div className='w-full h-[180px] relative overflow-hidden'>

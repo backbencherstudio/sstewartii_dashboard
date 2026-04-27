@@ -64,7 +64,7 @@ export default function AdminInformationPage() {
         {/* Left Side: Avatar Card */}
         <div className='w-full md:w-1/3 border border-[#DFE1E7] bg-[#F8FAFB] rounded-2xl p-6 flex flex-col items-center text-center'>
           <img 
-            src={imagePreview || "/path-to-your-image.jpg"} 
+            src={imagePreview || "https://randomuser.me/api/portraits/men/36.jpg"} 
             alt="Sedric Stewart" 
             className='w-32 h-32 rounded-lg object-cover mb-4' 
           />

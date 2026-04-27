@@ -53,6 +53,12 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ collapsed, onRequestExpand, o
       isBeta: true,
     },
     {
+      label: 'Profile',
+      // href: '/notifications',
+      // icon: <SidebarIcons.NotificationsIcon className="w-4 h-4" />,
+      isBottom: true,
+    },
+    {
       label: 'Settings',
       href: '/settings',
       icon: <Settings size={16} />,

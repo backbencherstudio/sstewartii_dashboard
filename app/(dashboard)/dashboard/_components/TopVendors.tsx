@@ -50,7 +50,7 @@ export default function TopVendors() {
 
       {/* Rows Construction */}
       {
-        currentData.length < 0 ? (
+        currentData.length > 0 ? (
           <>
 
             <div className="space-y-6 mb-2">

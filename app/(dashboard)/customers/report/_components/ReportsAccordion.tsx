@@ -14,6 +14,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Tooltip as TooltipPrimitive } from "radix-ui"
 
 type Report = {
     id: string;
@@ -171,6 +172,7 @@ export default function ReportsAccordion() {
                                                     </TooltipTrigger>
 
                                                     <TooltipContent
+                                                    arrowVariant="light"
                                                         side="left"
                                                         sideOffset={10}
                                                         className="max-w-[430px] rounded-lg border border-[#EAECF0] bg-white px-5 py-4 shadow-xl 
@@ -195,6 +197,8 @@ export default function ReportsAccordion() {
                                                                 </p>
                                                             </div>
                                                         </div>
+                                                    
+
                                                     </TooltipContent>
                                                 </Tooltip>
 

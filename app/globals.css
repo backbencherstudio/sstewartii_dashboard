@@ -219,3 +219,8 @@ button {
   fill: white !important;
   stroke: #EAECF0 !important;
 }
+
+
+.beta-badge {
+@apply flex justify-center items-center gap-2.5 rounded [background:rgba(58,194,194,0.20)] px-1.5 py-0.5 text-[color:var(--Info,#3AC2C2)] [font-family:Inter] text-xs font-normal leading-[120%]
+}
