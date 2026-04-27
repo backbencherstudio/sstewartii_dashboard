@@ -1,5 +1,6 @@
 "use client";
-import { Bell, ChevronRight, Link, Menu, User } from 'lucide-react';
+import { Bell, ChevronRight,  Menu } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 import useAuth from '@/hooks/useAuth';
 import { usePathname } from 'next/navigation';
@@ -34,11 +35,11 @@ export const Topbar = ({ name, onMenuClick }: Props) => {
 
       <div className="flex items-center gap-2 hidden md:flex">
         {breadcrumbs.map((breadcrumb, idx) => (
-          <p key={idx} className={cn("flex items-center gap-2 text-[#697586]   font-lora text-sm font-bold leading-[130%]", idx > 0 && "text-[#2A3542]")}>
+          <Link key={idx} href={breadcrumb.href} className={cn("flex items-center gap-2 text-[#697586]   font-lora text-sm font-bold leading-[130%]", idx > 0 && "text-[#2A3542]")}>
 
             {idx > 0 && <ChevronRight className="w-4 h-4" />}
             {breadcrumb.label}
-          </p>
+          </Link>
         ))}
       </div>
 

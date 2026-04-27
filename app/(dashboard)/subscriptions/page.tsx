@@ -21,7 +21,7 @@ export default function page() {
                     </Link>
 
 
-                    <button className='btn-primary'>Create New Plan</button>
+                    <Link href={"/subscriptions/create-plan"} className='btn-primary'>Create New Plan</Link>
                 </div>
             </div>
          

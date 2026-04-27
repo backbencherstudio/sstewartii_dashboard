@@ -26,7 +26,7 @@ export default function TopVendors() {
   const domainMax = 150000;
 
   return (
-    <div className="w-full p-6 bg-white rounded-3xl border border-gray-100 shadow-sm font-sans">
+    <div className="w-full h-full p-6 bg-white rounded-3xl border border-gray-100 shadow-sm font-sans">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <h3 className="section-title">Top 5 Vendors</h3>

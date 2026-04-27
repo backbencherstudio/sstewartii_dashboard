@@ -11,11 +11,15 @@ export const getBreadcrumbLabels = (pathname: string) => {
   if (!match) return [];
 
   const [basePath, labels] = match;
+  const pathSegments = basePath.split("/").filter(Boolean);
 
-  let currentPath = basePath;
-
-  return labels.map((label) => {
-    const href = currentPath;
+  return labels.map((label, idx) => {
+    // Keep breadcrumbs progressive so parent labels navigate to parent routes.
+    const segmentCount = Math.max(
+      1,
+      pathSegments.length - labels.length + idx + 1
+    );
+    const href = `/${pathSegments.slice(0, segmentCount).join("/")}`;
 
     return { label, href };
   });

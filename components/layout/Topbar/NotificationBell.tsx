@@ -27,7 +27,7 @@ export default function NotificationBell() {
                 </button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent className="w-125 p-0 shadow-lg rounded-xl overflow-hidden mt-2" align="end">
+            <DropdownMenuContent className="w-100 p-0 shadow-lg rounded-xl overflow-hidden mt-2" align="end">
                 {/* Prevent the menu from closing when clicking tabs */}
                 <Tabs defaultValue="all" className="w-full border" onSelect={(e) => e.preventDefault()}>
                     <div className="border-b bg-[#F6F8FA] px-4 pt-4">
