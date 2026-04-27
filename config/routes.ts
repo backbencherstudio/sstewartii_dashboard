@@ -17,6 +17,10 @@ export const breadcrumbConfig: Record<string, string[]> = {
     "/vendors/account": [
       "Manage Vendor Account",
     ],
+    "/vendors/account/": [
+      "Manage Vendor Account",
+      "View Details",
+    ],
     "/customers": [
       "Customers",
     ],
@@ -26,5 +30,21 @@ export const breadcrumbConfig: Record<string, string[]> = {
     ],
     "/customers/report": [
       "Reported Customers",
+    ],
+
+    "/analytics": [
+      "Analytics",
+    ],
+    "/subscriptions": [
+      "Subscriptions",
+    ],
+
+    "/subscriptions/": [
+      "Subscriptions",
+      "All Plans",
+    ],
+    "/subscriptions/create-plan": [ 
+      "Subscriptions",
+      "Create Plan",
     ],
   };

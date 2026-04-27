@@ -61,7 +61,7 @@ const PlatformRevenueChart = () => {
     const [selectedOption, setSelectedOption] = useState("this-year");
     return (
         <div>
-            <div className="w-full h-[414px] bg-white md:p-6 p-4 rounded-2xl shadow-[0_2px_20px_0_rgba(0,0,0,0.10)]">
+            <div className="w-full h-[445px] bg-white md:p-6 p-4 rounded-2xl shadow-[0_2px_20px_0_rgba(0,0,0,0.10)]">
                 <div className='md:mb-6 mb-4 flex items-center justify-between '>
                     <h2 className='section-title'>Platform Revenue</h2>
 

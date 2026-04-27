@@ -3,6 +3,7 @@ import CustomModal from "@/components/reusable/CustomModal";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 export default function ApproveDoc() {
@@ -81,6 +82,12 @@ const ApproveRejectModal = ({
     onClose: () => void;
     mode: "approve" | "reject";
 }) => {
+
+    const router = useRouter();
+    const handleBack = () => {
+        onClose();
+        router.push("/vendors/verification");
+    }
     return (
         <div className="flex flex-col items-center justify-center gap-10">
             <div className="relative w-[157.907px] h-[159.88px] mb-6">
@@ -109,7 +116,7 @@ const ApproveRejectModal = ({
             <div className="w-full">
                 <button
                     className="btn-primary flex-1 text-black "
-                    onClick={onClose}
+                    onClick={handleBack}
                 >
                     Back to Manage Verification
 
