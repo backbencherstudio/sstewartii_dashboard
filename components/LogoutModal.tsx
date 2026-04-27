@@ -42,8 +42,9 @@ export default function LogoutModal({ isOpen, onClose, onConfirm }: Props) {
             onClick={onClose}
             className="flex-1 h-14 justify-center items-center rounded-2xl bg-[#DFE1E7] text-[#585D63] font-inter text-base font-medium"
           >
-            Cancel
+            Cancel          
           </button>
+          
 
           <button
             onClick={onConfirm}

@@ -17,7 +17,8 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 
       <div
         className="relative hidden h-screen shrink-0 lg:block"
-        style={{ width: "min(50%, 667px)" }}
+        style={{ width: "min(50%)" }}
+        // style={{ width: "min(50%, 667px)" }}
       >
         <Image
           src="/images/auth-side.png"
