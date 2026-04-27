@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { getBreadcrumbLabels } from '@/lib/breadcrumb.utils';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './ThemeToogle';
+import NotificationBell from './NotificationBell';
 
 
 type Props = {
@@ -54,16 +55,7 @@ export const Topbar = ({ name, onMenuClick }: Props) => {
 
         {/* notification icon */}
         <div className="flex items-center gap-2">
-          <div className="relative">
-            <button className="flex items-start gap-2 border border-white/10  p-2 rounded-full border-solid transition-colors hover:border-[#F6D642]/40 bg-gray-100">
-              <Bell className="w-5 h-5" />
-            </button>
-
-            {/* alert iocn*/}
-            <div className="absolute top-2.5 right-2.5 flex w-2 h-2 justify-center items-center gap-2.5 shrink-0 bg-[#EB3D4D] px-0.5 py-px rounded-[14px]">
-            </div>
-
-          </div>
+          <NotificationBell />
 
 
           {/* profile icon */}

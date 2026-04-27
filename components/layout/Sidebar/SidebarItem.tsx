@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, User } from 'lucide-react';
+import Image from 'next/image';
 
 interface ChildItem {
   label: string;
@@ -19,6 +20,7 @@ interface SidebarItemProps {
   children?: ChildItem[];
   collapsed?: boolean;
   onRequestExpand?: () => void;
+  isBeta?: boolean;
 }
 
 /** True when pathname equals href or is a nested segment under it (e.g. /vendors/add under /vendors). */
@@ -37,6 +39,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   children,
   collapsed,
   onRequestExpand,
+  isBeta,
 }) => {
   const pathname = usePathname();
   const isActive = href ? isRouteActive(pathname, href) : false;
@@ -101,19 +104,29 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
           <div className="ml-6 flex flex-col relative">
             <div className="absolute left-0 top-0 bottom-6 w-px bg-gray-600 h-[calc(100%-2rem)]" />
             {children.map((child) => (
-              <ChildItem
-                key={child.label}
-                label={child.label}
-                href={child.href}
-                isActive={isRouteActive(pathname, child.href)}
-              />
-              
+              <>
+                <ChildItem
+                  key={child.label}
+                  label={child.label}
+                  href={child.href}
+                  isActive={isRouteActive(pathname, child.href)}
+                />
+              </>
+
             ))}
 
-          
+
           </div>
         </div>
       </div>
+    );
+  }
+
+  if (label === 'Profile') {
+    return (
+      <button onClick={onClick} className={baseClass}>
+        <ProfileItem />
+      </button>
     );
   }
 
@@ -122,6 +135,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       <Link href={href} className={baseClass}>
         {icon && <span className="shrink-0 text-inherit [&_svg]:shrink-0">{icon}</span>}
         <span>{label}</span>
+        {isBeta && <span className="beta-badge">Beta</span>}
       </Link>
     );
   }
@@ -132,6 +146,8 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       <span>{label}</span>
     </button>
   );
+
+
 };
 
 export default SidebarItem;
@@ -159,3 +175,22 @@ const ChildItem: React.FC<ChildItemProps> = ({ label, href, isActive }) => {
     </Link>
   );
 };
+
+
+const ProfileItem = () => {
+  return (
+    <div className='flex items-center gap-3'>
+      <div className='flex w-9 h-9 justify-center items-center border border-gray-200 rounded-full relative'>
+        <Image src='https://randomuser.me/api/portraits/men/36.jpg' alt='profile' fill className='absolute w-full h-full object-cover rounded-full' />
+      </div>
+
+      <div>
+        <p className='text-[color:var(--Button-text,#070707)] [font-family:Inter] text-sm font-medium leading-[160%]'>Sedric Stewart</p>
+
+        <p className='inline-flex justify-center items-center gap-2 [background:var(--Mid-Orange,#FFCD71)] px-1.5 py-0 rounded-3xl text-[color:var(--Button-text,#070707)] [font-family:Inter] text-[10px] font-normal leading-4 tracking-[-0.5px]'>Admin</p>
+      </div>
+    </div>
+  );
+};
+
+{/* */ }

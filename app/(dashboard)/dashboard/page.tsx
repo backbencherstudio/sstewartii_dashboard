@@ -49,6 +49,7 @@ export default function DashboardPage() {
             </div>
 
             <DashboardStats />
+            
             <section className="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="w-full  flex-1">
                     <PlatformRevenueChart />

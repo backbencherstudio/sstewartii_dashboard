@@ -10,7 +10,7 @@ interface StatsCardProps {
   
      const StatsCard: React.FC<StatsCardProps> = ({ color, title, value, update, icon }) => {
     return (
-      <div className="flex flex-col max-w-sm relative overflow-hidden shadow-sm rounded-[var(--Other-Radius-md,8px)] border border-[color:var(--Color-Gray-100,#EDEDED)] [background:var(--BG-Linear,linear-gradient(180deg,#ECF1F8_0%,#FEFEFE_100%))]">
+      <div className="flex flex-col w-full  relative overflow-hidden shadow-sm rounded-[var(--Other-Radius-md,8px)] border border-[color:var(--Color-Gray-100,#EDEDED)] [background:var(--BG-Linear,linear-gradient(180deg,#ECF1F8_0%,#FEFEFE_100%))]">
   
         {/* Top Section */}
         <div className="flex items-start gap-4 px-5 pt-4 pb-1 border-b border-[color:var(--Color-Gray-100,#EDEDED)]">
