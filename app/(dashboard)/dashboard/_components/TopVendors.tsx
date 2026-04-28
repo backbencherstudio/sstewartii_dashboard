@@ -59,8 +59,10 @@ export default function TopVendors() {
                   {/* Label Row */}
                   <div className="flex justify-between items-center text-sm">
                     <span className="font-medium text-slate-500">{item.name}</span>
-                    <span className={`font-bold ${index === 0 ? 'text-[#31C48D]' : 'text-slate-500'}`}>
-                      ${item.value.toLocaleString()}
+                    <span className={`font-medium ${index === 0 ? 'text-[#31C48D]' : 'text-slate-500'}`}>
+                      {
+                        activeTab === 'sales' ? `${item.value.toLocaleString()} orders` : `$${item.value.toLocaleString()}`
+                      }
                     </span>
                   </div>
 
