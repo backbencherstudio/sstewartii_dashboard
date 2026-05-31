@@ -2,8 +2,9 @@ import { ReusableSelect } from '@/components/form/CustomSelect';
 import EmptyState from '@/components/reusable/EmptyState';
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, LabelList, Tooltip, Legend } from 'recharts';
+import { useDashboardRevenue } from '@/hooks/useDashboardOverview';
 
-const data = [
+const fakeData = [
     { name: 'Jan', revenue: 1000 },
     { name: 'Fev', revenue: 1200 },
     { name: 'Mar', revenue: 700 },
@@ -59,25 +60,18 @@ const CustomBar = (props: any) => {
 
 const PlatformRevenueChart = () => {
     const [selectedOption, setSelectedOption] = useState("this-year");
+    const { data: dashboardRevenue } = useDashboardRevenue({ range: "year", metric: "revenue" });
+    console.log("dashboardRevenue", dashboardRevenue);
+    const data = dashboardRevenue?.items.map((item: { label: string, value: number }) => ({
+        name: item.label,
+        revenue: item.value,
+    })) || [];
     return (
         <div>
             <div className="w-full h-[445px] bg-white md:p-6 p-4 rounded-2xl shadow-[0_2px_20px_0_rgba(0,0,0,0.10)]">
-                <div className='md:mb-6 mb-4 flex items-center justify-between '>
-                    <h2 className='section-title'>Platform Revenue</h2>
-
-                    <ReusableSelect
-                        variant="small"
-
-                        value={selectedOption}
-                        options={[{ label: "This Year", value: "this-year" }, { label: "This Month", value: "monthly" }]}
-                        onValueChange={(value) => setSelectedOption(value)}
-                    />
-                </div>
-
-
                 {
                     data.length > 0 ? (
-                        <ResponsiveContainer width="100%" height="90%">
+                        <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 16 }}>
                                 <defs>
                                     <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">

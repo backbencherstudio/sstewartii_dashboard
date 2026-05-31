@@ -16,10 +16,20 @@ function isAuthLoginRequest(config: { url?: string } | undefined) {
   return url.includes("/auth/login");
 }
 
+// const api = axios.create({
+//   baseURL: process.env.NEXT_PUBLIC_API_URL,
+//   timeout: 10000,
+// });
+
+/** Free ngrok tunnels return an HTML interstitial unless this header is sent; axios then fails (often net::ERR_FAILED) even when the origin API would return 200. */
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   timeout: 10000,
+  headers: process.env.NEXT_PUBLIC_API_URL?.includes("ngrok")
+    ? { "ngrok-skip-browser-warning": "true" }
+    : {},
 });
+
 
 api.interceptors.request.use(async (config) => {
   const token = await getAccessToken();
