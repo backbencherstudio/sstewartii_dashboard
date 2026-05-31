@@ -10,9 +10,18 @@ import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
 import Checkbox from "../form/Checkbox";
 import { Form } from "@/components/form/Form";
 import Link from "next/link";
-import { cookie } from "@/lib/cookie";
 import { useRouter } from "next/navigation";
+import { IS_DEV } from "@/lib/constants";
 
+
+
+const defaultValues: LoginFormValues = IS_DEV ? {
+  email: "admin@gmail.com",
+  password: "Admin@123456",
+} : {
+  email: "",
+  password: "",
+};
 
 
 const loginSchema = z.object({
@@ -26,6 +35,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 function LoginFormFields({
   isLoading,
   submitError,
+  
 }: {
   isLoading: boolean;
   submitError: string;
@@ -35,6 +45,7 @@ function LoginFormFields({
   const {
     register,
     formState: { errors },
+    
   } = useFormContext<LoginFormValues>();
 
   return (
@@ -123,9 +134,9 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginFormValues) => {
     setSubmitError("");
     try {
-      // await login(data);
-      cookie.set("access-token", "1234567890");
-      router.push("/dashboard");
+      await login(data);
+      // cookie.set("access-token", "1234567890");
+      // router.push("/dashboard");
     } catch (err) {
       console.log(err);
       setSubmitError(err instanceof Error ? err.message : "Login failed");
@@ -148,7 +159,7 @@ export default function LoginForm() {
 
           <Form<LoginFormValues>
             schema={loginSchema}
-            defaultValues={{ email: "", password: "" }}
+            defaultValues={defaultValues}
             onSubmit={onSubmit}
             className="w-full space-y-4"
           >
