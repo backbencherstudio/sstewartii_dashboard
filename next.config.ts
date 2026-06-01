@@ -28,6 +28,17 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "randomuser.me",
       },
+      {
+        protocol: "https",
+        hostname: "affirmable-uncongruously-kensley.ngrok-free.dev",
+      },
+
+      // {
+      //   protocol: "https",
+      //   hostname: "affirmable-uncongruously-kensley.ngrok-free.dev",
+      // },
+
+
     ],
   },
 };

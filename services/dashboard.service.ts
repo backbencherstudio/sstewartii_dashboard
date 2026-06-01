@@ -12,7 +12,7 @@ export const dashboardService = {
   // Get the dashboard revenue
 
   async getRevenue(params: {
-    range: "day" | "week" | "month" | "year";
+    range?: "day" | "week" | "month" | "year";
     metric?: "revenue" | "orders" | "customers";
   }) {
     const res = await api.get("/admin/dashboard/revenue", {

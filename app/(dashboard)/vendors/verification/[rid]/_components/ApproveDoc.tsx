@@ -5,9 +5,57 @@ import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { VendorVerificationStatus } from "@/types/vendor.types";
+import { useApproveOrRejectDocument } from "@/hooks/useVendor";
+import { toast } from "sonner";
 
-export default function ApproveDoc() {
+interface ApproveDocProps {
+    verificationId: string;
+    verificationStatus: VendorVerificationStatus;
+}
+
+export default function ApproveDoc({ verificationId, verificationStatus }: ApproveDocProps) {
     const [mode, setMode] = useState<"approve" | "reject" | null>(null);
+    const { mutate: approveOrRejectDocument, isPending } = useApproveOrRejectDocument();
+
+    const handleApproveOrReject = (status: "approve" | "reject") => {
+
+        if (status === "approve") {
+           
+            // console.log("approve call", verificationId, status);
+            approveOrRejectDocument({ verificationId, status: "approve" }, {
+                onSuccess: () => {
+                    setMode("approve");
+                },
+                onError: (error) => {
+                    console.log(error);
+                    toast.error("Failed to approve document");
+
+                }
+            });
+        } else {
+           
+            // console.log("reject call", verificationId, status);
+            approveOrRejectDocument({ verificationId, status: "reject" }, {
+                onSuccess: () => {
+                    setMode("reject");
+                },
+                onError: (error) => {
+                    console.log(error);
+                    toast.error("Failed to reject document");
+                }
+            });
+        }
+    }
+
+    if (verificationStatus !== "PENDING") {
+        return (
+            <div className="flex flex-col items-start gap-2.5 self-stretch [background:var(--BG-Linear,linear-gradient(180deg,#ECF1F8_0%,#FEFEFE_100%))] p-6 rounded-2xl ">
+                <p className="self-stretch text-[#2A3542] text-base font-medium leading-[160%] text-center">{verificationStatus === "APPROVED" ? "You have already approved this application." : "You have already rejected this application."}</p>
+            </div>
+        );
+    }
+
 
     return (
         <>
@@ -30,14 +78,14 @@ export default function ApproveDoc() {
                     <Button
                         variant="outline"
                         className="btn-outline flex-1 text-black h-12"
-                        onClick={() => setMode("reject")}
+                        onClick={() => handleApproveOrReject("reject")}
                     >
                         Reject
                     </Button>
 
                     <Button
                         className="btn-primary flex-1 text-black h-12"
-                        onClick={() => setMode("approve")}
+                        onClick={() => handleApproveOrReject("approve")}
                     >
                         Approve
                     </Button>

@@ -12,7 +12,7 @@ export const useDashboardOverview = () => {
 
 // Get the dashboard revenue
 export const useDashboardRevenue = (params: {
-  range: "day" | "week" | "month" | "year";
+  range?: "day" | "week" | "month" | "year";
   metric?: "revenue" | "orders" | "customers";
 }) => {
   return useQuery({

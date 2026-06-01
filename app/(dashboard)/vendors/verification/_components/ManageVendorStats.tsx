@@ -2,8 +2,10 @@ import DashboardStatsIcons from '@/components/icons/DashboardStatsIcons';
 import StatsCard from '@/components/reusable/StatsCard';
 import { CalendarDays, Store } from 'lucide-react'
 import React from 'react'
+import { VendorVerificationStats } from '@/types/vendor.types';
 
-export default function DashboardStats() {
+export default function DashboardStats({ stats }: { stats: VendorVerificationStats | undefined }) {
+  console.log(stats, "stats");
   return (
     <div>
 

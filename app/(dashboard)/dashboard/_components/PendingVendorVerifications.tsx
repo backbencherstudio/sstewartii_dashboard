@@ -10,6 +10,9 @@ const verifications = [
 ];
 
 export default function PendingVendorVerifications() {
+
+
+  
   return (
     <div className='flex flex-col w-full rounded-2xl border border-[#ECEFF3] bg-white shadow-[0_0_16px_0_rgba(0,0,0,0.06)] overflow-hidden'>
       {/* Header Section */}

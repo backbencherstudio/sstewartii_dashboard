@@ -1,4 +1,5 @@
 import EmptyState from '@/components/reusable/EmptyState';
+import { useDashboardOverview, useDashboardRevenue } from '@/hooks/useDashboardOverview';
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from 'recharts';
 
@@ -24,6 +25,26 @@ export default function TopVendors() {
 
   // Calculate max for the scale at the bottom
   const domainMax = 150000;
+
+  const { data: dashboardRevenue } = useDashboardRevenue(
+    {
+      // range: "month",
+      metric: "revenue",
+    } 
+  );
+  const { data: dashboardSales } = useDashboardRevenue(
+    {
+      range: "year",
+      metric: "orders",
+    } 
+  );
+
+
+
+  console.log(dashboardRevenue, "dashboardRevenue");
+  console.log(dashboardSales, "dashboardSales");
+
+  
 
   return (
     <div className="w-full h-full p-6 bg-white rounded-3xl border border-gray-100 shadow-sm font-sans">
