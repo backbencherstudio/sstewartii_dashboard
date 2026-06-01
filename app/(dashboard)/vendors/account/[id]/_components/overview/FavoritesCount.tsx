@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Favorites as FavoritesType } from '@/types/vendorAccount.types';
 // Reusable type for the favorite users
 interface FavoriteUser {
   id: string;
@@ -20,18 +20,38 @@ const favorites: FavoriteUser[] = [
   { id: '4', name: 'Eleanor Pena', followerSince: 'Oct 2023', orders: 4, avatar: '/avatar4.jpg' },
 ];
 
-export default function FavoritesCountCard() {
+export default function FavoritesCountCard({ favorites }: { favorites: FavoritesType }) {
+
+  const { count, recent } = favorites || {};
+  console.log("favorites", favorites);
+   const data = recent?.map((item: any) => ({
+    id: item.id || '',
+    name: item.name || '',
+    followerSince: item.followerSince || '',
+    orders: item.orders || 0,
+    avatar: item.avatar || '/avatar1.jpg',
+  }));
+
+  console.log("data", data);
   return (
     <div className="flex  flex-col items-start gap-4 self-stretch bg-white shadow-[0_0_16px_0_rgba(0,0,0,0.06)]  rounded-2xl h-[418px] overflow-y-auto w-full container-scrollbar">
       {/* Header */}
       <div className="w-full flex justify-between items-center mb-2 sticky top-0 bg-white z-10 px-5 pt-6">
         <h2 className="section-title">Favorites count</h2>
-        <span className="text-[#2A3542] font-lora text-2xl font-bold leading-[130%] tracking-[0.48px]">756</span>
+        <span className="text-[#2A3542] font-lora text-2xl font-bold leading-[130%] tracking-[0.48px]">{count}</span>
       </div>
+
+      {
+        data?.length === 0 && (
+          <div className="w-full flex justify-center items-center h-full">
+            <p className="text-sm text-[#697586]">No favorites found</p>
+          </div>
+        )
+      }
 
       {/* List Container - Add 'overflow-y-auto' if you have many items */}
       <div className="w-full flex flex-col gap-3 px-5 pb-6">
-        {favorites.map((user) => (
+        {data?.map((user) => (
           <div 
             key={user.id} 
             className="border border-[#ECEFF3] [background:var(--background-normal-25,#F6F8FA)] px-4 py-3 rounded-2xl border-solid flex items-center justify-between"

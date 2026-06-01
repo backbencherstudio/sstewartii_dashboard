@@ -3,6 +3,7 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import Link from 'next/link';
+import { ServiceArea as ServiceAreaType } from '@/types/vendorAccount.types';
 
 const orangeMarkerIcon = L.divIcon({
   className: '',
@@ -37,8 +38,11 @@ const serviceLocations: { position: [number, number]; name: string }[] = [
   { position: [23.8160, 90.4450], name: 'Gulshan' },
 ];
 
-export default function ServiceArea() {
+export default function ServiceArea({ serviceArea }: { serviceArea: ServiceAreaType }) {
   const center: [number, number] = [23.8103, 90.4200];
+
+  const { address, latitude, longitude, radius } = serviceArea || {};
+  console.log("serviceArea", serviceArea);
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">

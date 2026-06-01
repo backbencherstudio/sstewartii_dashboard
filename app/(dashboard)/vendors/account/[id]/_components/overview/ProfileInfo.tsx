@@ -1,26 +1,34 @@
 import React from 'react';
 import Image from 'next/image';
 import { BadgeCheck } from 'lucide-react';
+import { VendorOverviewVendor, BusinessProfile } from '@/types/vendorAccount.types';
+import { ContactInfo } from '@/types/vendorAccount.types';
+import { SimpleJsonBox } from '@/lib/SimpleJsonBox';
+import { formatDate } from '@/lib/utils';
 
-export default function ProfileInfo() {
+export default function ProfileInfo({ vendor, contactInfo, businessProfile }: { vendor: VendorOverviewVendor, contactInfo: ContactInfo, businessProfile: BusinessProfile }) {
+
+    console.log("businessProfile", businessProfile);
     return (
         // <section className="bg-white p-8 rounded-3xl border border-[#ECEFF3] shadow-sm flex flex-col lg:flex-row gap-8">
 
         <div className="flex flex-col lg:flex-row gap-1">
 
+            {/* <SimpleJsonBox data={{vendor, contactInfo, businessProfile}} /> */}
+
             {/* LEFT: Profile Summary */}
 
             <div className="flex  flex-col items-center gap-4 flex-1 w-full max-w-[554px]  self-stretch border border-[#ECEFF3] [background:var(--Background-White,#FFF)] shadow-[0_0_16px_0_rgba(0,0,0,0.06)] rounded-l-2xl  border-solid p-6">
                 <div className="relative w-32 h-32 rounded-full overflow-hidden border">
-                    <Image src="https://i.pravatar.cc/150?u=52" alt="Meat On Wheel" fill className="object-cover" />
+                    <Image src={vendor?.coverImage || "/images/vendor-avatar.png"} alt={vendor?.businessName || ""} fill className="object-cover" />
                 </div>
                 <div className="text-center">
                     <h2 className="text-[color:var(--Stroke,#2A3542)] [font-family:Lora] text-2xl font-bold leading-[130%] tracking-[0.48px] flex items-center justify-center gap-2">
-                        Meat On Wheel <span className="text-emerald-500">
+                        {vendor?.businessName} <span className="text-emerald-500">
                         <BadgeCheck />
                         </span>
                     </h2>
-                    <p className="mt-1 text-[color:var(--Secondary-Text,#697586)] [font-family:Inter] text-base font-normal leading-[130%]">ID: #99283</p>
+                    <p className="mt-1 text-[color:var(--Secondary-Text,#697586)] [font-family:Inter] text-base font-normal leading-[130%]">ID: {vendor?.vendorCode}</p>
                 </div>
 
                 {/* Stats Card */}
@@ -30,15 +38,15 @@ export default function ProfileInfo() {
                         [
                             {
                                 label: 'Current Plan',
-                                value: 'Pro'
+                                value: vendor?.subscriptionStatus || 'Free'
                             },
                             {
                                 label: 'Avg. Rating',
-                                value: '4.8'
+                                value: vendor?.rating?.toFixed(1) || '0.0'
                             },
                             {
                                 label: 'Total Revenue',
-                                value: '$3804.00'
+                                value: vendor?.totalRevenue || 0
                             }
                         ].map((item) => (
                             <div key={item.label}>
@@ -59,11 +67,11 @@ export default function ProfileInfo() {
                         Vendor Contact Info
                     </h3>
                     <div className="space-y-4">
-                        <DetailsItem label="Vendor ID" value="ID: #99283" />
-                        <DetailsItem label="Full Name" value="David John" />
-                        <DetailsItem label="Registered Email" value="david@gmail.com" />
-                        <DetailsItem label="Phone Number" value="+1 (512) 555-0198" />
-                        <DetailsItem label="Date Joined" value="Joined on Oct 24, 2023" />
+                        <DetailsItem label="Vendor ID" value={`ID: ${vendor?.vendorCode}`} />
+                        <DetailsItem label="Full Name" value={vendor?.businessName || ""} />
+                        <DetailsItem label="Registered Email" value={contactInfo?.publicEmail || ""} />
+                        <DetailsItem label="Phone Number" value={contactInfo?.contactNumber || ""} />
+                        <DetailsItem label="Date Joined" value={`Joined on ${formatDate(vendor?.joinedAt || "")}`} />
                     </div>
                 </div>
 
@@ -73,11 +81,16 @@ export default function ProfileInfo() {
                     </h3>
                     <div className="space-y-4">
                        
-                        <DetailsItem label="Category" value="Mexican" />
-                        <DetailsItem label="Public Email" value="foodonwheel@gmail.com" />
-                        <DetailsItem label="Phone Number" value="+1 (512) 555-0198" />
-                        <DetailsItem label="Website URL" value="foodonwheel.com" />
-                        <DetailsItem label="Instagram URL" value="www.instagram.com/foodonwheel" />
+                        <DetailsItem label="Category" value={businessProfile?.cuisines.join(', ') || ""} />
+                        <DetailsItem label="Public Email" value={contactInfo?.registeredEmail || ""} />
+                        <DetailsItem label="Phone Number" value={contactInfo?.contactNumber || ""} />
+                        <DetailsItem label="Website Url" value={businessProfile?.socialLinks[1]?.url || ""} />
+                        <DetailsItem label="Website Url" value={businessProfile?.socialLinks[0]?.url || ""} />
+
+
+
+                        
+                        {/* <DetailsItem label="Instagram URL" value={businessProfile?.socialLinks.find(link => link.id === 'instagram')?.url || ""} /> */}
                     </div>
                 </div>
             </div>

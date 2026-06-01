@@ -12,8 +12,20 @@ import SubscriptionTable from './_components/subscription/SubscriptionTable'
 import SuspendModal from '@/components/SuspendModal'
 // import DisableModal from '@/components/DisableModal'
 import CustomModal from '@/components/reusable/CustomModal'
+import { useVendorOverview } from '@/hooks/useVendorAccount'
+import { useParams } from 'next/navigation'
+import { SimpleJsonBox } from '@/lib/SimpleJsonBox'
+import { formatDate } from '@/lib/utils'
+import { VendorOverviewData } from '@/types/vendorAccount.types'
 
 export default function Page() {
+
+    const { id } = useParams();
+    // console.log(id);
+
+    const { data: vendorOverview, isLoading, isError } = useVendorOverview(id as string, "month");
+    const {vendor,} = vendorOverview?.data || {};
+    console.log(JSON.stringify(vendorOverview, null, 2));
 
     const [modalAction, setModalAction] = useState<'suspend' | 'disable' | null>(null)
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -42,17 +54,21 @@ export default function Page() {
         { value: "subscription", label: "Subscription" },
     ]
 
+    if(isLoading) return <div>Loading...</div>
+    // if(isError) return <div>Error: {isError.message}</div>
+
     return (
         <div className='space-y-6 container mx-auto'>
 
+            {/* <SimpleJsonBox data={vendorOverview} /> */}
             <section className='flex items-center justify-between'>
                 <div>
                     <div className='flex items-center justify-between gap-2'>
-                        <h3 className='text-[#1A1C1E] font-lora text-2xl font-bold leading-[130%] tracking-[0.48px]'>David John</h3>
-                        <StatusBadge status="VERIFIED" />
+                        <h3 className='text-[#1A1C1E] font-lora text-2xl font-bold leading-[130%] tracking-[0.48px] capitalize'>{vendor?.businessName}</h3>
+                        <StatusBadge status={vendor?.kycStatus as "APPROVED" | "IN_REVIEW" | "REJECTED" | "SUSPENDED" | "PENDING" | "UNVERIFIED"} />
                     </div>
 
-                    <p className='text-[#2A3542] text-base font-normal leading-6'>Joined on Oct 24, 2023 • ID: #99283</p>
+                    <p className='text-[#2A3542] text-base font-normal leading-6'>Joined on {formatDate(vendor?.joinedAt || '')} • ID: {vendor?.vendorCode}</p>
                 </div>
 
                 <div>
@@ -92,7 +108,7 @@ export default function Page() {
             {/* tab content */}
             <ReusableTabs tabs={vendorTabs} defaultValue="overview" onValueChange={setActiveTab} />
 
-            {activeTab === 'overview' && <OverviewTab />}
+            {activeTab === 'overview' && <OverviewTab vendorOverview={vendorOverview?.data as VendorOverviewData} />}
             {activeTab === 'orders' && <OrdersTable />}
             {activeTab === 'documents' && <DocumentInfoTable />}
             {activeTab === 'subscription' && <SubscriptionTable />}

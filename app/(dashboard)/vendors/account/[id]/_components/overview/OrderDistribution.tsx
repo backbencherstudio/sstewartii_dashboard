@@ -1,7 +1,12 @@
 'use client';
 import React from 'react'
+import { OrderDistribution as OrderDistributionType 
+    } from '@/types/vendorAccount.types';
 
-export default function OrderDistribution() {
+export default function OrderDistribution({ orderDistribution }: { orderDistribution: OrderDistributionType }) {
+
+    const { totalOrders, itemsSold, completed, cancelled, incomplete } = orderDistribution || {};
+
     return (
         <section className='w-full max-w-3xl border border-[#ECEFF3] [background:var(--Background-White,#FFF)] shadow-[0_0_16px_0_rgba(0,0,0,0.06)] px-5 py-6 rounded-2xl border-solid'>
 
@@ -20,12 +25,12 @@ export default function OrderDistribution() {
                         [
                             {
                                 title: 'Total Orders',
-                                value: 1150,
+                                value: totalOrders || 0,
                                 icon: <Ordercon />
                             },
                             {
                                 title: 'Items Sold',
-                                value: 4150,
+                                value: itemsSold || 0,
                                 icon: <ItemIcon />
                             },
 
@@ -48,7 +53,7 @@ export default function OrderDistribution() {
 
 
                 </div>
-                <OrderOverviewChart />
+                <OrderOverviewChart orderDistribution={orderDistribution} />
             </div>
         </section>
     )
@@ -61,13 +66,18 @@ import { LayoutGrid } from 'lucide-react'; // Or your icon set's grid icon
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 
-const data = [
-    { name: 'Complete', value: 80, color: '#90EE90' },
-    { name: 'Cancel', value: 14, color: '#FFA07A' },
-    { name: 'Incomplete', value: 6, color: '#B0C4DE' },
-];
 
-export function OrderOverviewChart() {
+
+export function OrderOverviewChart({ orderDistribution }: { orderDistribution: OrderDistributionType }) {
+
+    const { completed, cancelled, incomplete, totalOrders } = orderDistribution || {};
+
+
+    const data = [
+        { name: 'Complete', value: completed || 0   , color: '#90EE90' },
+        { name: 'Cancel', value: cancelled || 0, color: '#FFA07A' },
+        { name: 'Incomplete', value: incomplete || 0, color: '#B0C4DE' },
+    ];
     return (
 
 
@@ -97,7 +107,7 @@ export function OrderOverviewChart() {
 
                 {/* Center Text */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className="text-[color:var(--Stroke,#2A3542)]  text-base font-semibold leading-[135%]">1150</span>
+                    <span className="text-[color:var(--Stroke,#2A3542)]  text-base font-semibold leading-[135%]">{totalOrders || 0}</span>
                     <span className="text-[color:var(--Secondary-Text,#697586)]  text-xs font-normal leading-[142%]">Orders</span>
                 </div>
             </div>

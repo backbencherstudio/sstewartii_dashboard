@@ -6,33 +6,39 @@ import ProfileViews from './ProfileViews'
 import FavoritesCountCard from './FavoritesCount'
 import CustomerEngagementChart from './CustomerEngagementChart'
 import ServiceArea from './ServiceArea'
+import { VendorOverviewData } from '@/types/vendorAccount.types'
 
-export default function OverviewTab() {
+export default function OverviewTab({ vendorOverview }: { vendorOverview: VendorOverviewData }) {
+
+    const { vendor, contactInfo, businessProfile, orderDistribution, revenueChart, customerEngagement, serviceArea, profileViews, favorites, lastUpdatedAt } = vendorOverview || {};
+
+
+
     return (
         <div className='space-y-6'>
-            <ProfileInfo />
+            <ProfileInfo vendor={vendor} contactInfo={contactInfo} businessProfile={businessProfile} />
             <div className='flex flex-col md:flex-row gap-4 w-full  '>
-                <OrderDistribution />
-                <RevenueChart />
+                <OrderDistribution orderDistribution={orderDistribution} />
+                <RevenueChart revenueChart={revenueChart} />
             </div>
 
             <div className='flex flex-col md:flex-row gap-4 w-full  '>
                 <div className='flex-1'>
-                    <CustomerEngagementChart />
+                    <CustomerEngagementChart customerEngagement={customerEngagement} />
                 </div>
                 <div className='flex-1'>
-                    <ServiceArea />
+                    <ServiceArea serviceArea={serviceArea} />
                 </div>
             </div>
 
             <div className='flex flex-col md:flex-row gap-4 w-full  '>
 
                 <div className='flex-1'>
-                    <ProfileViews />
+                    <ProfileViews profileViews={profileViews} />
 
                 </div>
                 <div className='flex-1'>
-                    <FavoritesCountCard />
+                    <FavoritesCountCard favorites={favorites} />
                 </div>
             </div>
 

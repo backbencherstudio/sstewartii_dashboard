@@ -9,66 +9,81 @@ import { cn } from "@/lib/utils";
 import { BadgeCheck, BanIcon, CircleX, ClockIcon, TicketIcon, XIcon } from "lucide-react";
 import { LoadingBoundaryProvider } from "next/dist/client/components/layout-router";
 import Link from "next/link";
+import { VendorListData } from "@/types/vendorAccount.types";
+import { SimpleJsonBox } from "@/lib/SimpleJsonBox";
 
 // 1. Updated Vendor type to match the data needed for badges
 type Vendor = {
-    id: string;
-    name: string;
+    vendorId: string;
+    vendorCode: string;
+    businessName: string;
+    ownerName: string;
     email: string;
-    status: 'VERIFIED' | 'SUSPENDED' | 'REJECTED' | 'EXPIRED';
-    subscriptionStatus: 'ACTIVE' | 'INACTIVE' | 'FREE TRIAL' | 'EXPIRED';
-    date: string;
-};
-
+  
+    status: "APPROVED" | "IN_REVIEW" | "REJECTED" | "SUSPENDED" | "PENDING" | "UNVERIFIED";
+    statusLabel: string;
+  
+    subscriptionStatus: "ACTIVE" | "INACTIVE" | "FREE_TRIAL" | "EXPIRED";
+    subscriptionStatusLabel: string;
+  
+    dateJoined: string;
+    dateJoinedLabel: string;
+  };
 // 2. Define Columns
 const getColumns = (): Column<Vendor>[] => [
-    { header: "Vendor ID", accessor: "id" },
     {
-        header: "Vendor",
-        cell: (row) => (
-            <div>
-                <div className="text-sm font-medium text-[#161618]">{row.name}</div>
-                <div className="text-xs text-[#697586]">{row.email}</div>
-            </div>
-        )
+      header: "Vendor ID",
+      accessor: "vendorCode",
     },
     {
-        header: "Status",
-        cell: (row) => <StatusBadge status={row.status} />
+      header: "Vendor",
+      cell: (row) => (
+        <div>
+          <div className="text-sm font-medium text-[#161618]">
+            {row.businessName}
+          </div>
+          <div className="text-xs text-[#697586]">
+            {row.email}
+          </div>
+        </div>
+      ),
     },
-    { header: "Date Joined", accessor: "date" },
     {
-        header: "Subscription Status",
-        cell: (row) => <SubscriptionStatusBadge status={row.subscriptionStatus} />
+      header: "Status",
+      cell: (row) => <StatusBadge status={row.status} />,
     },
-    
     {
-        header: "Action",
-        cell: (row) => (
-            <Link
-                href={`/vendors/account/${row.id}`}>
-                <Button size="icon" variant="ghost" className="border border-[#DFE1E7]">
-                    <ActionIcons.View className="w-5 h-5 text-[#697586]" />
-                </Button>
-                </Link>
-        ),
+      header: "Date Joined",
+      accessor: "dateJoinedLabel",
     },
+    {
+      header: "Subscription Status",
+      cell: (row) => (
+        <SubscriptionStatusBadge status={row.subscriptionStatus} />
+      ),
+    },
+    {
+      header: "Action",
+      cell: (row) => (
+        <Link href={`/vendors/account/${row.vendorId}`}>
+          <Button size="icon" variant="ghost" className="border border-[#DFE1E7]">
+            <ActionIcons.View className="w-5 h-5 text-[#697586]" />
+          </Button>
+        </Link>
+      ),
+    },
+  ];
 
-    
-];
 
 
-// 4. Dummy Data
-const data: Vendor[] = [
-    { id: "834759", name: "David John", email: "david.john@example.com", status: "VERIFIED", subscriptionStatus: "ACTIVE", date: "May 10, 2026" },
-    { id: "834454", name: "Rowan Fox", email: "skylar.kai@example.com", status: "SUSPENDED", subscriptionStatus: "INACTIVE", date: "May 10, 2026" },
-    { id: "834453", name: "Rowan Fox", email: "skylar.kai@example.com", status: "REJECTED", subscriptionStatus: "FREE TRIAL", date: "May 10, 2026" },
-    { id: "83445`", name: "Rowan Fox", email: "skylar.kai@example.com", status: "EXPIRED", subscriptionStatus: "EXPIRED", date: "May 10, 2026" },
-];
 
-export default function VendorAccountTable() {
+export default function VendorAccountTable({ vendorListData }: { vendorListData: VendorListData | undefined }) {
+    console.dir(vendorListData, { depth: null });
+    const items = vendorListData?.items || [];
     return (
         <div className="bg-white rounded-2xl border border-[#ECEFF3]">
+
+            {/* <SimpleJsonBox data={items} /> */}
             <div className="p-6 flex justify-between items-center border-b border-[#ECEFF3]">
                 <h2 className="text-xl font-semibold">Vendor Accounts</h2>
                 <div className="flex items-center gap-6">
@@ -93,7 +108,7 @@ export default function VendorAccountTable() {
                     </div>
                 </div>
             </div>
-            <DataTable columns={getColumns()} data={data} />
+            <DataTable columns={getColumns()} data={items as Vendor[]} />
         </div>
     );
 }
@@ -104,31 +119,39 @@ export default function VendorAccountTable() {
 // 3. Status Badge Logic (Matching the colors in your image)
 export const StatusBadge = ({ status }: { status: Vendor['status'] }) => {
     const styles = {
-        VERIFIED: {
+        APPROVED: {
             background: "bg-[#9DFF6C]",
             icon: <BadgeCheck className="w-3.5 h-3.5 text-black" />,
         }, // Green
-        SUSPENDED: {
+        IN_REVIEW: {
             background: "bg-[#FF7070]",
             icon: <BanIcon className="w-3.5 h-3.5 text-black" />,
         }, // Red
-        REJECTED: {
+        PENDING: {
             background: "bg-[#89A2C3]",
             icon: <CircleX className="w-3.5 h-3.5 text-black" />,
         },  // Blue
-        EXPIRED: {
+        SUSPENDED: {
             background: "bg-[#3AC2C2]",
             icon: <ClockIcon className="w-3.5 h-3.5 text-black" />,
         },   // Teal
+        REJECTED: {
+            background: "bg-[#FF7070]",
+            icon: <ClockIcon className="w-3.5 h-3.5 text-black" />,
+        },   // Red
+        UNVERIFIED: {
+            background: "bg-[#FFA500]/50",
+            icon: <BanIcon className="w-3.5 h-3.5 text-black" />,
+        },   // orange
     };
-    return <span className={cn("px-4 py-2 rounded-full text-xs  uppercase text-center inline-flex items-center gap-2", styles[status].background)}>{styles[status].icon} {status}</span>;
+    return <span className={cn("px-4 py-2 rounded-full text-xs  uppercase text-center inline-flex items-center gap-2", styles[status as keyof typeof styles]?.background)}>{styles[status as keyof typeof styles]?.icon} {status}</span>;
 };
 
 const SubscriptionStatusBadge = ({ status }: { status: Vendor['subscriptionStatus'] }) => {
     const styles = {
         ACTIVE: " [background:rgba(0,255,106,0.10)] border-[rgba(0,255,106,0.10)] text-[#1A994F]",
         INACTIVE: "[background:rgba(118,118,118,0.20)] px-4 py-2 rounded-lg border-solid border-[rgba(118,118,118,0.30)]          ",
-        "FREE TRIAL": "[background:rgba(28,100,255,0.10)] border-[rgba(61,123,255,0.14)] text-[#1967D2]",
+        "FREE_TRIAL": "[background:rgba(28,100,255,0.10)] border-[rgba(61,123,255,0.14)] text-[#1967D2]",
         EXPIRED: " [background:rgba(161,0,0,0.10)]  border-[rgba(242,85,85,0.15)] text-[#A10000]",
     };
     return <span className={cn("px-4 py-2 rounded-lg border  text-sm font-medium uppercase", styles[status])}>{status}</span>;

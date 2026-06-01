@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { CustomerEngagementItem, CustomerEngagement as CustomerEngagementType } from '@/types/vendorAccount.types';
 
 const data = [
   { day: '1', New: 60, Repeated: 20 },
@@ -12,7 +13,15 @@ const data = [
   { day: '31', New: 65, Repeated: 30 },
 ];
 
-export default function CustomerEngagementChart() {
+export default function CustomerEngagementChart({ customerEngagement }: { customerEngagement: CustomerEngagementType }) {
+
+  const { range, totalCustomers, newCustomers, repeatedCustomers, repeatRate, items } = customerEngagement || {};
+
+  const data = items?.filter((item: CustomerEngagementItem) => parseInt(item.label) % 5===0).map((item: CustomerEngagementItem) => ({
+    day: item.label,
+    New: item.newCustomers,
+    Repeated: item.repeatedCustomers,
+  }));
   return (
     <div className="w-full h-[360px] px-5 py-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
       <h3 className="section-title mb-4">Customer Engagement</h3>
@@ -35,7 +44,7 @@ export default function CustomerEngagementChart() {
         <div className="w-6 h-6 rounded-full bg-[#3AC2C2]/20 flex items-center justify-center">
             <span className="text-[#3AC2C2] text-xs">↻</span>
         </div>
-        <p className="text-sm font-semibold text-[#1A1A2E]">Repeat Rate: <span className="text-[#3AC2C2]">38%</span></p>
+        <p className="text-sm font-semibold text-[#1A1A2E]">Repeat Rate: <span className="text-[#3AC2C2]">{repeatRate}%</span></p>
       </div>
     </div>
   );

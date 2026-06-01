@@ -1,9 +1,12 @@
 import DashboardStatsIcons from '@/components/icons/DashboardStatsIcons';
 import VendorStatsIcons from '@/components/icons/VendorStatsIcons';
 import StatsCard from '@/components/reusable/StatsCard';
+import { VendorStats } from '@/types/vendorAccount.types';
 
 
-export default function ManageVendorAcountStats() {
+export default function ManageVendorAcountStats({ data }: { data: VendorStats | undefined }) {
+
+  // console.dir(data, { depth: null });
   return (
     <div>
 
@@ -15,28 +18,28 @@ export default function ManageVendorAcountStats() {
         <StatsCard
           color='#3AC2C2'
           title='Total Vendors'
-          value={1240}
+          value={data?.totalVendors || 0}
           update='May 22, 2026'
           icon={<VendorStatsIcons.TotalVendors/>} 
         />
           <StatsCard
           color='  #FFBB1C'
           title='Verified Vendors'
-          value={1220}
+          value={data?.verifiedVendors || 0}
           update='May 22, 2026'
           icon={<VendorStatsIcons.VerifiedVendors/>} 
         />
         <StatsCard
           color='#89A2C3'
           title='New This Month'
-          value={17 }
+          value={data?.newThisMonth || 0}
           update='May 22, 2026'
           icon={<VendorStatsIcons.NewVendors/>} 
         />
         <StatsCard
           color='#CC1E22'
           title='Suspended Vendors'
-          value={2}
+          value={data?.suspendedVendors || 0}
           update='May 22, 2026'
           icon={<VendorStatsIcons.SuspendedVendors/>} 
         />

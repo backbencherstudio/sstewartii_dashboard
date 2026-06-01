@@ -2,15 +2,8 @@
 import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ChevronDown } from 'lucide-react';
+import { RevenueChartItem, RevenueChart as RevenueChartType } from '@/types/vendorAccount.types';
 
-const data = [
-  { day: '1', revenue: 700 }, { day: '3', revenue: 700 }, { day: '5', revenue: 1300 },
-  { day: '7', revenue: 1400 }, { day: '9', revenue: 1250 }, { day: '11', revenue: 1150 },
-  { day: '13', revenue: 1200 }, { day: '15', revenue: 1450 }, { day: '17', revenue: 1800 },
-  { day: '19', revenue: 2500 }, { day: '21', revenue: 2300 }, { day: '23', revenue: 1300 },
-  { day: '25', revenue: 950 }, { day: '27', revenue: 1000 }, { day: '29', revenue: 1300 },
-  { day: '31', revenue: 1400 },
-];
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -23,7 +16,18 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null;
 };
 
-export default function RevenueChart() {
+export default function RevenueChart({ revenueChart }: { revenueChart: RevenueChartType }) {
+ console.log("revenueChart", revenueChart);
+ const { range, total, currency, items } = revenueChart || {};
+ 
+
+
+ const data = items?.map((item: RevenueChartItem) => ({
+  day: item.label,
+  revenue: item.value,
+ }));
+ console.log("data", data);
+ 
   return (
     <div className="w-full max-w-7xl p-5 bg-white/60 rounded-3xl border border-gray-100 shadow-sm font-sans flex flex-col items-center h-[343px]">
       
@@ -33,10 +37,10 @@ export default function RevenueChart() {
           Revenue <span className="font-medium text-slate-500 text-base">(Jan, 2026)</span>
         </h2>
         <select className='text-sm text-orange-500'>
-            <option value="this month ">This month</option>
-            <option value="last month">Last month</option>
+            {/* <option value="this month ">This month</option>
+            <option value="last month">Last month</option> */}
             <option value="this year">This year</option>
-            <option value="last year">Last year</option>
+            {/* <option value="last year">Last year</option> */}
         </select>
       </div>
 

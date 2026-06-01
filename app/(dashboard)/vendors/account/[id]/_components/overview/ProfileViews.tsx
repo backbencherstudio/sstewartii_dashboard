@@ -1,6 +1,38 @@
 "use client";
 import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { ProfileViewsItem, ProfileViews as ProfileViewsType } from '@/types/vendorAccount.types';
+
+
+const getVisibleMonths = () => {
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const currentMonthIndex = new Date().getMonth();
+
+  return Array.from({ length: 5 }, (_, i) => {
+    const monthIndex = (currentMonthIndex - 2 + i + 12) % 12;
+
+    return {
+      name: monthNames[monthIndex],
+      isCurrent: monthIndex === currentMonthIndex,
+    };
+  });
+};
+
+const visibleMonths = getVisibleMonths();
 
 const data = [
   { day: '1', views: 400 }, { day: '5', views: 800 }, { day: '8', views: 600 },
@@ -8,13 +40,20 @@ const data = [
   { day: '25', views: 1200 }, { day: '31', views: 500 },
 ];
 const months = ["Jan", "Feb", "March", "Apr", "May"];
-export default function ProfileViewsChart() {
+export default function ProfileViewsChart({ profileViews }: { profileViews: ProfileViewsType }) {
+
+  const { range, total, growthPercent, items } = profileViews || {};
+  const data = items?.map((item: ProfileViewsItem) => ({
+    day: item.label,
+    views: item.value,
+  }));
+
   return (
     <DashboardCard title="Profile views">
     {/* Central Stats */}
     <div className="text-center mb-4">
-      <h1 className="text-[40px] font-bold text-[#1A1A2E]">756</h1>
-      <p className="text-emerald-500  text-sm">▲ <span className='text-[#697586]'>23% from last month</span>
+      <h1 className="text-[40px] font-bold text-[#1A1A2E]">{total}</h1>
+      <p className="text-emerald-500  text-sm">▲ <span className='text-[#697586]'>{growthPercent}% from last month</span>
       </p>
     </div>
 
@@ -54,18 +93,20 @@ export default function ProfileViewsChart() {
     </div>
 
     {/* Bottom Month Selector */}
-    <div className="flex justify-between items-center px-4 ">
-      {months.map((m) => (
-        <button 
-          key={m} 
-          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-            m === "March" ? "bg-[#3AC2C2] text-white" : "text-[#697586] hover:text-gray-900"
-          }`}
-        >
-          {m}
-        </button>
-      ))}
-    </div>
+    <div className="flex justify-between items-center px-4">
+  {visibleMonths.map((month) => (
+    <button
+      key={month.name}
+      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+        month.isCurrent
+          ? "bg-[#3AC2C2] text-white"
+          : "text-[#697586] hover:text-gray-900"
+      }`}
+    >
+      {month.name}
+    </button>
+  ))}
+</div>
   </DashboardCard>
   );
 }
