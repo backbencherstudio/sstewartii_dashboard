@@ -27,3 +27,26 @@ export interface LoginResponseBody {
   };
   type?: string;
 }
+
+export interface ForgotPasswordResponseBody {
+  success?: boolean;
+  message?: string;
+}
+
+export interface VerifyOTPResponseBody {
+  success?: boolean;
+  message?: string;
+  resetToken?: string;
+  reset_token?: string;
+  token?: string;
+  data?: {
+    resetToken?: string;
+    reset_token?: string;
+    token?: string;
+  };
+}
+
+export interface ResetPasswordResponseBody {
+  success?: boolean;
+  message?: string;
+}

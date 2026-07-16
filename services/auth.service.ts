@@ -1,7 +1,14 @@
 import api from "@/lib/axios";
 import { extractTokensFromAuthPayload } from "@/lib/auth-tokens";
 import { clearTokens, setTokens } from "@/lib/session";
-import type { LoginResponseBody, MeResponseBody, User } from "@/types/auth.types";
+import type {
+  ForgotPasswordResponseBody,
+  LoginResponseBody,
+  MeResponseBody,
+  ResetPasswordResponseBody,
+  User,
+  VerifyOTPResponseBody,
+} from "@/types/auth.types";
 import axios from "axios";
 
 function messageFromAxiosError(error: unknown): string {
@@ -61,5 +68,58 @@ export const authService = {
 
   async logout() {
     await clearTokens();
+  },
+
+
+  // Forgot Password
+  async forgotPassword(email: string): Promise<ForgotPasswordResponseBody> {
+    try {
+      const { data } = await api.post<ForgotPasswordResponseBody>("/auth/forgot-password", { email });
+      if (data.success === false) {
+        throw new Error(data.message ?? "Failed to send verification code");
+      }
+      return data;
+    } catch (e) {
+      throw new Error(messageFromAxiosError(e));
+    }
+  },
+
+  // Verify OTP
+  async verifyOTP(email: string, otp: string): Promise<string> {
+    try {
+      const { data } = await api.post<VerifyOTPResponseBody>("/auth/verify-otp", { email, otp });
+      if (data.success === false) {
+        throw new Error(data.message ?? "OTP verification failed");
+      }
+
+      const resetToken =
+        data.resetToken ??
+        data.reset_token ??
+        data.token ??
+        data.data?.resetToken ??
+        data.data?.reset_token ??
+        data.data?.token;
+
+      if (!resetToken) {
+        throw new Error("Invalid OTP verification response");
+      }
+
+      return resetToken;
+    } catch (e) {
+      throw new Error(messageFromAxiosError(e));
+    }
+  },
+
+  // Reset Password
+  async resetPassword(resetToken: string, newPassword: string, confirmPassword: string): Promise<ResetPasswordResponseBody> {
+    try {
+      const { data } = await api.post<ResetPasswordResponseBody>("/auth/reset-password", { resetToken, newPassword, confirmPassword });
+      if (data.success === false) {
+        throw new Error(data.message ?? "Reset password failed");
+      }
+      return data;
+    } catch (e) {
+      throw new Error(messageFromAxiosError(e));
+    }
   },
 };

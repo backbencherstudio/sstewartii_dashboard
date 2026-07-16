@@ -2,6 +2,7 @@
 
 "use client";
 
+import { useState } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import {
     REGEXP_ONLY_DIGITS,
@@ -11,6 +12,15 @@ import {
     InputOTPGroup,
     InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { z } from "zod";
+import { Form } from "@/components/form/Form";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { authService } from "@/services/auth.service";
+import { Loader2 } from "lucide-react";
+
+const RESET_EMAIL_STORAGE_KEY = "password-reset-email";
+const RESET_TOKEN_STORAGE_KEY = "password-reset-token";
 
 interface OTPFieldProps {
     name: string;
@@ -58,13 +68,6 @@ export function OTPField({ name, maxLength = 6 }: OTPFieldProps) {
     );
 }
 
-
-
-import { z } from "zod";
-import { Form } from "@/components/form/Form";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-
 const otpSchema = z.object({
     code: z.string().length(6, "OTP must be 6 digits"),
 });
@@ -72,8 +75,30 @@ const otpSchema = z.object({
 export default function VerifyOTPForm() {
 
     const router = useRouter();
-    const handleVerify = (data: { code: string }) => {
-        router.push("/set-password");
+    const [isLoading, setIsLoading] = useState(false);
+    const [submitError, setSubmitError] = useState("");
+
+    const handleVerify = async (data: { code: string }) => {
+        setSubmitError("");
+        setIsLoading(true);
+
+        try {
+            const email = sessionStorage.getItem(RESET_EMAIL_STORAGE_KEY);
+            if (!email) {
+                setSubmitError("Please request a password reset code first.");
+                return;
+            }
+
+            const resetToken = await authService.verifyOTP(email, data.code);
+            sessionStorage.setItem(RESET_TOKEN_STORAGE_KEY, resetToken);
+            router.push("/set-password");
+        } catch (err) {
+            setSubmitError(
+                err instanceof Error ? err.message : "OTP verification failed"
+            );
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -97,8 +122,25 @@ export default function VerifyOTPForm() {
                     >
                         <OTPField name="code" maxLength={6} />
 
-                        <button type="submit" className="btn-primary mt-10">
-                            Verify Account
+                        {submitError && (
+                            <div className="mt-6 rounded-md border border-red-200 bg-red-50 p-3">
+                                <p className="text-center text-sm text-red-600">{submitError}</p>
+                            </div>
+                        )}
+
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="btn-primary mt-10 disabled:cursor-not-allowed"
+                        >
+                            {isLoading ? (
+                                <div className="flex items-center gap-2 text-gray-800">
+                                    <Loader2 className="h-4 w-4 animate-spin md:h-5 md:w-5" />
+                                    Verifying...
+                                </div>
+                            ) : (
+                                "Verify Account"
+                            )}
                         </button>
                     </Form>
                 </div>

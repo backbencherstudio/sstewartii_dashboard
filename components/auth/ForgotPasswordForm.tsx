@@ -3,15 +3,14 @@
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { z } from "zod";
-import useAuth from "@/hooks/useAuth";
 import Image from "next/image";
 import AuthIcons from "../icons/AuthIcons";
 import { Loader2 } from "lucide-react";
-import Checkbox from "../form/Checkbox";
 import { Form } from "@/components/form/Form";
 import { useRouter } from "next/navigation";
+import { authService } from "@/services/auth.service";
 
-
+const RESET_EMAIL_STORAGE_KEY = "password-reset-email";
 
 const forgotPasswordSchema = z.object({
     email: z.string().email("Please enter a valid email address.").min(1, "Email is required"),
@@ -34,6 +33,9 @@ function ForgotPasswordFormFields({
         register,
         formState: { errors },
     } = useFormContext<ForgotPasswordFormValues>();
+
+
+
 
     return (
         <>
@@ -87,23 +89,35 @@ function ForgotPasswordFormFields({
 }
 
 export default function ForgotPasswordForm() {
-    const { forgotPassword, isLoading } = useAuth();
+    // const { forgotPassword, isLoading } = useAuth();
+
+
+    const [isLoading, setIsLoading] = useState(false);
+
     const [submitError, setSubmitError] = useState("");
     const router = useRouter();
+
     const onSubmit = async (data: ForgotPasswordFormValues) => {
         setSubmitError("");
+        setIsLoading(true);
+
         try {
-            await forgotPassword(data);
+            await authService.forgotPassword(data.email);
+            sessionStorage.setItem(RESET_EMAIL_STORAGE_KEY, data.email);
             router.push("/verify-otp");
         } catch (err) {
-            console.log(err);
-            setSubmitError(err instanceof Error ? err.message : "Login failed");
+            console.error(err);
+            setSubmitError(
+                err instanceof Error ? err.message : "Something went wrong"
+            );
+        } finally {
+            setIsLoading(false);
         }
     };
-
+    // 
     return (
         <div className="">
-            
+
             <div className="flex min-w-[380px] flex-col items-center gap-[60px] rounded-3xl [background:var(--Opacity-Dark-05,rgba(8,14,30,0.05))] p-5 md:min-w-[600px] md:p-10">
                 <div className="flex w-full max-w-[440px] flex-col items-center gap-[40px]">
                     <div className="mx-auto w-full max-w-[100px] md:max-w-[150px]">
@@ -112,7 +126,7 @@ export default function ForgotPasswordForm() {
                             alt="logo"
                             width={100}
                             height={100}
-                            className="mx-auto" 
+                            className="mx-auto"
                         />
                     </div>
 

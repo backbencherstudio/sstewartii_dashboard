@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { useAuthStore } from "@/store/authStore";
+import { authService } from "@/services/auth.service";
 
 const useAuth = () => {
   const router = useRouter();
@@ -32,12 +33,12 @@ const useAuth = () => {
   }, [storeFetchMe]);
 
 
-  const forgotPassword = useCallback(async (data: { email: string }) => {
-    // await storeForgotPassword(email);
-    (async () => {
-      // await storeForgotPassword(data);
-    })();
-  }, []);
+  // const forgotPassword = useCallback(async (data: { email: string }) => {
+  //     await authService.forgotPassword(data.email);
+  // },
+  // []);
+
+
 
   return {
     user,
@@ -46,7 +47,7 @@ const useAuth = () => {
     login,
     logout,
     fetchMe,
-    forgotPassword
+    // forgotPassword
   };
 };
 

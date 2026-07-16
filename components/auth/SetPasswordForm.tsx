@@ -3,17 +3,19 @@
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { z } from "zod";
-import useAuth from "@/hooks/useAuth";
 import Image from "next/image";
 import AuthIcons from "../icons/AuthIcons";
 import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
 import { Form } from "@/components/form/Form";
 import { useRouter } from "next/navigation";
+import { authService } from "@/services/auth.service";
 
+const RESET_EMAIL_STORAGE_KEY = "password-reset-email";
+const RESET_TOKEN_STORAGE_KEY = "password-reset-token";
 
 const setPasswordSchema = z.object({
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string().min(8, "Password must be at least 8 characters"),
 }).refine((values) => values.password === values.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
@@ -114,19 +116,28 @@ function SetPasswordFormFields({
 }
 
 export default function SetPasswordForm() {
-    // const { setPassword, isLoading } = useAuth();
-    const {  isLoading } = useAuth();
+    const [isLoading, setIsLoading] = useState(false);
     const [submitError, setSubmitError] = useState("");
     const router = useRouter();
     const onSubmit = async (data: SetPasswordFormValues) => {
         setSubmitError("");
+        setIsLoading(true);
+
         try {
-            // await setPassword(data);
+            const resetToken = sessionStorage.getItem(RESET_TOKEN_STORAGE_KEY);
+            if (!resetToken) {
+                setSubmitError("Please verify your password reset code first.");
+                return;
+            }
+
+            await authService.resetPassword(resetToken, data.password, data.confirmPassword);
+            sessionStorage.removeItem(RESET_EMAIL_STORAGE_KEY);
+            sessionStorage.removeItem(RESET_TOKEN_STORAGE_KEY);
             router.push("/success");
-            console.log("Password set successfully");
         } catch (err) {
-            console.log(err);
             setSubmitError(err instanceof Error ? err.message : "Password reset failed");
+        } finally {
+            setIsLoading(false);
         }
     };
 
