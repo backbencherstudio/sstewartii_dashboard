@@ -8,6 +8,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import TableToolBar from "@/components/reusable/table/TableToolBar";
 import ActionIcons from "@/components/icons/ActionIcons";
+import { useGetAllCustomers } from "@/hooks/useCustomers";
 
 // 1. Define Types
 type Vendor = {
@@ -23,12 +24,16 @@ type Vendor = {
 // 2. Column Definitions
 const getColumns = (): Column<Vendor>[] => [
     {
-        header: "Customer ID", accessor: "CustomerId", cell: (row) => (
-            <div className="self-stretch text-[#697586] text-sm font-medium leading-[150%] tracking-[-0.28px]">{row.CustomerId}</div>
+        header: "Customer ID", 
+        accessor: "CustomerId", 
+        cell: (row) => (
+            <div className="self-stretch text-[#697586] text-sm font-medium leading-[150%] tracking-[-0.28px]">
+                {row.CustomerId}
+            </div>
         )
     },
     {
-        header: "Customer ",
+        header: "Customer",
         cell: (row) => (
             <div className="text-sm font-semibold text-[#1A1A2E]">
                 <p className="text-sm font-semibold text-[#1A1A2E]">{row.customerName || 'N/A'}</p>
@@ -36,13 +41,12 @@ const getColumns = (): Column<Vendor>[] => [
             </div>
         ),
     },
-
     {
         header: "Status",
         cell: (row) => <StatusBadge status={row.status} />,
     },
     {
-        header: "Date Joined           ",
+        header: "Date Joined",
         cell: (row) => (
             <div className="text-xs text-[#161618] font-medium leading-[180%]">{row.date_joined}</div>
         ),
@@ -50,106 +54,110 @@ const getColumns = (): Column<Vendor>[] => [
     {
         header: "Orders",
         cell: (row) => (
-            <div className="text-xs  text-[#161618] font-medium leading-[180%] ">${row.orders_count}</div>
+            <div className="text-xs text-[#161618] font-medium leading-[180%]">{row.orders_count}</div>
         ),
     },
-
     {
         header: "Total Spent",
         cell: (row) => (
-            <div className="text-xs text-[#161618] font-medium leading-[180%]">${row.total_spent}</div>
+            <div className="text-xs text-[#161618] font-medium leading-[180%]">${row.total_spent.toFixed(2)}</div>
         ),
     },
-
     {
         header: "Action",
         cell: (row) => (
-            <Link
-                href={`/customers/${row.CustomerId}`}>
+            <Link href={`/customers/${row.CustomerId}`}>
                 <Button size="icon" variant="ghost" className="border border-[#DFE1E7]">
-                    <ActionIcons.View className="w-5 h-5 text-[#697586]" />
+                    <Eye className="w-5 h-5 text-[#697586]" />
                 </Button>
             </Link>
         ),
     },
-
-
-
 ];
 
 // 3. Status Badge Components
 const StatusBadge = ({ status }: { status: Vendor['status'] }) => {
     const styles = {
-        active: "bg-[#BBFFA7] text-[#298C20] ",
-        reported: "bg-[#FFF291] text-[#8B7500] ",
-        suspended: "bg-[#FFADAE] text-[#872F31] ",
+        active: "bg-[#BBFFA7] text-[#298C20]",
+        reported: "bg-[#FFF291] text-[#8B7500]",
+        suspended: "bg-[#FFADAE] text-[#872F31]",
     };
     return <span className={cn("px-4 py-2 rounded-lg text-sm font-semibold leading-[130%] uppercase", styles[status])}>{status}</span>;
 };
 
-
-
 // 4. Main Table Component
 export default function CustomerManagementTable() {
-    // Dummy Data
-    const data: Vendor[] = [
-        { CustomerId: "834759", customerName: "David John", customerEmail: "david.john@example.com", status: "active", date_joined: "May 10, 2026", orders_count: 10, total_spent: 100.00 },
-        { CustomerId: "834754", customerName: "David John", customerEmail: "david.john@example.com", status: "reported", date_joined: "May 10, 2026", orders_count: 10, total_spent: 140.00 },
-        { CustomerId: "834454", customerName: "Rowan Fox", customerEmail: "skylar.kai@example.com", status: "suspended", date_joined: "May 10, 2026", orders_count: 10, total_spent: 250.00 },
-        { CustomerId: "834454", customerName: "Rowan Dox", customerEmail: "skylar.kai@example.com", status: "suspended", date_joined: "May 10, 2026", orders_count: 10, total_spent: 250.00 },
-        { CustomerId: "834454", customerName: "Rowan Fox", customerEmail: "skylar.kai@example.com", status: "suspended", date_joined: "May 10, 2026", orders_count: 10, total_spent: 250.00 },
+    const { data: customers, isLoading, error } = useGetAllCustomers();
 
-    ];
+    // Show loading state
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <div className="text-[#697586]">Loading customers...</div>
+            </div>
+        );
+    }
+
+    // Show error state
+    if (error) {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <div className="text-red-500">Error loading customers: {error.message}</div>
+            </div>
+        );
+    }
+
+    // Transform API data to match Vendor type
+    const transformedData: Vendor[] = customers?.data?.map((customer: any) => ({
+        CustomerId: customer.id || customer.customerId || 'N/A',
+        customerName: customer.name || customer.fullName || 'N/A',
+        customerEmail: customer.email || customer.customerEmail || 'N/A',
+        status: customer.status || 'active',
+        date_joined: customer.createdAt || customer.dateJoined || new Date().toLocaleDateString(),
+        orders_count: customer.ordersCount || customer.totalOrders || 0,
+        total_spent: customer.totalSpent || customer.amountSpent || 0,
+    })) || [];
+
+    console.log('Transformed customers:', transformedData);
 
     return (
-        <div >
-            {/* Table Header with Search and Filters */}
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                {/* <div className="relative">
-            <Search className="absolute left-3 top-3 w-4 h-6 text-gray-400" />
-            <input 
-              placeholder="Search by name, email..." 
-              className=" border border-[#ECEFF3] px-4 py-3 pl-10 rounded-md outline-none w-68"
-            />
-          </div> */}
-
-
-            </div>
-
+        <div>
             <div>
                 <TableToolBar searchPlaceholder="Search by name, email, or ID...">
-
-
-
                     <div className="flex items-center gap-4">
-
-
-                        {/* Sort by */}
+                        {/* Status Filter */}
                         <div>
-
-                            <label className="text-[#697586] text-sm font-normal leading-[160%]" htmlFor="status">Status:</label>
-
-                            <select className=" rounded-md p-1 text-[#2A3542] text-sm font-semibold leading-[160%] hover:bg-gray-50" id="status">
-                                <option value="all"> All</option>
-                                <option> Completed</option>
-                                <option> Cancelled</option>
-                                <option> Incomplete</option>
+                            <label className="text-[#697586] text-sm font-normal leading-[160%]" htmlFor="status">
+                                Status:
+                            </label>
+                            <select 
+                                className="rounded-md p-1 text-[#2A3542] text-sm font-semibold leading-[160%] hover:bg-gray-50" 
+                                id="status"
+                            >
+                                <option value="all">All</option>
+                                <option value="active">Active</option>
+                                <option value="reported">Reported</option>
+                                <option value="suspended">Suspended</option>
                             </select>
                         </div>
 
-                        {/* Sort by */}
+                        {/* Sort By */}
                         <div>
-
-                            <label className="text-[#697586] text-sm font-normal leading-[160%]" htmlFor="sort">Sort by:</label>
-
-                            <select className=" rounded-md p-1 text-[#2A3542] text-sm font-semibold leading-[160%] hover:bg-gray-50" id="sort">
-                                <option> Newest First</option>
-                                <option> Oldest First</option>
+                            <label className="text-[#697586] text-sm font-normal leading-[160%]" htmlFor="sort">
+                                Sort by:
+                            </label>
+                            <select 
+                                className="rounded-md p-1 text-[#2A3542] text-sm font-semibold leading-[160%] hover:bg-gray-50" 
+                                id="sort"
+                            >
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
                             </select>
                         </div>
                     </div>
                 </TableToolBar>
-                <DataTable columns={getColumns()} data={data} />
+                
+                <DataTable columns={getColumns()} data={transformedData} />
             </div>
         </div>
     );

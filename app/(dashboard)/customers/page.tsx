@@ -1,9 +1,15 @@
+'use client'
+
 import PageTitle from "@/components/reusable/PageTitle";
 import CustomerStats from "./_components/CustomerStats";
 import CustomerManagementTable from "./_components/CustomerManagementTable";
 import Link from "next/link";
-
+import { useGetAllCustomers } from "@/hooks/useCustomers";
 export default function customersPage() {
+
+ 
+  
+
   return (
     <div>
       <div className='space-y-6'>
