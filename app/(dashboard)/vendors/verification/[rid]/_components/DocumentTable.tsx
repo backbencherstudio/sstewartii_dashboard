@@ -3,11 +3,6 @@ import ActionIcons from "@/components/icons/ActionIcons";
 import CustomModal from "@/components/reusable/CustomModal";
 import DataTable, { Column } from "@/components/reusable/table/DataTable";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { StatusBadge } from "@/components/reusable/CustomBadge";
-import { ArrowRight, CheckIcon, EyeIcon, } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import ViewDoc from "../_components/ViewDoc";
 import { DocumentItem } from "@/types/vendor.types";
@@ -155,7 +150,7 @@ export default function DocumentTable({ docData }: { docData: DocumentItem[] }) 
             >
                 {view && (
                     <ViewDoc
-                        document={view}
+                        document={view as unknown as DocumentItem}
                         onClose={() => setView(null)}
                     />
                 )}

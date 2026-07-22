@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import {
   BarChart,
   Bar,
@@ -11,7 +10,7 @@ import {
   ResponsiveContainer,
   TooltipProps,
 } from "recharts";
-import { ChevronDown } from "lucide-react";
+
 
 const data = [
   { month: "Jan", Vendor: 0.35, Customer: 2.85 },

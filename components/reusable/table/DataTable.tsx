@@ -25,7 +25,6 @@ export default function DataTable<T>({
     columns,
     data,
     pageSize = 5,
-    toolbar,
     selectedId,
     onSelectionChange,
     idKey
@@ -93,7 +92,7 @@ export default function DataTable<T>({
             </div>
 
             {/* 2. Simple Pagination */}
-            {/* {totalPages > 1 && (
+            {totalPages > 1 && (
                 <div className="flex items-center justify-between pt-2">
                     <p className="text-xs text-neutral-400">Page {currentPage} of {totalPages}</p>
                     <div className="flex gap-2">
@@ -101,7 +100,7 @@ export default function DataTable<T>({
                         <Button variant="outline" size="sm" onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}>Next</Button>
                     </div>
                 </div>
-            )} */}
+            )}
         </div>
     );
 }

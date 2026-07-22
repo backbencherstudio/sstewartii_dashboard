@@ -25,10 +25,6 @@ export const useVendorVerificationDetails = (
 };
 
 
-interface MutationParams {
-    verificationId: string;
-    status: 'approve' | 'reject';
-  }
 
   
   type Status = "approve" | "reject";

@@ -17,7 +17,8 @@ export default function page() {
     const vendorDetails = vendorVerificationDetails?.vendor as VendorDetails;
     const vendorDocs = vendorVerificationDetails?.documents as DocumentItem[] || [];
 
-    console.dir(vendorVerificationDetails);
+    // console.dir(vendorVerificationDetails);
+    console.log(vendorDocs);
     return (
         <div className='space-y-6 container mx-auto'>
             <div>

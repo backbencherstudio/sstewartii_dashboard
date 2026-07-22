@@ -9,13 +9,13 @@ import { SimpleJsonBox } from '@/lib/SimpleJsonBox'
 
 export default function page() {
 
-  const { data: vendorAccounts } = useVendorAccounts();
+  const { data: vendorAccounts, isLoading } = useVendorAccounts();
   console.log(JSON.stringify(vendorAccounts, null, 2));
 
   const stats = vendorAccounts?.data.stats;
   return (
     <div className='space-y-6'>
-      <SimpleJsonBox data={vendorAccounts} />
+      {/* <SimpleJsonBox data={vendorAccounts} /> */}
       <PageTitle title="Manage Vendor Accounts" description="Monitor and maintain vendor profiles, status, and performance insights across the marketplace." />
 
       <ManageVendorAcountStats data={stats} />

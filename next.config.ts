@@ -16,6 +16,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
+
+      {
+        protocol: "https",
+        hostname: "*",
+      },
+
       {
         protocol: "https",
         hostname: "dev.sstewartii.com",
@@ -31,6 +37,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "affirmable-uncongruously-kensley.ngrok-free.dev",
+      },
+      {
+        protocol: "https",
+        hostname: "example.com",
       },
 
       // {

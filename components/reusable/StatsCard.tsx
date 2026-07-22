@@ -1,7 +1,7 @@
 interface StatsCardProps {
     color: string;
     title: string;
-    value: number;
+    value: number | string;
     update: string;
     icon: React.ReactNode;
   }

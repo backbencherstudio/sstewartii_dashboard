@@ -4,6 +4,15 @@ import { CalendarDays, Store } from 'lucide-react'
 import React from 'react'
 import { VendorVerificationStats } from '@/types/vendor.types';
 
+
+
+// {
+//   "totalPending": 1,
+//   "rejectedVerifications": 0,
+//   "avgReviewTimeDays": 1,
+//   "rejectionRate": 0
+// }
+
 export default function DashboardStats({ stats }: { stats: VendorVerificationStats | undefined }) {
   console.log(stats, "stats");
   return (
@@ -19,10 +28,10 @@ export default function DashboardStats({ stats }: { stats: VendorVerificationSta
         <div className='flex h-full max-w-sm flex-col gap-3 justify-between items-start flex-[1_0_0] [background:var(--Primary-Linear,linear-gradient(136deg,#FFBB1C_0%,#E28611_100%))] px-6 py-4 rounded-lg relative'>
           <div>
             <h3 className='text-[color:var(--Secondary-Text,#697586)] [font-family:Inter] text-sm font-medium leading-[160%] mb-1'>Total Vendors</h3>
-            <p className='text-[#071E27] [font-family:Inter] text-4xl font-semibold leading-[124%]'>1240</p>
+            <p className='text-[#071E27] [font-family:Inter] text-4xl font-semibold leading-[124%]'>{stats?.totalPending}</p>
           </div>
 
-          <p className=' text-[rgba(109,77,0,0.80)]  text-sm font-medium text-nowrap leading-5'>12% Increase from yesterday</p>
+          {/* <p className=' text-[rgba(109,77,0,0.80)]  text-sm font-medium text-nowrap leading-5'>12% Increase from yesterday</p> */}
 
 
           <div className='absolute top-0 right-0'>
@@ -35,21 +44,21 @@ export default function DashboardStats({ stats }: { stats: VendorVerificationSta
         <StatsCard
           color='#E28611'
           title='Total Customers'
-          value={1240}
+          value={stats?.rejectedVerifications || 0}
           update='May 22, 2026'
           icon={<DashboardStatsIcons.Customers />}
         />
         <StatsCard
           color='#89A2C3'
           title='Total Active Trucks'
-          value={1240}
+          value={stats?.avgReviewTimeDays || 0}
           update='May 22, 2026'
           icon={<DashboardStatsIcons.ActiveTruck />}
         />
         <StatsCard
           color='#E5C649'
           title='Platform Revenue'
-          value={1240}
+          value={stats?.rejectionRate || 0}
           update='May 22, 2026'
           icon={<DashboardStatsIcons.Revenue />}
         />

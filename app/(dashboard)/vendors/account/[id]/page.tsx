@@ -110,8 +110,8 @@ export default function Page() {
 
             {activeTab === 'overview' && <OverviewTab vendorOverview={vendorOverview?.data as VendorOverviewData} />}
             {activeTab === 'orders' && <OrdersTable />}
-            {activeTab === 'documents' && <DocumentInfoTable />}
-            {activeTab === 'subscription' && <SubscriptionTable />}
+            {activeTab === 'documents' && <DocumentInfoTable accountId={id as string} />}
+            {activeTab === 'subscription' && <SubscriptionTable accountId={id as string} />}
 
             {/* action modals */}
             {isSuspendModalOpen && (

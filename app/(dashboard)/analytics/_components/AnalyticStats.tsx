@@ -1,9 +1,18 @@
-import DashboardStatsIcons from '@/components/icons/DashboardStatsIcons';
+'use client'
+
 import VendorStatsIcons from '@/components/icons/VendorStatsIcons';
 import StatsCard from '@/components/reusable/StatsCard';
+import { useGetAnalytics } from '@/hooks/useAnalytics';
 
 
 export default function AnalyticStats() {
+
+    const { data: analytics } = useGetAnalytics();
+    console.log(analytics);
+
+
+    const { platformRevenue, totalCustomers, totalSubscribers, totalVendors } = analytics?.data || {};
+
     return (
         <div>
 
@@ -15,28 +24,28 @@ export default function AnalyticStats() {
                 <StatsCard
                     color='#3AC2C2'
                     title='Total Vendors Registered                      '
-                    value={1240}
+                    value={totalVendors || 0}
                     update='May 22, 2026'
                     icon={<VendorStatsIcons.TotalVendors />}
                 />
                 <StatsCard
                     color='  #FFBB1C'
                     title='Total Customers Registered'
-                    value={1220}
+                    value={totalCustomers || 0}
                     update='May 22, 2026'
                     icon={<VendorStatsIcons.VerifiedVendors />}
                 />
                 <StatsCard
                     color='#89A2C3'
                     title='Total Subscribers'
-                    value={17}
+                    value={totalSubscribers || 0}
                     update='May 22, 2026'
                     icon={<VendorStatsIcons.NewVendors />}
                 />
                 <StatsCard
                     color='#CC1E22'
                     title='Platform Revenue'
-                    value={2}
+                    value={platformRevenue || 0}
                     update='May 22, 2026'
                     icon={<VendorStatsIcons.SuspendedVendors />}
                 />

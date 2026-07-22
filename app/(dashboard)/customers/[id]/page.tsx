@@ -1,9 +1,11 @@
 "use client"
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import CustomerProfileDetails from "./_components/CustomerProfileDetails";
 import { useGetCustomerById } from "@/hooks/useCustomers";
 import { format } from "date-fns";
+import { Button } from "@/components/ui/button";
+import { ArrowLeftIcon } from "lucide-react";
 
 // Transform API data to match the expected format
 const transformCustomerData = (apiData: any) => {
@@ -35,6 +37,11 @@ export default function CustomerProfilePage() {
     const params = useParams();
     const id = params.id as string;
     const { data: customerData, isLoading, error } = useGetCustomerById(id);
+    const router = useRouter();
+
+    const handleGoBack = () => {
+        router.back();
+    }
 
     // Loading state
     if (isLoading) {
@@ -72,14 +79,21 @@ export default function CustomerProfilePage() {
 
     return (
         <section className="space-y-6 md:space-y-8">
-            {/* Name and ID */}
-            <div>
-                <h3 className="text-[#1A1C1E] font-Lora text-2xl font-bold leading-[130%] tracking-[0.48px]">
-                    {customer.name}
-                </h3>
-                <p className="self-stretch text-[#2A3542] font-Manrope text-base font-normal leading-6 mt-1">
-                    Joined on {joinedDate} • ID: #{customer.id}
-                </p>
+            <div className="flex justify-between items-center">
+                {/* Name and ID */}
+                <div>
+                    <h3 className="text-[#1A1C1E] font-Lora text-2xl font-bold leading-[130%] tracking-[0.48px]">
+                        {customer.name}
+                    </h3>
+                    <p className="self-stretch text-[#2A3542] font-Manrope text-base font-normal leading-6 mt-1">
+                        Joined on {joinedDate} • ID: #{customer.id}
+                    </p>
+                </div>
+
+                {/* Status */}
+                <div>
+                    <Button className="bg-[#F09F16] text-white" onClick={handleGoBack}  > <ArrowLeftIcon className="w-4 h-4" /> Go Back</Button>
+                </div>
             </div>
 
             {/* Full details */}

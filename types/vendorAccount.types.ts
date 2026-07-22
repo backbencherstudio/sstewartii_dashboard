@@ -186,3 +186,44 @@ export interface Favorites {
   count: number;
   recent: any[];
 }
+// ===================================
+export interface VendorDocumentResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: {
+    items: DocumentItem[];
+  };
+}
+
+export interface DocumentItem {
+  id: string;
+  documentType: string; // "BUSINESS_LICENSE" | "HEALTH_PERMIT" | "INSURANCE_PROOF" | "OTHER"
+  documentName: string;
+  status: string; // "ACTIVE" | "PENDING" | "REJECTED" | etc.
+  statusLabel: string; // "Active" | "Pending" | "Rejected" | etc.
+  uploadedAt: string; // ISO 8601 date string
+  uploadedAtLabel: string; // Formatted date string e.g., "Jul 13, 2026"
+  fileUrl: string;
+}
+
+
+
+export interface SubscriptionResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: {
+    items: SubscriptionItem[];
+  };
+}
+
+export interface SubscriptionItem {
+  invoiceId: string;
+  planName: string;
+  provider: string; // "REVENUECAT" | "APPLE" | "GOOGLE" | etc.
+  status: string; // "ACTIVE" | "INACTIVE" | "PENDING" | "CANCELLED" | etc.
+  startDate: string; // ISO 8601 date string
+  startDateLabel: string; // Formatted date string e.g., "Jul 13, 2026"
+  isCurrent: boolean;
+}

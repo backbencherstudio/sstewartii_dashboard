@@ -7,6 +7,7 @@ import { useState } from "react";
 import ViewDoc from "@/app/(dashboard)/vendors/verification/[rid]/_components/ViewDoc";
 import OtherIcons from "@/components/icons/OtherIcons";
 import TransactionDetails from "./TransactionDetails";
+import { useVendorSubscriptions } from "@/hooks/useVendorAccount";
 
 
 // 1. Define the Vendor type based on your data structure
@@ -143,7 +144,12 @@ const data: Document[] = [
 
 
 // 3. Usage in your Page
-export default function DocumentInfoTable() {
+export default function DocumentInfoTable({ accountId }: { accountId: string }) {
+
+
+    const { data: subscriptionData } = useVendorSubscriptions(accountId);
+    
+    console.log(subscriptionData?.data.items);
 
 
     // const [review, setReview] = useState<Document | null>(null);

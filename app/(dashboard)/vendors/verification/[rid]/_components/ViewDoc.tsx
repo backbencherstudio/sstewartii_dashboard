@@ -2,9 +2,20 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { FileText, PlusCircle, MinusCircle, RotateCw, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DocumentItem } from '@/types/vendor.types';
+import type { DocumentItem as VerificationDocumentItem } from '@/types/vendor.types';
+import type { DocumentItem as AccountDocumentItem } from '@/types/vendorAccount.types';
 
-export default function DocumentViewer({ document, onClose }: { document: DocumentItem, onClose: () => void }) {
+type DocumentViewerItem = VerificationDocumentItem | AccountDocumentItem;
+
+const getDocumentDisplayName = (document: DocumentViewerItem) => {
+  if ('fileName' in document) {
+    return document.fileName || document.label;
+  }
+
+  return document.documentName;
+};
+
+export default function DocumentViewer({ document, onClose }: { document: DocumentViewerItem, onClose: () => void }) {
   const [zoomLevel, setZoomLevel] = useState(100);
   const [rotation, setRotation] = useState(0);
 
@@ -27,7 +38,7 @@ export default function DocumentViewer({ document, onClose }: { document: Docume
       const url = window.URL.createObjectURL(blob);
       const link = window.document.createElement('a');
       link.href = url;
-      link.download = document.label || 'document';
+      link.download = getDocumentDisplayName(document) || 'document.pdf';
       window.document.body.appendChild(link);
       link.click();
       window.document.body.removeChild(link);
@@ -48,7 +59,7 @@ export default function DocumentViewer({ document, onClose }: { document: Docume
         <div className="flex items-center gap-3">
           <FileText className="w-6 h-6 text-gray-400" />
           <h2 className="text-xl font-medium text-gray-900 leading-tight">
-            {document.label}
+            {getDocumentDisplayName(document)}
           </h2>
         </div>
 
