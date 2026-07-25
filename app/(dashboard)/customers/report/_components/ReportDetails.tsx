@@ -89,7 +89,10 @@ export default function ReportDetails({ selectedId }: { selectedId: string | nul
                     </div>
                 </div>
 
-                <ReportsAccordion customerReports={customerReportDetails} />
+                <ReportsAccordion
+                    customerReports={customerReportDetails}
+                    customerId={selectedId ?? ""}
+                />
             </div>
 
             <CustomModal open={isSuspendModalOpen} onOpenChange={handleSuspendModalClose}>

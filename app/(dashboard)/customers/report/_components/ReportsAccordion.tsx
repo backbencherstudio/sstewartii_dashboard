@@ -15,7 +15,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useGetCustomerReportDetails } from "@/hooks/useCustomers";
+import { useGetCustomerReportDetailsList } from "@/hooks/useCustomers";
 
 
 type VendorReportSummary = {
@@ -24,13 +24,16 @@ type VendorReportSummary = {
     businessName?: string;
     coverImage?: string;
     reportCount?: number;
+    reports?: ReportDetail[];
 };
 
 type ReportDetail = {
     id?: string;
     reportId?: string;
     reportCode?: string;
+    reportNumber?: string;
     date?: string;
+    displayDate?: string;
     reportedAt?: string;
     createdAt?: string;
     reason?: string;
@@ -39,6 +42,7 @@ type ReportDetail = {
     additionalDetails?: string;
     description?: string;
     comment?: string;
+    status?: string;
 };
 
 type ApiRecord = Record<string, unknown>;
@@ -69,7 +73,7 @@ function getVendors(customerReports: unknown): VendorReportSummary[] {
     return Array.isArray(data) ? (data as VendorReportSummary[]) : [];
 }
 
-function getReportDetails(reportDetails: unknown): ReportDetail[] {
+function getReportDetails(reportDetails: unknown, vendorId?: string): ReportDetail[] {
     if (Array.isArray(reportDetails)) {
         return reportDetails as ReportDetail[];
     }
@@ -82,6 +86,15 @@ function getReportDetails(reportDetails: unknown): ReportDetail[] {
 
     if (isRecord(data) && Array.isArray(data.reports)) {
         return data.reports as ReportDetail[];
+    }
+
+    if (isRecord(data) && Array.isArray(data.vendors)) {
+        const vendors = data.vendors as VendorReportSummary[];
+        const vendor = vendorId
+            ? vendors.find((item) => item.vendorId === vendorId)
+            : vendors[0];
+
+        return vendor?.reports ?? [];
     }
 
     if (isRecord(data) && isRecord(data.data) && Array.isArray(data.data.reports)) {
@@ -98,6 +111,15 @@ function getReportDetails(reportDetails: unknown): ReportDetail[] {
 
     if (Array.isArray(reportDetails.reports)) {
         return reportDetails.reports as ReportDetail[];
+    }
+
+    if (Array.isArray(reportDetails.vendors)) {
+        const vendors = reportDetails.vendors as VendorReportSummary[];
+        const vendor = vendorId
+            ? vendors.find((item) => item.vendorId === vendorId)
+            : vendors[0];
+
+        return vendor?.reports ?? [];
     }
 
     return [];
@@ -117,9 +139,17 @@ function formatReportDate(value?: string) {
     return date.toLocaleDateString();
 }
 
-export default function ReportsAccordion({ customerReports }: { customerReports: unknown }) {
+export default function ReportsAccordion({
+    customerReports,
+    customerId,
+}: {
+    customerReports: unknown;
+    customerId: string;
+}) {
     const [openVendorId, setOpenVendorId] = useState<string>("");
     const vendors = getVendors(customerReports);
+
+    console.log(vendors);
 
     if (!vendors.length) {
         return (
@@ -153,6 +183,7 @@ export default function ReportsAccordion({ customerReports }: { customerReports:
                             key={vendor.vendorId}
                             vendor={vendor}
                             isOpen={openVendorId === vendor.vendorId}
+                            customerId={customerId}
                         />
                     ))}
                 </Accordion>
@@ -164,16 +195,25 @@ export default function ReportsAccordion({ customerReports }: { customerReports:
 function VendorReportItem({
     vendor,
     isOpen,
+    customerId,
 }: {
     vendor: VendorReportSummary;
     isOpen: boolean;
+    customerId: string;
 }) {
-    const { data: reportDetails, isLoading, error } = useGetCustomerReportDetails(
+
+    
+    const { data: reportDetails, isLoading, error } = useGetCustomerReportDetailsList(
+        customerId,
         vendor.vendorId,
         isOpen
     );
-    const reports = getReportDetails(reportDetails);
+
+    const fetchedReports = getReportDetails(reportDetails, vendor.vendorId);
+    const reports = fetchedReports.length ? fetchedReports : vendor.reports ?? [];
     const displayName = vendor.businessName || "Unknown vendor";
+
+    console.log("Report Details", reportDetails);
 
     return (
         <AccordionItem
@@ -218,9 +258,9 @@ function VendorReportItem({
 
             <AccordionContent className="px-3 pb-3 ">
                 <div className="space-y-0 border-t border-[#EAECF0]">
-                    {isLoading ? (
+                    {isLoading && !reports.length ? (
                         <div className="py-3 text-sm text-[#667085]">Loading report details...</div>
-                    ) : error ? (
+                    ) : error && !reports.length ? (
                         <div className="py-3 text-sm text-red-500">Unable to load report details.</div>
                     ) : reports.length ? (
                         reports.map((report, index) => (
@@ -240,7 +280,7 @@ function VendorReportItem({
 }
 
 function ReportRow({ report, index }: { report: ReportDetail; index: number }) {
-    const reportId = report.reportCode || report.reportId || report.id || "N/A";
+    const reportId = report.reportNumber || report.reportCode || report.reportId || report.id || "N/A";
     const reason = report.reportReason || report.reason || "N/A";
     const details =
         report.additionalDetails ||
@@ -248,7 +288,7 @@ function ReportRow({ report, index }: { report: ReportDetail; index: number }) {
         report.description ||
         report.comment ||
         "N/A";
-    const date = formatReportDate(report.reportedAt || report.createdAt || report.date);
+    const date = report.displayDate || formatReportDate(report.reportedAt || report.createdAt || report.date);
 
     return (
         <div className="flex items-center justify-between gap-2 border-b border-[#EAECF0] last:border-b-0 py-2">

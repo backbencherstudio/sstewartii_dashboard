@@ -29,8 +29,8 @@ export const CustomerService = {
         return data;
     },
 
-    async getCustomerReportDetails(id: string){
-        const {data} = await api.get<any>(`/admin/customers/${id}/reports/vendors`);
+    async getCustomerReportDetailsList(cid: string, vendorId: string){
+        const {data} = await api.get<any>(`/admin/customers/${cid}/reports/vendors/${vendorId}`);
         return data;
     }
 }

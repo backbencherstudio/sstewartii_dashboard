@@ -41,10 +41,10 @@ export const useGetCustomerReportById = (id: string) => {
     });
 }
 
-export const useGetCustomerReportDetails = (id: string, enabled = true) => {
+export const useGetCustomerReportDetailsList = (cid: string, vendorId: string, enabled = true) => {
     return useQuery({
-        queryKey: ['customer-report-details', id],
-        queryFn: () => CustomerService.getCustomerReportDetails(id),
-        enabled: Boolean(id) && enabled,
+        queryKey: ['customer-report-details', cid, vendorId],
+        queryFn: () => CustomerService.getCustomerReportDetailsList(cid, vendorId),
+        enabled: Boolean(cid) && Boolean(vendorId) && enabled,
     });
 }

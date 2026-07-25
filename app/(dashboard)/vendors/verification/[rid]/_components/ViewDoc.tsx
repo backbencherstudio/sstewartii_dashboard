@@ -48,7 +48,7 @@ export default function DocumentViewer({ document, onClose }: { document: Docume
     }
   };
 
-  console.dir(document);
+  // console.dir(document);
 
   return (
     <div className="w-full bg-gray-50/50 rounded-2xl border border-gray-100 shadow-sm font-sans flex flex-col">
