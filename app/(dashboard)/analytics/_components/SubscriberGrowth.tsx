@@ -1,5 +1,6 @@
 "use client";
 
+import { SubscriberGrowth as SubscriberGrowthType } from '@/types/analytics.types';
 import React from 'react';
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
@@ -21,7 +22,9 @@ const data = [
     { name: 'DEC', Free: 190, Starter: 80, Pro: 300, Elite: 120 },
 ];
 
-export default function SubscriberGrowth() {
+export default function SubscriberGrowth({ subscribers }: { subscribers: SubscriberGrowthType | undefined }) {
+
+    console.log(subscribers);
     return (
         <div className="bg-white p-6 rounded-2xl border border-[#ECEFF3] shadow-sm">
             {/* Header */}
@@ -46,7 +49,7 @@ export default function SubscriberGrowth() {
                         <Legend
                             iconType="circle"
                             itemSorter={null}
-                            // formatter={(value) => String(value).toLowerCase()}
+                        // formatter={(value) => String(value).toLowerCase()}
                         />
                         <Bar dataKey="Free" stackId="a" fill="#F4AE2B" radius={[0, 0, 0, 0]} />
                         <Bar dataKey="Starter" stackId="a" fill="#F6C553" radius={[0, 0, 0, 0]} />

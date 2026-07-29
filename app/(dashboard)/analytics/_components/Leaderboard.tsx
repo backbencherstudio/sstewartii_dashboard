@@ -1,11 +1,16 @@
 
 "use client"
+
 import { ReusableTabs } from '@/components/reusable/CustomTabs';
+import { LeaderboardItem, Leaderboard as LeaderboardType } from '@/types/analytics.types';
 import React, { useState } from 'react'
 
-export default function Leaderboard() {
+export default function Leaderboard({ leaderboard }: { leaderboard: LeaderboardType | undefined }) {
 
     const [selectedTab, setSelectedTab] = useState('customers');
+
+    console.log("leaderboard", leaderboard);
+
     return (
         <div className='w-full flex-col gap-4 self-stretch border border-[#ECEFF3] [background:var(--text-0,#FFF)] shadow-[0_0_16px_0_rgba(0,0,0,0.06)]   rounded-[10px] border-solid'>
             <div className="mb-4 flex items-center justify-between p-6">
@@ -45,7 +50,7 @@ export default function Leaderboard() {
                 {
                     selectedTab === 'customers' && (
                         <div>
-                        <TopPerformersCard />
+                        <TopPerformersCard winnersList={leaderboard?.customers || []} />
                     </div>
                 )}
                     
@@ -89,7 +94,11 @@ const winners = [
   },
 ];
 
-function TopPerformersCard() {
+function TopPerformersCard({ winnersList }: { winnersList: LeaderboardItem[] }) {
+
+  // console the winnersList
+  console.log("winnersList", winnersList);
+  
   return (
     <div className="object-cover overflow-hidden  bg-[#FFF8E8] px-6   h-[340px]">
 

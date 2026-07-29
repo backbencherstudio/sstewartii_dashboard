@@ -1,5 +1,6 @@
 "use client";
 
+import { RevenueGrowth } from '@/types/analytics.types';
 import React from 'react';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
@@ -20,7 +21,7 @@ const data = [
   { name: 'DEC', value: 3500 },
 ];
 
-export default function RevenueChart() {
+export default function RevenueChart({ revenue }: { revenue: RevenueGrowth | undefined }) {
   return (
     <div className="bg-white p-8 rounded-3xl border border-[#ECEFF3] shadow-sm">
       {/* Header */}

@@ -86,29 +86,10 @@ const StatusBadge = ({ status }: { status: Vendor['status'] }) => {
 };
 
 // 4. Main Table Component
-export default function CustomerManagementTable() {
-    const { data: customers, isLoading, error } = useGetAllCustomers();
-
-    // Show loading state
-    if (isLoading) {
-        return (
-            <div className="flex justify-center items-center h-64">
-                <div className="text-[#697586]">Loading customers...</div>
-            </div>
-        );
-    }
-
-    // Show error state
-    if (error) {
-        return (
-            <div className="flex justify-center items-center h-64">
-                <div className="text-red-500">Error loading customers: {error.message}</div>
-            </div>
-        );
-    }
+export default function CustomerManagementTable( { customers }: { customers: any[] } ) {
 
     // Transform API data to match Vendor type
-    const transformedData: Vendor[] = customers?.data?.map((customer: any) => ({
+    const transformedData: Vendor[] = customers?.map((customer: any) => ({
         CustomerId: customer.id || customer.customerId || 'N/A',
         customerName: customer.name || customer.fullName || 'N/A',
         customerEmail: customer.email || customer.customerEmail || 'N/A',

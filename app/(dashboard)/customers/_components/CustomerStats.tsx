@@ -3,7 +3,7 @@ import StatsCard from '@/components/reusable/StatsCard';
 import { CalendarDays, Store } from 'lucide-react'
 import React from 'react'
 
-export default function CustomerStats() {
+export default function CustomerStats( { data }: { data: any } ) {
   return (
     <div>
 
@@ -15,28 +15,28 @@ export default function CustomerStats() {
         <StatsCard
           color='#2CC1C1'
           title='Total Customers'
-          value={1240}
+          value={data?.totalCustomers || 0}
           update='May 22, 2026'
           icon={<DashboardStatsIcons.Vendors/>} 
         />
           <StatsCard
           color='#E28611'
           title='Active Users'
-          value={1240}
+          value={data?.activeUsers || 0}
           update='May 22, 2026'
           icon={<DashboardStatsIcons.Customers/>} 
         />
         <StatsCard
           color='#89A2C3'
           title='Reported Customers'
-          value={1240}
+          value={data?.reportedCustomers || 0   }
           update='May 22, 2026'
           icon={<DashboardStatsIcons.ActiveTruck/>} 
         />
         <StatsCard
           color='#E5C649'
           title='Suspended Customers'
-          value={1240}
+          value={data?.suspendedCustomers || 0}
           update='May 22, 2026'
           icon={<DashboardStatsIcons.Revenue/>} 
         />

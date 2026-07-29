@@ -3,15 +3,13 @@
 import VendorStatsIcons from '@/components/icons/VendorStatsIcons';
 import StatsCard from '@/components/reusable/StatsCard';
 import { useGetAnalytics } from '@/hooks/useAnalytics';
+import { AnalyticsStats } from '@/types/analytics.types';
 
 
-export default function AnalyticStats() {
+export default function AnalyticStats({ data }: { data: AnalyticsStats | undefined }) {
 
-    const { data: analytics } = useGetAnalytics();
-    console.log(analytics);
-
-
-    const { platformRevenue, totalCustomers, totalSubscribers, totalVendors } = analytics?.data || {};
+    const { platformRevenue, totalCustomers, totalSubscribers, totalVendors } = data || {};
+    // console.log(data);
 
     return (
         <div>
