@@ -1,23 +1,49 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
-import { Upload, Trash2, Pencil } from 'lucide-react';
+import React, { useState, useRef, useEffect } from "react";
+import { Upload, Trash2, Pencil, Loader2 } from "lucide-react";
+import useAuth from "@/hooks/useAuth";
+import { useUpdateUser } from "@/hooks/useSettings";
+
 
 export default function AdminInformationPage() {
+  const { user } = useAuth();
+  const { mutate: updateUser, isPending } = useUpdateUser();
+
   // --- State Management ---
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: "Sedric Stewart",
-    email: "admin.atliss@gmail.com",
-    accountType: "ADMINISTRATOR"
+    name: "",
+    email: "",
+    // accountType: "ADMINISTRATOR",
   });
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Sync state when auth user loads/changes
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || "",
+        email: user.email || "",
+        // accountType: user.role || "ADMINISTRATOR",
+      });
+    }
+  }, [user]);
+
+  // Clean up object URLs to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (imagePreview && imagePreview.startsWith("blob:")) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
+
   // --- Handlers ---
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,31 +54,64 @@ export default function AdminInformationPage() {
     }
   };
 
-  const handleSave = () => {
-    // Logic for API integration would go here
-    console.log("Saving data:", { ...formData, image });
+  const handleCancel = () => {
     setIsEditing(false);
+    setImage(null);
+    setImagePreview(null);
+    if (user) {
+      setFormData({
+        name: user.name || "",
+        email: user.email || "",
+        // accountType: user.role || "ADMINISTRATOR",
+      });
+    }
+  };
+
+  const handleSave = () => {
+    updateUser(
+      {
+        name: formData.name,
+        avatar: image || undefined,
+      },
+      {
+        onSuccess: () => {
+          setIsEditing(false);
+          setImage(null);
+        },
+      }
+    );
   };
 
   return (
-    <div className='space-y-6 max-w-7xl'>
+    <div className="max-w-7xl space-y-6">
       {/* Header */}
-      <div className='flex justify-between items-center py-4 border-b border-[#E6E6E6]'>
-        <h3 className='text-[#2A3542] font-lora text-2xl font-bold'>Admin Information</h3>
-        
+      <div className="flex items-center justify-between border-b border-[#E6E6E6] py-4">
+        <h3 className="text-2xl font-bold text-[#2A3542] font-lora">
+          Admin Information
+        </h3>
+
         {!isEditing ? (
-          <button 
+          <button
             onClick={() => setIsEditing(true)}
-            className='flex items-center gap-2 text-[#E28611] font-medium'
+            className="flex items-center gap-2 font-medium text-[#E28611]"
           >
             <Pencil size={18} /> Edit
           </button>
         ) : (
-          <div className='flex gap-2'>
-            <button onClick={() => setIsEditing(false)} className='h-14 px-6 py-4 rounded-2xl border border-[#70747C] text-[#585D63] font-medium'>
+          <div className="flex gap-2">
+            <button
+              onClick={handleCancel}
+              disabled={isPending}
+              className="h-14 rounded-2xl border border-[#70747C] px-6 py-4 font-medium text-[#585D63] disabled:opacity-50"
+            >
               Cancel
             </button>
-            <button onClick={handleSave} className='h-14 px-6 py-4 rounded-2xl bg-gradient-to-r from-[#FFBB1C] to-[#E28611] text-white font-semibold'>
+            <button
+              onClick={handleSave}
+              disabled={isPending}
+              className="flex h-14 items-center gap-2 rounded-2xl bg-gradient-to-r from-[#FFBB1C] to-[#E28611] px-6 py-4 font-semibold text-white disabled:opacity-50"
+            >
+              {isPending && <Loader2 size={18} className="animate-spin" />}
               Save Changes
             </button>
           </div>
@@ -60,56 +119,101 @@ export default function AdminInformationPage() {
       </div>
 
       {/* Main Content */}
-      <div className='flex flex-col md:flex-row gap-8'>
+      <div className="flex flex-col gap-8 md:flex-row">
         {/* Left Side: Avatar Card */}
-        <div className='w-full md:w-1/3 border border-[#DFE1E7] bg-[#F8FAFB] rounded-2xl p-6 flex flex-col items-center text-center'>
-          <img 
-            src={imagePreview || "https://randomuser.me/api/portraits/men/36.jpg"} 
-            alt="Sedric Stewart" 
-            className='w-32 h-32 rounded-lg object-cover mb-4' 
+        <div className="flex w-full flex-col items-center rounded-2xl border border-[#DFE1E7] bg-[#F8FAFB] p-6 text-center md:w-1/3">
+          <img
+            src={imagePreview || user?.avatar || "/placeholder-avatar.png"}
+            alt={formData.name || "Admin"}
+            className="mb-4 h-32 w-32 rounded-lg object-cover"
           />
-          <h4 className='text-[#697586] font-inter text-base font-normal'>{formData.name}</h4>
-          <p className='text-[#313337] font-lora text-base font-bold mb-6'>{formData.accountType}</p>
-          
-          <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleImageChange} />
-          
-          <button 
-            onClick={() => fileInputRef.current?.click()}
-            className='w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#FFBB1C] to-[#E28611] text-white p-2.5 rounded-lg mb-2'
+          <h4 className="text-base font-normal text-[#697586] font-inter">
+            {formData.name || "Admin"}
+          </h4>
+          {/* <p className="mb-6 text-base font-bold text-[#313337] font-lora">
+            {formData.accountType}
+          </p> */}
+
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+
+          <button
+            onClick={() => {
+              if (!isEditing) setIsEditing(true);
+              fileInputRef.current?.click();
+            }}
+            className="mb-2 flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#FFBB1C] to-[#E28611] p-2.5 text-white"
           >
             <Upload size={16} /> Upload Photo
           </button>
-          <button 
-            onClick={() => { setImage(null); setImagePreview(null); }}
-            className='w-full border border-red-200 text-red-600 py-2 px-4 rounded-lg flex items-center justify-center gap-2'
-          >
-            <Trash2 size={16} /> Delete
-          </button>
+          
+          {(imagePreview || user?.avatar) && (
+            <button
+              onClick={() => {
+                setImage(null);
+                setImagePreview(null);
+              }}
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-200 px-4 py-2 text-red-600"
+            >
+              <Trash2 size={16} /> Delete
+            </button>
+          )}
         </div>
 
         {/* Right Side: Form Fields */}
-        <div className='flex-1 space-y-6'>
-          <InputField label="Name" name="name" value={formData.name} onChange={handleInputChange} disabled={!isEditing} />
-          <InputField label="Email" name="email" value={formData.email} onChange={handleInputChange} disabled={!isEditing} />
-          <InputField label="Account Type" name="accountType" value={formData.accountType} onChange={handleInputChange} disabled={true} />
+        <div className="flex-1 space-y-6">
+          <InputField
+            label="Name"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            disabled={!isEditing || isPending}
+          />
+          <InputField
+            label="Email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            disabled={true}
+          />
+          <InputField
+            label="Account Type"
+            name="accountType"
+            value={"ADMINISTRATOR"}
+            onChange={handleInputChange}
+            disabled={true}
+          />
         </div>
       </div>
-
-      <p className='text-sm text-gray-400'>Last updated: Oct 24, 2023</p>
     </div>
   );
 }
 
-function InputField({ label, name, value, onChange, disabled }: any) {
+interface InputFieldProps {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
+}
+
+function InputField({ label, name, value, onChange, disabled }: InputFieldProps) {
   return (
     <div>
-      <label className="mb-2 block text-[#697586] font-bold font-lora">{label}</label>
+      <label className="mb-2 block font-bold text-[#697586] font-lora">
+        {label}
+      </label>
       <input
         name={name}
         value={value}
         onChange={onChange}
         disabled={disabled}
-        className="h-[54px] w-full rounded-md border border-[#DFE1E7] bg-[#F8FAFC] px-4 text-sm text-[#161618] outline-none focus:border-[#F59E0B] disabled:cursor-not-allowed"
+        className="h-[54px] w-full rounded-md border border-[#DFE1E7] bg-[#F8FAFC] px-4 text-sm text-[#161618] outline-none focus:border-[#F59E0B] disabled:cursor-not-allowed disabled:opacity-75"
       />
     </div>
   );

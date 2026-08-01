@@ -1,79 +1,164 @@
 "use client";
 
-import { SubscriberGrowth as SubscriberGrowthType } from '@/types/analytics.types';
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
-    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+  TooltipProps
 } from 'recharts';
 
-// Mock Data matching your structure
-const data = [
-    { name: 'JAN', Free: 40, Starter: 20, Pro: 15, Elite: 10 },
-    { name: 'FEB', Free: 70, Starter: 30, Pro: 60, Elite: 45 },
-    { name: 'MAR', Free: 90, Starter: 60, Pro: 100, Elite: 50 },
-    { name: 'APR', Free: 100, Starter: 110, Pro: 350, Elite: 150 },
-    { name: 'MAY', Free: 120, Starter: 100, Pro: 400, Elite: 250 },
-    { name: 'JUN', Free: 90, Starter: 80, Pro: 200, Elite: 120 },
-    { name: 'JUL', Free: 90, Starter: 80, Pro: 200, Elite: 120 },
-    { name: 'AUG', Free: 190, Starter: 80, Pro: 200, Elite: 120 },
-    { name: 'SEP', Free: 90, Starter: 80, Pro: 200, Elite: 120 },
-    { name: 'OCT', Free: 160, Starter: 80, Pro: 200, Elite: 120 },
-    { name: 'NOV', Free: 40, Starter: 80, Pro: 200, Elite: 120 },
-    { name: 'DEC', Free: 190, Starter: 80, Pro: 300, Elite: 120 },
-];
-
-export default function SubscriberGrowth({ subscribers }: { subscribers: SubscriberGrowthType | undefined }) {
-
-    console.log(subscribers);
-    return (
-        <div className="bg-white p-6 rounded-2xl border border-[#ECEFF3] shadow-sm">
-            {/* Header */}
-            <div className="flex justify-between items-start mb-8">
-                <div>
-                    <h2 className="section-title">Subscriber Growth</h2>
-                    <p className="text-sm text-[#697586]">New subscribers over the last 7 days</p>
-                </div>
-                <select className="border border-gray-200 rounded-lg px-3 py-1 text-sm font-medium outline-none">
-                    <option>This year</option>
-                </select>
-            </div>
-
-            {/* Chart */}
-            <div className="h-[300px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
-                        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#697586', fontSize: 12 }} />
-                        <YAxis axisLine={false} tickLine={false} tick={{ fill: '#697586', fontSize: 12 }} />
-                        <Tooltip cursor={{ fill: '#F9FAFB' }} content={<CustomTooltip />} />
-                        <Legend
-                            iconType="circle"
-                            itemSorter={null}
-                        // formatter={(value) => String(value).toLowerCase()}
-                        />
-                        <Bar dataKey="Free" stackId="a" fill="#F4AE2B" radius={[0, 0, 0, 0]} />
-                        <Bar dataKey="Starter" stackId="a" fill="#F6C553" radius={[0, 0, 0, 0]} />
-                        <Bar dataKey="Pro" stackId="a" fill="#F9DD8E" radius={[0, 0, 0, 0]} />
-                        <Bar dataKey="Elite" stackId="a" fill="#FCEFC9" radius={[6, 6, 0, 0]} />
-                    </BarChart>
-                </ResponsiveContainer>
-            </div>
-        </div>
-    );
+// Types matching your API response
+export interface PlanCount {
+  planId: string;
+  planCode: string;
+  planName: string;
+  count: number;
 }
 
+export interface SeriesItem {
+  label: string;
+  total: number;
+  plans: PlanCount[];
+}
 
-const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-        return (
-            <div className="custom-tooltip bg-gray-800 text-white p-3 rounded-md shadow-md">
-                <p className="label text-xs font-medium  text-white">{label}</p>
-                <p className="value text-xs font-medium  text-white"> {payload[0].name}: {payload[0].value}</p>
-                <p className="value text-xs font-medium  text-white"> {payload[1].name}: {payload[1].value}</p>
-                <p className="value text-xs font-medium  text-white"> {payload[2].name}: {payload[2].value}</p>
-                <p className="value text-xs font-medium  text-white"> {payload[3].name}: {payload[3].value}</p>
+export interface PlanLegendItem {
+  planId: string;
+  planCode: string;
+  planName: string;
+}
+
+export interface SubscriberGrowthData {
+  series: SeriesItem[];
+  totalSubscribers: number;
+  planLegend: PlanLegendItem[];
+}
+
+// Fallback color palette for dynamic dynamic plan bars
+const PALETTE = [
+  '#F4AE2B',
+  '#F6C553',
+  '#F9DD8E',
+  '#FCEFC9',
+  '#D97706',
+  '#B45309'
+];
+
+interface CustomTooltipProps extends TooltipProps<number, string> {
+  active?: boolean;
+  payload?: any[];
+  label?: string;
+}
+
+const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="custom-tooltip bg-gray-800 text-white p-3 rounded-md shadow-md border border-gray-700">
+        <p className="label text-xs font-semibold text-white mb-1.5">{label}</p>
+        <div className="flex flex-col gap-1">
+          {payload.map((item, index) => (
+            <div key={index} className="flex items-center justify-between gap-4 text-xs">
+              <span className="flex items-center gap-1.5" style={{ color: item.color }}>
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
+                <span className="text-gray-200">{item.name}:</span>
+              </span>
+              <span className="font-semibold text-white">{item.value}</span>
             </div>
-        );
-    }
-    return null;
+          ))}
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
+export default function SubscriberGrowth({ subscribers }: { subscribers: SubscriberGrowthData | undefined }) {
+  // Transform hierarchical series structure into flat Recharts data
+  const chartData = useMemo(() => {
+    if (!subscribers?.series) return [];
+
+    return subscribers.series.map((item) => {
+      const dataPoint: Record<string, string | number> = {
+        name: item.label.toUpperCase()
+      };
+
+      item.plans.forEach((p) => {
+        dataPoint[p.planName] = p.count;
+      });
+
+      return dataPoint;
+    });
+  }, [subscribers]);
+
+  const legendKeys = useMemo(() => {
+    if (!subscribers?.planLegend) return [];
+    return subscribers.planLegend.map((item) => item.planName);
+  }, [subscribers]);
+
+  return (
+    <div className="bg-white p-6 rounded-2xl border border-[#ECEFF3] shadow-sm">
+      {/* Header */}
+      <div className="flex justify-between items-start mb-8">
+        <div>
+          <h2 className="section-title text-lg font-bold text-gray-900">Subscriber Growth</h2>
+          <p className="text-sm text-[#697586]">
+            Total Subscribers: {subscribers?.totalSubscribers ?? 0}
+          </p>
+        </div>
+        <select className="border border-gray-200 rounded-lg px-3 py-1 text-sm font-medium outline-none bg-white text-gray-700">
+          <option>This year</option>
+        </select>
+      </div>
+
+      {/* Chart Container */}
+      <div className="h-[300px] w-full">
+        {chartData.length > 0 ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: '#697586', fontSize: 12 }}
+              />
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: '#697586', fontSize: 12 }}
+                allowDecimals={false}
+              />
+              <Tooltip cursor={{ fill: '#F9FAFB' }} content={<CustomTooltip />} />
+              <Legend iconType="circle" />
+
+              {/* Dynamically render stacked bar per plan with top-corner radius on final bar */}
+              {legendKeys.map((key, index) => {
+                const isLast = index === legendKeys.length - 1;
+                const fillColor = PALETTE[index % PALETTE.length];
+
+                return (
+                  <Bar
+                    key={key}
+                    dataKey={key}
+                    stackId="a"
+                    fill={fillColor}
+                    radius={isLast ? [6, 6, 0, 0] : [0, 0, 0, 0]}
+                  />
+                );
+              })}
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-sm text-[#697586]">
+            No subscriber data available
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }

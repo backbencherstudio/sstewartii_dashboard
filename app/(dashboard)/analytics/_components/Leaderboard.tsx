@@ -1,161 +1,162 @@
+"use client";
 
-"use client"
-
-import { ReusableTabs } from '@/components/reusable/CustomTabs';
-import { LeaderboardItem, Leaderboard as LeaderboardType } from '@/types/analytics.types';
-import React, { useState } from 'react'
+import { ReusableTabs } from "@/components/reusable/CustomTabs";
+import { LeaderboardItem, Leaderboard as LeaderboardType } from "@/types/analytics.types";
+import Image from "next/image";
+import React, { useMemo, useState } from "react";
 
 export default function Leaderboard({ leaderboard }: { leaderboard: LeaderboardType | undefined }) {
+  const [selectedTab, setSelectedTab] = useState("customers");
 
-    const [selectedTab, setSelectedTab] = useState('customers');
-
-    console.log("leaderboard", leaderboard);
-
-    return (
-        <div className='w-full flex-col gap-4 self-stretch border border-[#ECEFF3] [background:var(--text-0,#FFF)] shadow-[0_0_16px_0_rgba(0,0,0,0.06)]   rounded-[10px] border-solid'>
-            <div className="mb-4 flex items-center justify-between p-6">
-                <div>
-                    <h3 className="section-title">
-                        Leaderboard
-                    </h3>
-                </div>
-
-                <button className="flex h-[46px] items-center gap-2 rounded-xl bg-white px-4  font-medium text-[#202332] shadow-[0_8px_24px_rgba(16,24,40,0.08)]">
-                    <select>
-                        <option value="this year">This year</option>
-                        <option value="last year">Last year</option>
-                        <option value="2025">2025</option>
-                        <option value="2024">2024</option>
-                        <option value="2023">2023</option>
-                        <option value="2022">2022</option>
-                    </select>
-                    {/* <ChevronDown className="h-4 w-4" /> */}
-                </button>
-            </div>
-            {/* tabs */}
-            <div>
-                <ReusableTabs
-                    defaultValue={"customers"}
-                    tabs={[
-                        { label: 'Customers', value: 'customers' },
-                        { label: 'Vendors', value: 'vendors' },
-                       
-                    ]}
-                    onValueChange={(value) => {
-                        setSelectedTab(value);
-                        console.log(value);
-                    }}
-                />
-
-                {
-                    selectedTab === 'customers' && (
-                        <div>
-                        <TopPerformersCard winnersList={leaderboard?.customers || []} />
-                    </div>
-                )}
-                    
-
-                    {
-                        selectedTab === 'vendors' && (
-                            <div>
-                                <h3>Vendors</h3>
-                            </div>
-                        )
-                    }
-            </div>
+  return (
+    <div className="w-full flex-col gap-4 self-stretch rounded-[10px] border border-solid border-[#ECEFF3] bg-white shadow-[0_0_16px_0_rgba(0,0,0,0.06)]">
+      {/* Header */}
+      <div className="mb-4 flex items-center justify-between p-6">
+        <div>
+          <h3 className="section-title text-lg font-bold text-gray-900">Leaderboard</h3>
         </div>
-    )
+
+        <button className="flex h-[46px] items-center gap-2 rounded-xl bg-white px-4 font-medium text-[#202332] shadow-[0_8px_24px_rgba(16,24,40,0.08)]">
+          <select className="bg-transparent outline-none cursor-pointer">
+            <option value="this year">This year</option>
+            <option value="last year">Last year</option>
+            <option value="2025">2025</option>
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+          </select>
+        </button>
+      </div>
+
+      {/* Tabs */}
+      <div>
+        <ReusableTabs
+          defaultValue="customers"
+          tabs={[
+            { label: "Customers", value: "customers" },
+            { label: "Vendors", value: "vendors" },
+          ]}
+          onValueChange={(value) => setSelectedTab(value)}
+        />
+
+        <div className="p-6">
+          {selectedTab === "customers" && (
+            <TopPerformersCard winnersList={leaderboard?.customers || []} />
+          )}
+
+          {selectedTab === "vendors" && (
+            <TopPerformersCard winnersList={leaderboard?.vendors || []} />
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-
-import Image from "next/image";
-
-const winners = [
+// Visual Podium Rank Mapping Config
+const PODIUM_CONFIG: Record<
+  number,
   {
-    rank: 2,
-    name: "Marie Kom",
-    orders: "8,4321",
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-    size: "small",
+    borderBg: string;
+    badgeBg: string;
+    avatarSize: string;
+    boxSize: string;
+    boxBg: string;
+    textColor: string;
+  }
+> = {
+  1: {
+    borderBg: "border-[#39C5C3]",
+    badgeBg: "bg-[#F6A316]",
+    avatarSize: "h-[100px] w-[100px]",
+    boxSize: "h-[135px] w-[80px]",
+    boxBg: "bg-[#FFDEA0]",
+    textColor: "text-[#744C12]",
   },
-  {
-    rank: 1,
-    name: "Ava Adam",
-    orders: "12,7788",
-    image: "https://randomuser.me/api/portraits/women/68.jpg",
-    size: "large",
+  2: {
+    borderBg: "border-[#43C6C6]",
+    badgeBg: "bg-[#43C6C6]",
+    avatarSize: "h-[80px] w-[80px]",
+    boxSize: "h-[106px] w-[70px]",
+    boxBg: "bg-[#FFDEA0]",
+    textColor: "text-[#744C12]",
   },
-  {
-    rank: 3,
-    name: "Justin Hopper",
-    orders: "5,1632",
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
-    size: "small",
+  3: {
+    borderBg: "border-[#9DB4CC]",
+    badgeBg: "bg-[#9DB4CC]",
+    avatarSize: "h-[80px] w-[80px]",
+    boxSize: "h-[106px] w-[70px]",
+    boxBg: "bg-[#FFDEA0]",
+    textColor: "text-[#744C12]",
   },
-];
+};
 
 function TopPerformersCard({ winnersList }: { winnersList: LeaderboardItem[] }) {
+  // Re-order the items so index 0 = 2nd Place, index 1 = 1st Place, index 2 = 3rd Place
+  const orderedWinners = useMemo(() => {
+    if (!winnersList || winnersList.length === 0) return [];
 
-  // console the winnersList
-  console.log("winnersList", winnersList);
-  
+    const first = winnersList[0] ? { ...winnersList[0], rank: 1 } : null;
+    const second = winnersList[1] ? { ...winnersList[1], rank: 2 } : null;
+    const third = winnersList[2] ? { ...winnersList[2], rank: 3 } : null;
+
+    // Arranging visually for standard podium layout: [Rank 2, Rank 1, Rank 3]
+    return [second, first, third].filter(Boolean) as (LeaderboardItem & { rank: number })[];
+  }, [winnersList]);
+
+  if (winnersList.length === 0) {
+    return (
+      <div className="flex h-[340px] items-center justify-center rounded-[10px] bg-[#FFF8E8] text-sm text-[#667085]">
+        No leaderboard data available.
+      </div>
+    );
+  }
+
   return (
-    <div className="object-cover overflow-hidden  bg-[#FFF8E8] px-6   h-[340px]">
-
-
-      <div className="grid grid-cols-3 items-end gap-6 h-full overflow-hidden">
-        {winners.map((item) => {
-          const isFirst = item.rank === 1;
+    <div className="h-[340px] overflow-hidden rounded-[10px] bg-[#FFF8E8] px-6">
+      <div className="grid h-full grid-cols-3 items-end gap-6 overflow-hidden pb-4">
+        {orderedWinners.map((item) => {
+          const config = PODIUM_CONFIG[item.rank] || PODIUM_CONFIG[2];
+          const avatarUrl =
+            (item as any).avatar ||
+            (item as any).image ||
+            `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(item.name)}`;
 
           return (
-            <div
-              key={item.rank}
-              className={`flex flex-col items-center ${
-                isFirst ? "pb-0" : "pb-0"
-              }`}
-            >
-              {/* Avatar */}
-              <div className="relative ">
+            <div key={item.id || item.rank} className="flex flex-col items-center">
+              {/* Polygon Avatar */}
+              <div className="relative">
                 <div
-                  className={`rotate-28  overflow-hidden border-2 border-[#39C5C3] bg-white shadow-sm [clip-path:polygon(25%_5%,75%_5%,100%_50%,75%_95%,25%_95%,0_50%)]  ${
-                    isFirst ? "h-[100px] w-[100px]" : "h-[80px] w-[80px]"
-                  }`}
+                  className={`rotate-28 overflow-hidden border-2 bg-white shadow-sm [clip-path:polygon(25%_5%,75%_5%,100%_50%,75%_95%,25%_95%,0_50%)] ${config.borderBg} ${config.avatarSize}`}
                 >
                   <Image
-                    src={item.image}
+                    src={avatarUrl}
                     alt={item.name}
                     fill
-                    className="object-cover -rotate-28"
+                    className="-rotate-28 object-cover"
+                    unoptimized
                   />
                 </div>
 
-                {/* Rank badge */}
+                {/* Rank Badge */}
                 <div
-                  className={`absolute left-1/2 flex -translate-x-1/2 items-center justify-center rounded-full text-[#263244] text-sm font-bold font-lora ${
-                    isFirst
-                      ? "-bottom-2 h-5 w-5 bg-[#F6A316] "
-                      : "-bottom-3 h-5 w-5 bg-[#43C6C6] "
-                  } ${item.rank === 3 ? "bg-[#9DB4CC]" : ""}`}
+                  className={`absolute -bottom-2 left-1/2 flex h-5 w-5 -translate-x-1/2 items-center justify-center rounded-full text-xs font-bold text-[#263244] ${config.badgeBg}`}
                 >
                   {item.rank}
                 </div>
               </div>
 
               {/* Name */}
-              <h3
-                className={`mt-4 text-center font-medium text-[#667085] text-sm `}
-              >
+              <h3 className="mt-4 line-clamp-1 text-center text-sm font-medium text-[#667085]">
                 {item.name}
               </h3>
 
-              {/* Score Box */}
+              {/* Value / Score Box */}
               <div
-                className={`mt-4 flex flex-col items-center justify-center rounded-t-[13px]  bg-[#FFDEA0] px-6 ${
-                  isFirst ? "h-[135px] w-[80px]" : "h-[106px] w-[70px]"
-                }`}
+                className={`mt-3 flex flex-col items-center justify-center rounded-t-[13px] px-2 ${config.boxBg} ${config.boxSize}`}
               >
-                <p className="m-0 text-lg font-bold font-lora text-[#744C12]">
-                  {item.orders}
+                <p className={`m-0 text-center text-base font-bold ${config.textColor}`}>
+                  {typeof item.value === "number" ? item.value.toLocaleString() : item.value}
                 </p>
               </div>
             </div>

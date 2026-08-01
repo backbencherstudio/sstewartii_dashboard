@@ -7,7 +7,7 @@ import ManageVendorAcountStats from '../vendors/account/_components/ManageVendor
 import AnalyticStats from './_components/AnalyticStats'
 import Leaderboard from './_components/Leaderboard'
 import PlatformGrothGraph from './_components/PlatformGrothGraph'
-import SubscriberGrowth from './_components/SubscriberGrowth'
+import SubscriberGrowth, { SubscriberGrowthData } from './_components/SubscriberGrowth'
 import RevenueGraph from './_components/RevenueGraph'
 import { useGetAnalytics } from '@/hooks/useAnalytics'
 
@@ -34,7 +34,7 @@ export default function page() {
       </section>
 
 
-      <SubscriberGrowth subscribers={analytics?.data?.subscriberGrowth || undefined} />
+      <SubscriberGrowth subscribers={analytics?.data?.subscriberGrowth as SubscriberGrowthData | undefined} />
 
       <RevenueGraph revenue={analytics?.data?.revenueGrowth || undefined} />
 
