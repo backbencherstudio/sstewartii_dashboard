@@ -21,7 +21,7 @@ export default function DashboardPage() {
             {/* Header Section */}
             <div className="flex md:flex-row flex-col md:items-center md:justify-between gap-6">
                 {/* Left Side - Welcome Text */}
-                <PageTitle title="Welcome, Sedric Stewart 👋" description="Manage your platform data, operational health and vendor ecosystem status." />
+                <PageTitle title="Welcome, Admin 👋" description="Manage your platform data, operational health and vendor ecosystem status." />
 
                 {/* Right Side - Action Buttons */}
                 <div className="flex items-center gap-4">

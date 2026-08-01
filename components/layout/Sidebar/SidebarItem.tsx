@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronDown, User } from 'lucide-react';
 import Image from 'next/image';
+import useAuth from '@/hooks/useAuth';
 
 interface ChildItem {
   label: string;
@@ -178,14 +179,18 @@ const ChildItem: React.FC<ChildItemProps> = ({ label, href, isActive }) => {
 
 
 const ProfileItem = () => {
+
+  const {user}  = useAuth();
+
+
   return (
     <div className='flex items-center gap-3'>
       <div className='flex w-9 h-9 justify-center items-center border border-gray-200 rounded-full relative'>
-        <Image src='https://randomuser.me/api/portraits/men/36.jpg' alt='profile' fill className='absolute w-full h-full object-cover rounded-full' />
+        <Image src={user?.avatar || ""} alt='profile' fill className='absolute w-full h-full object-cover rounded-full' />
       </div>
 
       <div>
-        <p className='text-[color:var(--Button-text,#070707)] [font-family:Inter] text-sm font-medium leading-[160%]'>Sedric Stewart</p>
+        <p className='text-[color:var(--Button-text,#070707)] [font-family:Inter] text-sm font-medium leading-[160%]'>{user?.name || "Admin"}</p>
 
         <p className='inline-flex justify-center items-center gap-2 [background:var(--Mid-Orange,#FFCD71)] px-1.5 py-0 rounded-3xl text-[color:var(--Button-text,#070707)] [font-family:Inter] text-[10px] font-normal leading-4 tracking-[-0.5px]'>Admin</p>
       </div>

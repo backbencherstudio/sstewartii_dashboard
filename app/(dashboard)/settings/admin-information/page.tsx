@@ -123,6 +123,7 @@ export default function AdminInformationPage() {
         {/* Left Side: Avatar Card */}
         <div className="flex w-full flex-col items-center rounded-2xl border border-[#DFE1E7] bg-[#F8FAFB] p-6 text-center md:w-1/3">
           <img
+            crossOrigin=""
             src={imagePreview || user?.avatar || "/placeholder-avatar.png"}
             alt={formData.name || "Admin"}
             className="mb-4 h-32 w-32 rounded-lg object-cover"
@@ -151,7 +152,7 @@ export default function AdminInformationPage() {
           >
             <Upload size={16} /> Upload Photo
           </button>
-          
+
           {(imagePreview || user?.avatar) && (
             <button
               onClick={() => {
