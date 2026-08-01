@@ -41,11 +41,11 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ collapsed, onRequestExpand, o
       href: '/analytics',
       icon: <SidebarIcons.AnalyticsIcon className="" />,
     },
-    {
-      label: 'Subscription Management',
-      href: '/subscriptions',
-      icon: <SidebarIcons.SubscriptionsIcon className="w-4 h-4" />,
-    },
+    // {
+    //   label: 'Subscription Management',
+    //   href: '/subscriptions',
+    //   icon: <SidebarIcons.SubscriptionsIcon className="w-4 h-4" />,
+    // },
     {
       label: 'Event Management',
       href: '/event',

@@ -7,7 +7,7 @@ export default function subscriptionPage() {
     <div className='space-y-6'>
       <PageTitle title="Subscription Management" description="Configure and manage platform membership tiers." />
 
-      <AnalyticStats />
+      {/* <AnalyticStats /> */}
     </div>);
 }
  

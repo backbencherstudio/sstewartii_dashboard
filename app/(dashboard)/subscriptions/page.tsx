@@ -25,7 +25,7 @@ export default function page() {
                 </div>
             </div>
          
-            <AnalyticStats />
+            {/* <AnalyticStats /> */}
 
             <SubscriptionPackagesTable/>
 

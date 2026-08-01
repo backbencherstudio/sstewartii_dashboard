@@ -17,7 +17,7 @@ import { IS_DEV } from "@/lib/constants";
 
 const defaultValues: LoginFormValues = IS_DEV ? {
   email: "admin@gmail.com",
-  password: "Admin@123456",
+  password: "12345678",
 } : {
   email: "",
   password: "",
@@ -35,7 +35,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 function LoginFormFields({
   isLoading,
   submitError,
-  
+
 }: {
   isLoading: boolean;
   submitError: string;
@@ -45,7 +45,7 @@ function LoginFormFields({
   const {
     register,
     formState: { errors },
-    
+
   } = useFormContext<LoginFormValues>();
 
   return (

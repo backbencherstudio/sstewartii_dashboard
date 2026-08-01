@@ -8,6 +8,8 @@ const PUBLIC_PATHS = [
   '/verify-otp',
   '/set-password',
   '/success',
+  '/privacy-policy',
+  '/terms',
 ];
 
 export function proxy(request: NextRequest) {

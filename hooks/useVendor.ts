@@ -58,3 +58,32 @@ export const useVendorVerificationDetails = (
       },
     });
   };
+
+
+
+  export const useNIDVerifications = () => {
+    return useQuery({
+      queryKey: ["nid-verifications"],
+      queryFn: () => vendorService.getNIDVerifications(),
+    });
+  };
+
+  export const useNIDVerificationDetails = (verificationId: string) => {
+    return useQuery({
+      queryKey: ["nid-verification-details", verificationId],
+      queryFn: () => vendorService.getNIDVerificationDetails(verificationId),
+    });
+  };
+
+
+  export const useApproveNIDVerification = () => {
+    return useMutation({
+      mutationFn: (verificationId: string) => vendorService.approveNIDVerification(verificationId),
+    });
+  };
+
+  export const useRejectNIDVerification = () => {
+    return useMutation({
+      mutationFn: (verificationId: string) => vendorService.rejectNIDVerification(verificationId),
+    });
+  };

@@ -40,4 +40,41 @@ export const vendorService = {
         );
         return response.data.data;
     },
+
+    // =============================================== NID VERIFICATIONS ========================================
+
+  
+    async getNIDVerifications(): Promise<any> {
+        const response = await api.get(
+            "/admin/vendors/verification"
+        );
+        return response.data.data;
+    },
+
+
+    async getNIDVerificationDetails(verificationId: string): Promise<any> {
+        const response = await api.get(
+            `/admin/vendors/verification/${verificationId}`
+        );
+        return response.data.data;
+    },
+
+
+ 
+
+    async approveNIDVerification(verificationId: string): Promise<any> {
+        const response = await api.patch(
+            `/admin/vendors/verification/${verificationId}/approve`
+        );
+        return response.data.data;
+    },
+
+ 
+    async rejectNIDVerification(verificationId: string): Promise<any> {
+        const response = await api.patch(
+            `/admin/vendors/verification/${verificationId}/reject`
+        );
+        return response.data.data;
+    },
 };
+

@@ -6,49 +6,33 @@ import ApproveDoc from './_components/ApproveDoc'
 import { useParams } from 'next/navigation';
 import { useVendorVerificationDetails } from '@/hooks/useVendor';
 import { DocumentItem, VendorDetails, VendorVerificationStatus } from '@/types/vendor.types';
+import DocumentTab from './_components/DocumentTab';
+import { useState } from 'react';
+import CustomTabs2 from '@/components/reusable/CustomTabs2';
+import NidTab from './_components/NidTab';
+
 
 export default function page() {
     const params = useParams();
     const id = params.rid as string;
 
-    const { data: vendorVerificationDetails } = useVendorVerificationDetails(id);
+    const [activeTab, setActiveTab] = useState<"document" | "nid-information">("document");
 
 
-    const vendorDetails = vendorVerificationDetails?.vendor as VendorDetails;
-    const vendorDocs = vendorVerificationDetails?.documents as DocumentItem[] || [];
 
     // console.dir(vendorVerificationDetails);
-    console.log(vendorDocs);
+
     return (
         <div className='space-y-6 container mx-auto'>
-            <div>
-                <h2 className='text-[#1A1C1E] font-lora text-2xl font-bold leading-[130%] tracking-[0.48px]'>Reviewing documents</h2>
 
-                <p className="text-[#2A3542] text-base font-normal leading-6">
-                    Submitted on {vendorVerificationDetails?.submittedAtLabel} • ID: {vendorVerificationDetails?.vendorCode}
-                </p>
+            <CustomTabs2
+                defaultTab="document"
+                onChange={(tabId: string) => setActiveTab(tabId as "document" | "nid-information")}
+            />
 
-            </div>
+            {activeTab === "document" && <DocumentTab id={id} />}
+            {activeTab === "nid-information" && <NidTab id={id} />}
 
-
-            {/* doc table */}
-
-            <section className='grid md:grid-cols-[70%_30%] grid-cols-1 gap-6'>
-
-                <div className='space-y-6'>
-                    <DocumentTable docData={vendorDocs} />
-
-                    <ApproveDoc verificationId={id} verificationStatus={vendorVerificationDetails?.status as VendorVerificationStatus} />
-                </div>
-
-
-                <div>
-                    <VendorDetailCard data={vendorDetails} />
-                </div>
-            </section>
-            <div>
-
-            </div>
         </div>
     )
 }

@@ -28,7 +28,7 @@ function messageFromAxiosError(error: unknown): string {
 }
 
 export const authService = {
-  async login(credentials: { email: string; password: string }) {
+  async login(credentials: { email: string; password: string }): Promise<User> {
     try {
       const { data } = await api.post<LoginResponseBody>(
         "/auth/login",
@@ -43,12 +43,12 @@ export const authService = {
       }
       await setTokens(tokens.accessToken, tokens.refreshToken);
 
-      // try {
-      //   return await authService.me();
-      // } catch (meErr) {
-      //   await clearTokens();
-      //   throw new Error(messageFromAxiosError(meErr));
-      // }
+      try {
+        return await authService.me();
+      } catch (meErr) {
+        await clearTokens();
+        throw new Error(messageFromAxiosError(meErr));
+      }
     } catch (e) {
       throw new Error(messageFromAxiosError(e));
     }
