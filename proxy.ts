@@ -11,6 +11,7 @@ const PUBLIC_PATHS = [
   '/privacy-policy',
   '/terms',
   '/account-deletion',
+  '/delete-account'
 ];
 
 export function proxy(request: NextRequest) {
