@@ -10,7 +10,6 @@ const PUBLIC_PATHS = [
   '/success',
   '/privacy-policy',
   '/terms',
-  '/account-deletion',
   '/delete-account'
 ];
 
