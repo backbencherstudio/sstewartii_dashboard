@@ -10,6 +10,7 @@ const PUBLIC_PATHS = [
   '/success',
   '/privacy-policy',
   '/terms',
+  '/account-deletion',
 ];
 
 export function proxy(request: NextRequest) {
