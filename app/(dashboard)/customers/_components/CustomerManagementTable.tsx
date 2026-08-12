@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import DataTable, { Column } from "@/components/reusable/table/DataTable";
 import { Eye, Plus, Search } from "lucide-react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import TableToolBar from "@/components/reusable/table/TableToolBar";
 import ActionIcons from "@/components/icons/ActionIcons";
 import { useGetAllCustomers } from "@/hooks/useCustomers";
@@ -48,7 +48,7 @@ const getColumns = (): Column<Vendor>[] => [
     {
         header: "Date Joined",
         cell: (row) => (
-            <div className="text-xs text-[#161618] font-medium leading-[180%]">{row.date_joined}</div>
+            <div className="text-xs text-[#161618] font-medium leading-[180%]">{formatDate(row.date_joined)}</div>
         ),
     },
     {

@@ -10,6 +10,7 @@ const links = [
     { label: "Admin Information", href: "/settings/admin-information", Icon: SettingsIcon.Info },
     { label: "Notifications", href: "/settings/notifications", Icon: SettingsIcon.Notification },
     { label: "Security", href: "/settings/security", Icon: SettingsIcon.Security },
+    { label: "Audit Logs", href: "/settings/audit-logs", Icon: SettingsIcon.Security },
 ];
 
 export default function SettingsSidebar() {

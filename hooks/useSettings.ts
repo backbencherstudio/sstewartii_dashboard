@@ -6,7 +6,7 @@ import {
     NotificationPreferencesPayload,
 } from "@/types/notifications.types";
 import { ChangePasswordPayload, UpdateProfilePayload } from "@/types/settings.types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const useSettings = () => {
     const [notificationPreferences, setNotificationPreferences] =
@@ -84,3 +84,28 @@ export const useUpdateUser = () => {
     });
   };
 
+
+
+
+//   audit logs 
+
+
+export const useAuditLogs = () => {
+
+    const getAuditLogsList = useQuery({
+        queryKey: ["audit-logs"],
+        queryFn: () => settingsService.getAuditLogs(),
+    });
+
+    return {
+        getAuditLogsList,
+    };
+};
+
+export const useAuditLog = (id: string) => {
+    return useQuery({
+        queryKey: ["audit-log", id],
+        queryFn: () => settingsService.getAuditLogById(id),
+        enabled: !!id,
+    });
+};

@@ -93,7 +93,7 @@ export default function DataTable<T>({
 
             {/* 2. Simple Pagination */}
             {totalPages > 1 && (
-                <div className="flex items-center justify-between pt-2">
+                <div className="flex items-center justify-between p-2">
                     <p className="text-xs text-neutral-400">Page {currentPage} of {totalPages}</p>
                     <div className="flex gap-2">
                         <Button variant="outline" size="sm" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>Prev</Button>
