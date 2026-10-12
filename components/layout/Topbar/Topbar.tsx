@@ -1,14 +1,13 @@
 "use client";
-import { Bell, ChevronRight,  Menu } from 'lucide-react';
-import Link from 'next/link';
-import { useState } from 'react';
-import useAuth from '@/hooks/useAuth';
-import { usePathname } from 'next/navigation';
-import { getBreadcrumbLabels } from '@/lib/breadcrumb.utils';
-import { cn } from '@/lib/utils';
-import { ThemeToggle } from './ThemeToogle';
-import NotificationBell from './NotificationBell';
-
+import { Bell, ChevronRight, Menu } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import useAuth from "@/hooks/useAuth";
+import { usePathname } from "next/navigation";
+import { getBreadcrumbLabels } from "@/lib/breadcrumb.utils";
+import { cn } from "@/lib/utils";
+import { ThemeToggle } from "./ThemeToogle";
+import NotificationBell from "./NotificationBell";
 
 type Props = {
   name?: string;
@@ -16,27 +15,22 @@ type Props = {
 };
 
 export const Topbar = ({ name, onMenuClick }: Props) => {
-
   const [showNotification, setShowNotification] = useState(false);
   const pathname = usePathname();
-  console.log(pathname);
   const breadcrumbs = getBreadcrumbLabels(pathname);
-  // console.log("breadcrumbs", breadcrumbs);
-  const { user } = useAuth();
-
-
-
-
-  const email = user?.email || "admin@example.com";
-  const role = user?.type || "Admin";
 
   return (
     <header className="md:h-20 h-16 bg-white border-b border-[#EAECF0] flex items-center justify-between md:px-8 px-4  shrink-0">
-
       <div className="flex items-center gap-2 hidden md:flex">
         {breadcrumbs.map((breadcrumb, idx) => (
-          <Link key={idx} href={breadcrumb.href} className={cn("flex items-center gap-2 text-[#697586]   font-lora text-sm font-bold leading-[130%]", idx > 0 && "text-[#2A3542]")}>
-
+          <Link
+            key={idx}
+            href={breadcrumb.href}
+            className={cn(
+              "flex items-center gap-2 text-[#697586]   font-lora text-sm font-bold leading-[130%]",
+              idx > 0 && "text-[#2A3542]",
+            )}
+          >
             {idx > 0 && <ChevronRight className="w-4 h-4" />}
             {breadcrumb.label}
           </Link>
@@ -45,7 +39,10 @@ export const Topbar = ({ name, onMenuClick }: Props) => {
 
       {/* menu icon */}
       <div className="flex items-center gap-3 min-w-0">
-        <button onClick={onMenuClick} className="md:hidden p-1.5 rounded-md hover:bg-gray-100">
+        <button
+          onClick={onMenuClick}
+          className="md:hidden p-1.5 rounded-md hover:bg-gray-100"
+        >
           <Menu className="w-5 h-5" />
         </button>
       </div>
@@ -57,7 +54,6 @@ export const Topbar = ({ name, onMenuClick }: Props) => {
         {/* notification icon */}
         <div className="flex items-center gap-2">
           <NotificationBell />
-
 
           {/* profile icon */}
           {/* <div className="flex items-center gap-2">
