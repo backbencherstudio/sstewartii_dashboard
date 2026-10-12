@@ -2,7 +2,9 @@ import api from "@/lib/axios";
 import {
     VendorVerificationQueryParams,
     VendorVerificationList,
-    VendorVerificationData
+    VendorVerificationData,
+    VerificationReviewPayload,
+    VerificationReviewResponse
 } from '@/types/vendor.types';
 
 export const vendorService = {
@@ -39,6 +41,32 @@ export const vendorService = {
             `/admin/vendor-verifications/${verificationId}/${status}`,
         );
         return response.data.data;
+    },
+
+    // =============================================== ADMIN REVIEW (credential / business-document) ========================================
+    // PATCH /api/v1/admin/vendor-verifications/:verificationId/credential-review
+    // PATCH /api/v1/admin/vendor-verifications/:verificationId/business-document-review
+    // body: { status: "APPROVED" | "NEEDS_REVIEW" | "REJECTED", result: string, reason: string }
+    async reviewCredentialItem(
+        verificationId: string,
+        payload: VerificationReviewPayload
+    ): Promise<VerificationReviewResponse> {
+        const response = await api.patch(
+            `/admin/vendor-verifications/${verificationId}/credential-review`,
+            payload
+        );
+        return response.data.data ?? response.data;
+    },
+
+    async reviewBusinessDocumentItem(
+        verificationId: string,
+        payload: VerificationReviewPayload
+    ): Promise<VerificationReviewResponse> {
+        const response = await api.patch(
+            `/admin/vendor-verifications/${verificationId}/business-document-review`,
+            payload
+        );
+        return response.data.data ?? response.data;
     },
 
     // =============================================== NID VERIFICATIONS ========================================
