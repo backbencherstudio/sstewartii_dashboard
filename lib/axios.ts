@@ -1,19 +1,26 @@
 // lib/axios.ts
-import axios from "axios";
 import { extractTokensFromAuthPayload } from "@/lib/auth-tokens";
 import {
-  getAccessToken,
-  setTokens,
   clearTokens,
+  getAccessToken,
   getRefreshToken,
+  setTokens,
 } from "@/lib/session";
+import axios from "axios";
+import { API_URL } from "./constants";
 
-const refreshEnabled = () =>
-  process.env.NEXT_PUBLIC_ENABLE_REFRESH === "true";
+const refreshEnabled = () => process.env.NEXT_PUBLIC_ENABLE_REFRESH === "true";
 
-function isAuthLoginRequest(config: { url?: string } | undefined) {
+function isPreAuthRequest(config: { url?: string } | undefined) {
   const url = config?.url ?? "";
-  return url.includes("/auth/login");
+  return (
+    url.includes("/auth/login") ||
+    url.includes("/2fa/verify") ||
+    url.includes("/two-factor/verify") ||
+    url.includes("/auth/verify-otp") ||
+    url.includes("/auth/forgot-password") ||
+    url.includes("/auth/reset-password")
+  );
 }
 
 // const api = axios.create({
@@ -23,13 +30,12 @@ function isAuthLoginRequest(config: { url?: string } | undefined) {
 
 /** Free ngrok tunnels return an HTML interstitial unless this header is sent; axios then fails (often net::ERR_FAILED) even when the origin API would return 200. */
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: API_URL,
   timeout: 10000,
-  headers: process.env.NEXT_PUBLIC_API_URL?.includes("ngrok")
+  headers: API_URL?.includes("ngrok")
     ? { "ngrok-skip-browser-warning": "true" }
     : {},
 });
-
 
 api.interceptors.request.use(async (config) => {
   const token = await getAccessToken();
@@ -59,7 +65,7 @@ api.interceptors.response.use(
     const status = error.response?.status;
 
     if (status === 401 && !originalRequest._retry) {
-      if (isAuthLoginRequest(originalRequest)) {
+      if (isPreAuthRequest(originalRequest)) {
         return Promise.reject(error);
       }
 
@@ -67,7 +73,7 @@ api.interceptors.response.use(
         await clearTokens();
         if (
           typeof window !== "undefined" &&
-          !isAuthLoginRequest(originalRequest)
+          !isPreAuthRequest(originalRequest)
         ) {
           window.location.href = "/login";
         }
@@ -95,7 +101,7 @@ api.interceptors.response.use(
         }
         const { data } = await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-          { refreshToken }
+          { refreshToken },
         );
 
         const parsed = extractTokensFromAuthPayload(data);
@@ -116,7 +122,7 @@ api.interceptors.response.use(
         await clearTokens();
         if (
           typeof window !== "undefined" &&
-          !isAuthLoginRequest(originalRequest)
+          !isPreAuthRequest(originalRequest)
         ) {
           window.location.href = "/login";
         }
@@ -127,7 +133,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

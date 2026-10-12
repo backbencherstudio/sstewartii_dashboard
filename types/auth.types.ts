@@ -20,12 +20,18 @@ export interface MeResponseBody {
 export interface LoginResponseBody {
   success?: boolean;
   message?: string;
-  authorization?: {
-    type?: string;
-    access_token: string;
-    refresh_token: string;
-  };
+  // authorization?: {
+  //   type?: string;
+  //   access_token: string;
+  //   refresh_token: string;
+  // };
   type?: string;
+  data: {
+    success: boolean;
+    message: string;
+    requiresTwoFactor: boolean;
+    challengeToken: string;
+  };
 }
 
 export interface ForgotPasswordResponseBody {
@@ -49,4 +55,21 @@ export interface VerifyOTPResponseBody {
 export interface ResetPasswordResponseBody {
   success?: boolean;
   message?: string;
+}
+
+export interface TwoFactorVerifyResponseBody {
+  success: boolean;
+  statusCode?: number;
+  message: string;
+  data: {
+    accessToken: string;
+    refreshToken: string;
+    user: {
+      id: string;
+      email: string;
+      role: "ADMIN";
+      isVerified: boolean;
+    };
+    deletionInfo: null;
+  };
 }

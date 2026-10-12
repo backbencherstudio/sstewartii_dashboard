@@ -1,11 +1,11 @@
 import api from "@/lib/axios";
-import { extractTokensFromAuthPayload } from "@/lib/auth-tokens";
 import { clearTokens, setTokens } from "@/lib/session";
 import type {
   ForgotPasswordResponseBody,
   LoginResponseBody,
   MeResponseBody,
   ResetPasswordResponseBody,
+  TwoFactorVerifyResponseBody,
   User,
   VerifyOTPResponseBody,
 } from "@/types/auth.types";
@@ -28,27 +28,33 @@ function messageFromAxiosError(error: unknown): string {
 }
 
 export const authService = {
-  async login(credentials: { email: string; password: string }): Promise<User> {
+  async login(credentials: {
+    email: string;
+    password: string;
+  }): Promise<LoginResponseBody> {
     try {
       const { data } = await api.post<LoginResponseBody>(
         "/auth/login",
-        credentials
+        credentials,
       );
+
       if (data.success === false) {
         throw new Error(data.message ?? "Login failed");
       }
-      const tokens = extractTokensFromAuthPayload(data);
-      if (!tokens) {
-        throw new Error("Invalid login response");
-      }
-      await setTokens(tokens.accessToken, tokens.refreshToken);
+      // const tokens = extractTokensFromAuthPayload(data);
+      // if (!tokens) {
+      //   throw new Error("Invalid login response");
+      // }
+      // await setTokens(tokens.accessToken, tokens.refreshToken);
 
-      try {
-        return await authService.me();
-      } catch (meErr) {
-        await clearTokens();
-        throw new Error(messageFromAxiosError(meErr));
-      }
+      // try {
+      //   return await authService.me();
+      // } catch (meErr) {
+      //   await clearTokens();
+      //   throw new Error(messageFromAxiosError(meErr));
+      // }
+
+      return data;
     } catch (e) {
       throw new Error(messageFromAxiosError(e));
     }
@@ -70,11 +76,13 @@ export const authService = {
     await clearTokens();
   },
 
-
   // Forgot Password
   async forgotPassword(email: string): Promise<ForgotPasswordResponseBody> {
     try {
-      const { data } = await api.post<ForgotPasswordResponseBody>("/auth/forgot-password", { email });
+      const { data } = await api.post<ForgotPasswordResponseBody>(
+        "/auth/forgot-password",
+        { email },
+      );
       if (data.success === false) {
         throw new Error(data.message ?? "Failed to send verification code");
       }
@@ -87,7 +95,10 @@ export const authService = {
   // Verify OTP
   async verifyOTP(email: string, otp: string): Promise<string> {
     try {
-      const { data } = await api.post<VerifyOTPResponseBody>("/auth/verify-otp", { email, otp });
+      const { data } = await api.post<VerifyOTPResponseBody>(
+        "/auth/verify-otp",
+        { email, otp },
+      );
       if (data.success === false) {
         throw new Error(data.message ?? "OTP verification failed");
       }
@@ -110,10 +121,45 @@ export const authService = {
     }
   },
 
-  // Reset Password
-  async resetPassword(resetToken: string, newPassword: string, confirmPassword: string): Promise<ResetPasswordResponseBody> {
+  // Verify Two-Factor (TOTP app code)
+  async verifyTwoFactor(
+    challengeToken: string,
+    code: string,
+  ): Promise<TwoFactorVerifyResponseBody["data"]> {
     try {
-      const { data } = await api.post<ResetPasswordResponseBody>("/auth/reset-password", { resetToken, newPassword, confirmPassword });
+      const { data } = await api.post<TwoFactorVerifyResponseBody>(
+        "/auth/admin/2fa/verify",
+        { challengeToken, code },
+      );
+      if (!data?.success) {
+        throw new Error(data?.message ?? "Two-factor verification failed");
+      }
+      const payload = data.data;
+      if (
+        !payload ||
+        typeof payload.accessToken !== "string" ||
+        typeof payload.refreshToken !== "string"
+      ) {
+        throw new Error("Invalid two-factor verification response");
+      }
+      await setTokens(payload.accessToken, payload.refreshToken);
+      return payload;
+    } catch (e) {
+      throw new Error(messageFromAxiosError(e));
+    }
+  },
+
+  // Reset Password
+  async resetPassword(
+    resetToken: string,
+    newPassword: string,
+    confirmPassword: string,
+  ): Promise<ResetPasswordResponseBody> {
+    try {
+      const { data } = await api.post<ResetPasswordResponseBody>(
+        "/auth/reset-password",
+        { resetToken, newPassword, confirmPassword },
+      );
       if (data.success === false) {
         throw new Error(data.message ?? "Reset password failed");
       }

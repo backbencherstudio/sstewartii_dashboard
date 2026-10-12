@@ -1,9 +1,9 @@
 "use client";
 
-import { User } from '@/types/auth.types';
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import { authService } from "@/services/auth.service";
+import { User } from "@/types/auth.types";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface AuthState {
   // State
@@ -18,7 +18,6 @@ interface AuthState {
   clear: () => void;
 
   // Async Logic Actions
-  login: (credentials: { email: string; password: string }) => Promise<void>;
   fetchMe: () => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -38,18 +37,6 @@ export const useAuthStore = create<AuthState>()(
       clear: () => set({ user: null, isLoading: false }),
 
       // Async Logic
-      login: async (credentials) => {
-        set({ isLoading: true });
-        try {
-          const user = await authService.login(credentials);
-          set({ user });
-        } catch (error) {
-          throw error;
-        } finally {
-          set({ isLoading: false });
-        }
-      },
-
       fetchMe: async () => {
         set({ isLoading: true });
         try {
@@ -75,11 +62,11 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: 'auth-store',
+      name: "auth-store",
       partialize: (state) => ({ user: state.user }),
       onRehydrateStorage: () => (state) => {
         state?.setHydrated(true);
       },
-    }
-  )
+    },
+  ),
 );
