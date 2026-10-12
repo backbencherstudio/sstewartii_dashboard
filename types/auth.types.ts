@@ -29,8 +29,25 @@ export interface LoginResponseBody {
   data: {
     success: boolean;
     message: string;
-    requiresTwoFactor: boolean;
-    challengeToken: string;
+
+    /** `true` when this account has no 2FA enrolled yet and must complete
+     *  setup before continuing. Only present on setup-required logins.
+     *  Handle by storing {@link setupToken} and routing to the 2FA setup page. */
+    requiresTwoFactorSetup?: boolean;
+    /** Short-lived token authorizing the 2FA setup calls (fetch QR data +
+     *  confirm). Only present when `requiresTwoFactorSetup` is true.
+     *  Single-use: discard after setup completes or a new login starts. */
+    setupToken?: string;
+
+    /** `true` when 2FA is already enrolled: this login pauses and waits for
+     *  a TOTP code from the authenticator app. Only present on
+     *  verification-required logins. Handle by storing {@link challengeToken}
+     *  and routing to `/login/two-factor/app`. */
+    requiresTwoFactor?: boolean;
+    /** Short-lived token authorizing the 2FA code-verification call.
+     *  Only present when `requiresTwoFactor` is true. Single-use:
+     *  cleared from sessionStorage after verify (or a new login). */
+    challengeToken?: string;
   };
 }
 
@@ -71,5 +88,16 @@ export interface TwoFactorVerifyResponseBody {
       isVerified: boolean;
     };
     deletionInfo: null;
+  };
+}
+
+export interface TwoFactorSetupResponseBody {
+  success: boolean;
+  statusCode?: number;
+  message: string;
+  data: {
+    qrCodeDataUrl: string;
+    manualEntryKey: string;
+    otpauthUrl: string;
   };
 }

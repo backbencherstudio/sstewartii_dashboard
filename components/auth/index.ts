@@ -4,4 +4,5 @@ export { default as LoginForm } from './LoginForm';
 export { default as SetPasswordForm } from './SetPasswordForm';
 export { default as RegisterForm } from './RegisterForm';
 export { default as TwoFactorForm } from './TwoFactorForm';
+export { default as TwoFactorSetupForm } from './TwoFactorSetupForm';
 

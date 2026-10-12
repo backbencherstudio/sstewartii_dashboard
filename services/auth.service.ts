@@ -5,6 +5,7 @@ import type {
   LoginResponseBody,
   MeResponseBody,
   ResetPasswordResponseBody,
+  TwoFactorSetupResponseBody,
   TwoFactorVerifyResponseBody,
   User,
   VerifyOTPResponseBody,
@@ -143,6 +144,37 @@ export const authService = {
         throw new Error("Invalid two-factor verification response");
       }
       await setTokens(payload.accessToken, payload.refreshToken);
+      return payload;
+    } catch (e) {
+      throw new Error(messageFromAxiosError(e));
+    }
+  },
+
+  // Two-Factor setup (fetch QR data for the authenticator app)
+  async setupTwoFactor(
+    setupToken: string,
+  ): Promise<TwoFactorSetupResponseBody["data"]> {
+    try {
+      const { data } = await api.post<TwoFactorSetupResponseBody>(
+        "/auth/admin/2fa/setup",
+        { setupToken },
+      );
+      if (!data?.success) {
+        throw new Error(data?.message ?? "Two-factor setup failed");
+      }
+      const payload = data.data;
+      if (
+        !payload ||
+        typeof payload.qrCodeDataUrl !== "string" ||
+        !payload.qrCodeDataUrl ||
+        typeof payload.manualEntryKey !== "string" ||
+        !payload.manualEntryKey ||
+        typeof payload.otpauthUrl !== "string" ||
+        !payload.otpauthUrl
+      ) {
+        throw new Error("Invalid two-factor setup response");
+      }
+
       return payload;
     } catch (e) {
       throw new Error(messageFromAxiosError(e));
