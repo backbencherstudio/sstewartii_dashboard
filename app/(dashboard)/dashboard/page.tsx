@@ -93,7 +93,6 @@ const HeaderNotifyCard = ({ icon, title, color }: HeaderNotifyCardProps) => {
 };
 
 const DashboardAlerts = ({ alerts }: { alerts: DashboardAlerts | undefined }) => {
-    console.log("alerts", alerts);
 
 
     return (

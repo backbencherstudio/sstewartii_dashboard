@@ -10,7 +10,6 @@ import { SimpleJsonBox } from '@/lib/SimpleJsonBox'
 export default function page() {
 
   const { data: vendorAccounts, isLoading } = useVendorAccounts();
-  console.log(JSON.stringify(vendorAccounts, null, 2));
 
   const stats = vendorAccounts?.data.stats;
   return (

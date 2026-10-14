@@ -22,7 +22,6 @@ export default function ApproveDoc({ verificationId, verificationStatus }: Appro
 
         if (status === "approve") {
            
-            // console.log("approve call", verificationId, status);
             approveOrRejectDocument({ verificationId, status: "approve" }, {
                 onSuccess: () => {
                     setMode("approve");

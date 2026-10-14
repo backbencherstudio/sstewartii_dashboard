@@ -20,7 +20,7 @@ type Vendor = {
     ownerName: string;
     email: string;
   
-    status: "APPROVED" | "IN_REVIEW" | "REJECTED" | "SUSPENDED" | "PENDING" | "UNVERIFIED";
+    status: "APPROVED" | "IN_REVIEW" | "REJECTED" | "SUSPENDED" | "PENDING" | "PENDING_REVIEW" | "UNVERIFIED";
     statusLabel: string;
   
     subscriptionStatus: "ACTIVE" | "INACTIVE" | "FREE_TRIAL" | "EXPIRED";
@@ -128,6 +128,10 @@ export const StatusBadge = ({ status }: { status: Vendor['status'] }) => {
             icon: <BanIcon className="w-3.5 h-3.5 text-black" />,
         }, // Red
         PENDING: {
+            background: "bg-[#89A2C3]",
+            icon: <CircleX className="w-3.5 h-3.5 text-black" />,
+        },  // Blue
+        PENDING_REVIEW: {
             background: "bg-[#89A2C3]",
             icon: <CircleX className="w-3.5 h-3.5 text-black" />,
         },  // Blue

@@ -68,10 +68,11 @@ export const useVendorVerificationDetails = (
     });
   };
 
-  export const useNIDVerificationDetails = (verificationId: string) => {
+  export const useNIDVerificationDetails = (vendorId?: string) => {
     return useQuery({
-      queryKey: ["nid-verification-details", verificationId],
-      queryFn: () => vendorService.getNIDVerificationDetails(verificationId),
+      queryKey: ["nid-verification-details", vendorId],
+      queryFn: () => vendorService.getNIDVerificationDetails(vendorId!),
+      enabled: !!vendorId,
     });
   };
 

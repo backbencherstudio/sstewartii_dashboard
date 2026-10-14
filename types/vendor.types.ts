@@ -53,13 +53,15 @@ export interface DocumentItem {
   fileName: string;
   fileUrl: string;
   status: "ACTIVE" | "INACTIVE" | string;
+  expirationDate?: string;
+  expirationDateLabel?: string;
 }
 
 export interface VendorDetails {
   id: string;
   vendorCode: string;
   businessName: string;
-  coverImage: string;
+  coverImage?: string;
   ownerName: string;
   ownerEmail: string;
   publicEmail: string;
@@ -74,6 +76,32 @@ export interface VerificationDecision {
   message: string;
 }
 
+export interface NameComparison {
+  verifiedIdName: string;
+  permitHolderName: string;
+  businessName: string;
+}
+
+export interface CredentialReview {
+  status: "PENDING" | "APPROVED" | "REJECTED" | "NEEDS_REVIEW" | string;
+}
+
+export interface BusinessDocumentReview {
+  status: "PENDING" | "APPROVED" | "REJECTED" | "NEEDS_REVIEW" | string;
+  uploaded: boolean;
+}
+
+export interface VerificationReviewHistoryItem {
+  id?: string;
+  kind?: string;
+  status?: string;
+  reviewerId?: string | null;
+  result?: string | null;
+  reason?: string | null;
+  reviewedAt?: string | null;
+  [key: string]: unknown;
+}
+
 export interface VendorVerificationData {
   verificationId: string;
   vendorId: string;
@@ -81,6 +109,19 @@ export interface VendorVerificationData {
   status: "PENDING" | "APPROVED" | "REJECTED" | string;
   submittedAt: string;
   submittedAtLabel: string;
+  permitHolderName: string;
+  verifiedIdName: string;
+  nameComparison: NameComparison;
+  credentialReview: CredentialReview;
+  businessDocumentReview: BusinessDocumentReview;
+  reviewHistory: VerificationReviewHistoryItem[];
+  credentialNumber: string;
+  issuingAuthority: string;
+  credentialState: string;
+  credentialJurisdiction: string;
+  expirationDate: string;
+  permitHolderNameMatchesVerifiedId: boolean;
+  manualReviewRequired: boolean;
   documents: DocumentItem[];
   vendor: VendorDetails;
   decision: VerificationDecision;
@@ -109,4 +150,68 @@ export interface VerificationReviewResponse {
   status: string;
   reviewedAt: string;
   message: string;
+}
+
+// =============================================== NID / KYC VERIFICATIONS ========================================
+
+export type NidKycStatus = "PENDING_REVIEW" | "APPROVED" | "REJECTED" | string;
+
+export type NidDocumentType = "NATIONAL_ID" | string;
+
+export type NidSelfiePose = "FRONT" | "LEFT" | "RIGHT" | string;
+
+export interface VendorNidOwner {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: string;
+}
+
+export interface VendorNidDocument {
+  type: NidDocumentType;
+  documentNumber: string;
+  frontImageUrl: string;
+  backImageUrl: string;
+}
+
+export interface VendorNidSelfieImage {
+  pose: NidSelfiePose;
+  imageUrl: string;
+  uploadedAt: string;
+}
+
+export interface VendorNidSelfie {
+  images: VendorNidSelfieImage[];
+}
+
+export interface VendorNidKycProfile {
+  document: VendorNidDocument;
+  selfie: VendorNidSelfie;
+  rejectionReason: string | null;
+  submittedAt: string;
+  reviewedAt: string | null;
+  updatedAt: string;
+  verifiedAt: string | null;
+  verifiedIdName: string;
+}
+
+export interface VendorNidVerificationDetails {
+  id: string;
+  vendorCode: string;
+  businessName: string;
+  publicEmail: string;
+  contactNumber: string;
+  coverImage: string | null;
+  kycStatus: NidKycStatus;
+  createdAt: string;
+  updatedAt: string;
+  owner: VendorNidOwner;
+  kycProfile: VendorNidKycProfile;
+}
+
+export interface VendorNidVerificationDetailsResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: VendorNidVerificationDetails;
 }

@@ -42,7 +42,6 @@ export default function ServiceArea({ serviceArea }: { serviceArea: ServiceAreaT
   const center: [number, number] = [23.8103, 90.4200];
 
   const { address, latitude, longitude, radius } = serviceArea || {};
-  console.log("serviceArea", serviceArea);
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">

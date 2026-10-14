@@ -79,7 +79,7 @@ const getColumns = (
         )
     },
     {
-        header: "Expire Status",
+        header: "Document Expiry",
         cell: (row) => (
             <div className="flex">
                 <span className={`flex justify-center items-center gap-2.5 ${getStatusColor(row.status)} px-4 py-2 rounded-lg text-white text-sm font-medium leading-[120%]`}>
@@ -172,7 +172,6 @@ export default function DocumentInfoTable({ accountId }: { accountId: string }) 
                 closeButtonProps={{
                     onClick: () => {
                         setView(null);
-                        console.log("close button clicked");
                     },
                 }}
                 className="p-0"

@@ -17,7 +17,6 @@ export default   function page() {
 
 
 
-  console.log(vendorVerifications, "vendorVerifications");
 
   return (
     <div className='space-y-6'>

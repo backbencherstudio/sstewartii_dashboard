@@ -14,7 +14,6 @@ import { VendorVerificationStats } from '@/types/vendor.types';
 // }
 
 export default function DashboardStats({ stats }: { stats: VendorVerificationStats | undefined }) {
-  console.log(stats, "stats");
   return (
     <div>
 

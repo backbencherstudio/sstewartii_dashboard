@@ -61,7 +61,6 @@ const CustomBar = (props: any) => {
 const PlatformRevenueChart = () => {
     const [selectedOption, setSelectedOption] = useState("this-year");
     const { data: dashboardRevenue } = useDashboardRevenue({ range: "year", metric: "revenue" });
-    console.log("dashboardRevenue", dashboardRevenue);
     const data = dashboardRevenue?.items.map((item: { label: string, value: number }) => ({
         name: item.label,
         revenue: item.value,
