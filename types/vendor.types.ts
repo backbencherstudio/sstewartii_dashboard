@@ -93,9 +93,12 @@ export interface BusinessDocumentReview {
 
 export interface VerificationReviewHistoryItem {
   id?: string;
-  kind?: string;
+  /** Reviewed item, e.g. "MOBILE_FOOD_OPERATING_CREDENTIAL" | "BUSINESS_DOCUMENT" */
+  item?: string;
   status?: string;
+  source?: string | null;
   reviewerId?: string | null;
+  reviewerName?: string | null;
   result?: string | null;
   reason?: string | null;
   reviewedAt?: string | null;
