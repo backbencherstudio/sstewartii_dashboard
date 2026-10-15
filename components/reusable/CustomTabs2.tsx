@@ -16,8 +16,8 @@ interface CustomTabsProps {
 }
 
 const DEFAULT_TABS: TabItem[] = [
-  { id: "document", label: "Document" },
   { id: "nid-information", label: "NID Information" },
+  { id: "document", label: "Document" },
 ];
 
 export default function CustomTabs2({

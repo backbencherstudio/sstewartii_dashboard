@@ -12,7 +12,7 @@ export default function Page() {
   const id = params.rid as string;
 
   const [activeTab, setActiveTab] = useState<"document" | "nid-information">(
-    "document",
+    "nid-information",
   );
 
   const { data: vendorVerificationDetails } = useVendorVerificationDetails(id);
@@ -20,11 +20,10 @@ export default function Page() {
     vendorVerificationDetails?.vendorId ??
     vendorVerificationDetails?.vendor?.id;
 
-
   return (
     <div className="space-y-6 container mx-auto">
       <CustomTabs2
-        defaultTab="document"
+        defaultTab="nid-information"
         onChange={(tabId: string) =>
           setActiveTab(tabId as "document" | "nid-information")
         }
