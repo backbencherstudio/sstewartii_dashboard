@@ -21,11 +21,9 @@ import { VendorOverviewData } from '@/types/vendorAccount.types'
 export default function Page() {
 
     const { id } = useParams();
-    // console.log(id);
 
     const { data: vendorOverview, isLoading, isError } = useVendorOverview(id as string, "month");
     const {vendor,} = vendorOverview?.data || {};
-    console.log(JSON.stringify(vendorOverview, null, 2));
 
     const [modalAction, setModalAction] = useState<'suspend' | 'disable' | null>(null)
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)

@@ -12,7 +12,6 @@ export default function customersPage() {
 
   const { data: customers, isLoading, error } = useGetAllCustomers();
 
-  console.log(customers);
 
   // Show loading state
   if (isLoading) {

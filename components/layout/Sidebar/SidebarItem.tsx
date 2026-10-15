@@ -1,10 +1,10 @@
-'use client';
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { ChevronDown, User } from 'lucide-react';
-import Image from 'next/image';
-import useAuth from '@/hooks/useAuth';
+"use client";
+import useAuth from "@/hooks/useAuth";
+import { ChevronDown, User } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React, { useState } from "react";
 
 interface ChildItem {
   label: string;
@@ -27,7 +27,7 @@ interface SidebarItemProps {
 /** True when pathname equals href or is a nested segment under it (e.g. /vendors/add under /vendors). */
 function isRouteActive(pathname: string, href: string) {
   if (pathname === href) return true;
-  if (href === '/') return false;
+  if (href === "/") return false;
   return pathname.startsWith(`${href}/`);
 }
 
@@ -44,18 +44,20 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
 }) => {
   const pathname = usePathname();
   const isActive = href ? isRouteActive(pathname, href) : false;
-  const isChildActive = children?.some((child) => isRouteActive(pathname, child.href));
+  const isChildActive = children?.some((child) =>
+    isRouteActive(pathname, child.href),
+  );
   const [open, setOpen] = useState(isChildActive ?? false);
-
 
   //  px-5 py-3 rounded-xl
   const baseClass = `
     flex items-center gap-3 w-full text-left pl-5 pr-5 py-3 rounded-xl text-sm text-nowrap
     transition-colors duration-150 cursor-pointer
-    ${collapsed ? 'justify-center px-2' : ''}
-    ${isActive || isChildActive
-      ? '[background:var(--Primary-Linear,linear-gradient(136deg,#FFBB1C_0%,#E28611_100%))]  font-medium hover:bg-primary-linear/80 text-black font-medium '
-      : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900'
+    ${collapsed ? "justify-center px-2" : ""}
+    ${
+      isActive || isChildActive
+        ? "[background:var(--Primary-Linear,linear-gradient(136deg,#FFBB1C_0%,#E28611_100%))]  font-medium hover:bg-primary-linear/80 text-black font-medium "
+        : "text-gray-600 hover:bg-gray-200 hover:text-gray-900"
     }
   `;
 
@@ -76,7 +78,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       );
     }
 
-    const El = href ? Link : 'button';
+    const El = href ? Link : "button";
     return (
       <El
         href={href as string}
@@ -84,7 +86,9 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
         className={baseClass}
         title={label}
       >
-        {icon && <span className="shrink-0 text-inherit [&_svg]:shrink-0">{icon}</span>}
+        {icon && (
+          <span className="shrink-0 text-inherit [&_svg]:shrink-0">{icon}</span>
+        )}
       </El>
     );
   }
@@ -93,15 +97,21 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
     return (
       <div>
         <button onClick={() => setOpen((prev) => !prev)} className={baseClass}>
-          {icon && <span className="shrink-0 text-inherit [&_svg]:shrink-0">{icon}</span>}
+          {icon && (
+            <span className="shrink-0 text-inherit [&_svg]:shrink-0">
+              {icon}
+            </span>
+          )}
           <span className="flex-1">{label}</span>
           <ChevronDown
             size={16}
-            className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+            className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           />
         </button>
 
-        <div className={`overflow-hidden transition-all duration-200 ease-in-out ${open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div
+          className={`overflow-hidden transition-all duration-200 ease-in-out ${open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}
+        >
           <div className="ml-6 flex flex-col relative">
             <div className="absolute left-0 top-0 bottom-6 w-px bg-gray-600 h-[calc(100%-2rem)]" />
             {children.map((child) => (
@@ -113,17 +123,14 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                   isActive={isRouteActive(pathname, child.href)}
                 />
               </>
-
             ))}
-
-
           </div>
         </div>
       </div>
     );
   }
 
-  if (label === 'Profile') {
+  if (label === "Profile") {
     return (
       <button onClick={onClick} className={baseClass}>
         <ProfileItem />
@@ -134,7 +141,9 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   if (href) {
     return (
       <Link href={href} className={baseClass}>
-        {icon && <span className="shrink-0 text-inherit [&_svg]:shrink-0">{icon}</span>}
+        {icon && (
+          <span className="shrink-0 text-inherit [&_svg]:shrink-0">{icon}</span>
+        )}
         <span>{label}</span>
         {isBeta && <span className="beta-badge">Beta</span>}
       </Link>
@@ -143,12 +152,12 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
 
   return (
     <button onClick={onClick} className={baseClass}>
-      {icon && <span className="shrink-0 text-inherit [&_svg]:shrink-0">{icon}</span>}
+      {icon && (
+        <span className="shrink-0 text-inherit [&_svg]:shrink-0">{icon}</span>
+      )}
       <span>{label}</span>
     </button>
   );
-
-
 };
 
 export default SidebarItem;
@@ -165,7 +174,7 @@ const ChildItem: React.FC<ChildItemProps> = ({ label, href, isActive }) => {
       href={href}
       className={`
         relative flex items-center py-2 pl-6 text-sm transition-colors duration-150
-        ${isActive ? 'text-gray-800 font-semibold' : 'text-gray-600 hover:text-gray-800'}
+        ${isActive ? "text-gray-800 font-semibold" : "text-gray-600 hover:text-gray-800"}
         before:absolute before:left-0 before:top-1/3
         before:-translate-y-1/2 before:w-5 before:h-4
         before:border-l before:border-b before:border-gray-600
@@ -177,25 +186,37 @@ const ChildItem: React.FC<ChildItemProps> = ({ label, href, isActive }) => {
   );
 };
 
-
 const ProfileItem = () => {
-
-  const {user}  = useAuth();
-
+  const { user } = useAuth();
 
   return (
-    <div className='flex items-center gap-3'>
-      <div className='flex w-9 h-9 justify-center items-center border border-gray-200 rounded-full relative'>
-        <Image src={user?.avatar || ""} alt='profile' fill className='absolute w-full h-full object-cover rounded-full' />
+    <div className="flex items-center gap-3">
+      <div className="flex w-9 h-9 justify-center items-center border border-gray-200 rounded-full relative overflow-hidden">
+        {user?.avatar ? (
+          <Image
+            src={user.avatar}
+            alt="profile"
+            fill
+            className="absolute w-full h-full object-cover rounded-full"
+          />
+        ) : (
+          <User />
+        )}
       </div>
 
       <div>
-        <p className='text-[color:var(--Button-text,#070707)] [font-family:Inter] text-sm font-medium leading-[160%]'>{user?.name || "Admin"}</p>
+        <p className="text-(--Button-text,#070707) font-[Inter] text-sm font-medium leading-[160%]">
+          {user?.name || "Admin"}
+        </p>
 
-        <p className='inline-flex justify-center items-center gap-2 [background:var(--Mid-Orange,#FFCD71)] px-1.5 py-0 rounded-3xl text-[color:var(--Button-text,#070707)] [font-family:Inter] text-[10px] font-normal leading-4 tracking-[-0.5px]'>Admin</p>
+        <p className="inline-flex justify-center items-center gap-2 [background:var(--Mid-Orange,#FFCD71)] px-1.5 py-0 rounded-3xl text-[color:var(--Button-text,#070707)] [font-family:Inter] text-[10px] font-normal leading-4 tracking-[-0.5px]">
+          {user?.role || "Admin"}
+        </p>
       </div>
     </div>
   );
 };
 
-{/* */ }
+{
+  /* */
+}

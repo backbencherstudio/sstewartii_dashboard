@@ -13,7 +13,6 @@ export default function ReportDetails({ selectedId }: { selectedId: string | nul
     const customer = customerReportDetails?.data;
 
 
-    console.log("customer report details", customerReportDetails);
 
     const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(false);
 

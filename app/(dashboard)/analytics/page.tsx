@@ -16,7 +16,6 @@ export default function page() {
 
   const { data: analytics, isLoading, error } = useGetAnalytics();
 
-  console.log(analytics);
 
   return (
     <div className='space-y-6'>

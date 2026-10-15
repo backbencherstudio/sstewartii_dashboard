@@ -28,7 +28,6 @@ export default function PendingVendorVerifications() {
   const { data: vendorVerifications } = useVendorVerifications({ status: "PENDING", page: 1, limit: 10, sort: "newest" });
 
 
-  console.log(vendorVerifications?.items);
 
   return (
     <div className='flex flex-col w-full rounded-2xl border border-[#ECEFF3] bg-white shadow-[0_0_16px_0_rgba(0,0,0,0.06)] overflow-hidden'>

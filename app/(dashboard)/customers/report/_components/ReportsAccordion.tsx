@@ -149,7 +149,6 @@ export default function ReportsAccordion({
     const [openVendorId, setOpenVendorId] = useState<string>("");
     const vendors = getVendors(customerReports);
 
-    console.log(vendors);
 
     if (!vendors.length) {
         return (
@@ -213,7 +212,6 @@ function VendorReportItem({
     const reports = fetchedReports.length ? fetchedReports : vendor.reports ?? [];
     const displayName = vendor.businessName || "Unknown vendor";
 
-    console.log("Report Details", reportDetails);
 
     return (
         <AccordionItem

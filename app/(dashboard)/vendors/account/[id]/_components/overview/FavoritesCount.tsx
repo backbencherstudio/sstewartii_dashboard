@@ -23,7 +23,6 @@ const favorites: FavoriteUser[] = [
 export default function FavoritesCountCard({ favorites }: { favorites: FavoritesType }) {
 
   const { count, recent } = favorites || {};
-  console.log("favorites", favorites);
    const data = recent?.map((item: any) => ({
     id: item.id || '',
     name: item.name || '',
@@ -32,7 +31,6 @@ export default function FavoritesCountCard({ favorites }: { favorites: Favorites
     avatar: item.avatar || '/avatar1.jpg',
   }));
 
-  console.log("data", data);
   return (
     <div className="flex  flex-col items-start gap-4 self-stretch bg-white shadow-[0_0_16px_0_rgba(0,0,0,0.06)]  rounded-2xl h-[418px] overflow-y-auto w-full container-scrollbar">
       {/* Header */}
