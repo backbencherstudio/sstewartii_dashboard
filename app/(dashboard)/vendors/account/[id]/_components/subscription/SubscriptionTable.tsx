@@ -149,7 +149,6 @@ export default function DocumentInfoTable({ accountId }: { accountId: string }) 
 
     const { data: subscriptionData } = useVendorSubscriptions(accountId);
     
-    console.log(subscriptionData?.data.items);
 
 
     // const [review, setReview] = useState<Document | null>(null);
@@ -196,7 +195,6 @@ export default function DocumentInfoTable({ accountId }: { accountId: string }) 
                 closeButtonProps={{
                     onClick: () => {
                         setView(null);
-                        console.log("close button clicked");
                     },
 
                 }}

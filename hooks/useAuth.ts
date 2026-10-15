@@ -4,19 +4,21 @@ import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { authService } from "@/services/auth.service";
-import { TWO_FACTOR_CHALLENGE_KEY } from "@/lib/constants";
+import {
+  TWO_FACTOR_CHALLENGE_KEY,
+  TWO_FACTOR_SETUP_KEY,
+} from "@/lib/constants";
+
+const clearLocalSessionTokens = async () => {
+  sessionStorage.removeItem(TWO_FACTOR_CHALLENGE_KEY);
+  sessionStorage.removeItem(TWO_FACTOR_SETUP_KEY);
+};
 
 const useAuth = () => {
   const router = useRouter();
 
-  // Grab state and methods from the store
-  const {
-    logout: storeLogout,
-    fetchMe: storeFetchMe,
-    user,
-    isLoading: storeIsLoading,
-    isHydrated,
-  } = useAuthStore();
+  // Store is state-only — all API calls live in this hook
+  const { setUser, clear, user, isHydrated } = useAuthStore();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -32,8 +34,17 @@ const useAuth = () => {
       setIsLoading(true);
       setIsError(false);
       setErrMsg(null);
+
       try {
         const res = await authService.login(credentials);
+
+        if (res.data?.requiresTwoFactorSetup) {
+          if (res.data.setupToken) {
+            sessionStorage.setItem(TWO_FACTOR_SETUP_KEY, res.data.setupToken);
+          }
+          router.push("/login/two-factor/setup");
+          return;
+        }
 
         if (res.data?.requiresTwoFactor) {
           if (res.data.challengeToken) {
@@ -65,7 +76,8 @@ const useAuth = () => {
     setIsError(false);
     setErrMsg(null);
     try {
-      await storeLogout();
+      await authService.logout();
+      clear();
       router.push("/login");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Logout failed";
@@ -75,7 +87,7 @@ const useAuth = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [storeLogout, router]);
+  }, [clear, router]);
 
   const verifyTwoFactor = useCallback(
     async (code: string) => {
@@ -83,7 +95,11 @@ const useAuth = () => {
       setIsError(false);
       setErrMsg(null);
       try {
-        const challengeToken = sessionStorage.getItem(TWO_FACTOR_CHALLENGE_KEY);
+        // Fresh login stores the challenge token; a setup-first login stores
+        // the setup token instead — the verify endpoint accepts either.
+        const challengeToken =
+          sessionStorage.getItem(TWO_FACTOR_CHALLENGE_KEY) ??
+          sessionStorage.getItem(TWO_FACTOR_SETUP_KEY);
         if (!challengeToken) {
           throw new Error("Session expired. Please log in again.");
         }
@@ -91,7 +107,14 @@ const useAuth = () => {
           challengeToken,
           code,
         );
-        sessionStorage.removeItem(TWO_FACTOR_CHALLENGE_KEY);
+
+        clearLocalSessionTokens();
+        // Tokens are set now, so load the full profile into the store.
+        try {
+          setUser(await authService.me());
+        } catch {
+          // Non-fatal: dashboard rehydrates via fetchMe().
+        }
         router.push("/dashboard");
         return verified;
       } catch (err) {
@@ -104,25 +127,48 @@ const useAuth = () => {
         setIsLoading(false);
       }
     },
-    [router],
+    [router, setUser],
   );
 
-  const fetchMe = useCallback(async () => {
+  const setupTwoFactor = useCallback(async () => {
     setIsLoading(true);
     setIsError(false);
     setErrMsg(null);
     try {
-      await storeFetchMe();
+      const setupToken = sessionStorage.getItem(TWO_FACTOR_SETUP_KEY);
+      if (!setupToken) {
+        throw new Error("Session expired. Please log in again.");
+      }
+      return await authService.setupTwoFactor(setupToken);
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : "Failed to load profile";
+        err instanceof Error ? err.message : "Two-factor setup failed";
       setIsError(true);
       setErrMsg(message);
       throw new Error(message);
     } finally {
       setIsLoading(false);
     }
-  }, [storeFetchMe]);
+  }, []);
+
+  const fetchMe = useCallback(async () => {
+    setIsLoading(true);
+    setIsError(false);
+    setErrMsg(null);
+    try {
+      setUser(await authService.me());
+    } catch (err) {
+      clear(); // Wipe store if token/session is invalid
+      const message =
+        err instanceof Error ? err.message : "Failed to load profile";
+      setIsError(true);
+      setErrMsg(message);
+      // No rethrow: matches previous silent semantics —
+      // AuthProvider calls this fire-and-forget on every dashboard visit.
+    } finally {
+      setIsLoading(false);
+    }
+  }, [setUser, clear]);
 
   // const forgotPassword = useCallback(async (data: { email: string }) => {
   //     await authService.forgotPassword(data.email);
@@ -131,7 +177,7 @@ const useAuth = () => {
 
   return {
     user,
-    isLoading: isLoading || storeIsLoading,
+    isLoading,
     isError,
     errMsg,
     isHydrated,
@@ -139,6 +185,7 @@ const useAuth = () => {
     logout,
     fetchMe,
     verifyTwoFactor,
+    setupTwoFactor,
     clearError,
     // forgotPassword
   };

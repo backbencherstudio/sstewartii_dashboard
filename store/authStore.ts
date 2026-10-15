@@ -1,6 +1,5 @@
 "use client";
 
-import { authService } from "@/services/auth.service";
 import { User } from "@/types/auth.types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -8,58 +7,25 @@ import { persist } from "zustand/middleware";
 interface AuthState {
   // State
   user: User | null;
-  isLoading: boolean;
   isHydrated: boolean;
 
-  // Actions
+  // Actions — state only
   setUser: (user: User | null) => void;
-  setLoading: (loading: boolean) => void;
   setHydrated: (hydrated: boolean) => void;
   clear: () => void;
-
-  // Async Logic Actions
-  fetchMe: () => Promise<void>;
-  logout: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       // Initial State
       user: null,
-      isLoading: false,
       isHydrated: false,
 
       // Base Actions
       setUser: (user) => set({ user }),
-      setLoading: (isLoading) => set({ isLoading }),
       setHydrated: (isHydrated) => set({ isHydrated }),
-      clear: () => set({ user: null, isLoading: false }),
-
-      // Async Logic
-      fetchMe: async () => {
-        set({ isLoading: true });
-        try {
-          const user = await authService.me();
-          set({ user });
-        } catch (error) {
-          get().clear(); // Wipe store if token/session is invalid
-        } finally {
-          set({ isLoading: false });
-        }
-      },
-
-      logout: async () => {
-        set({ isLoading: true });
-        try {
-          await authService.logout();
-          get().clear();
-        } catch (error) {
-          throw error;
-        } finally {
-          set({ isLoading: false });
-        }
-      },
+      clear: () => set({ user: null }),
     }),
     {
       name: "auth-store",

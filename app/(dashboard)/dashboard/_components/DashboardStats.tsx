@@ -5,7 +5,6 @@ import React from 'react'
 import type { DashboardSummary } from '@/types/dashboard.types';
 
 export default function DashboardStats({ summary }: { summary: DashboardSummary | undefined }) {
-  console.log("summary", summary);
   return (
     <div>
     

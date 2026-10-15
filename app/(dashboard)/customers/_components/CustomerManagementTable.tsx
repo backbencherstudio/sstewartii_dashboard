@@ -99,7 +99,6 @@ export default function CustomerManagementTable( { customers }: { customers: any
         total_spent: customer.totalSpent || customer.amountSpent || 0,
     })) || [];
 
-    console.log('Transformed customers:', transformedData);
 
     return (
         <div>

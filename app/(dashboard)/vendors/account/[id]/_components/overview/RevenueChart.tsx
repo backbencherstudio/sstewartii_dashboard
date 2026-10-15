@@ -17,7 +17,6 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 export default function RevenueChart({ revenueChart }: { revenueChart: RevenueChartType }) {
- console.log("revenueChart", revenueChart);
  const { range, total, currency, items } = revenueChart || {};
  
 
@@ -26,7 +25,6 @@ export default function RevenueChart({ revenueChart }: { revenueChart: RevenueCh
   day: item.label,
   revenue: item.value,
  }));
- console.log("data", data);
  
   return (
     <div className="w-full max-w-7xl p-5 bg-white/60 rounded-3xl border border-gray-100 shadow-sm font-sans flex flex-col items-center h-[343px]">

@@ -9,7 +9,6 @@ import { AnalyticsStats } from '@/types/analytics.types';
 export default function AnalyticStats({ data }: { data: AnalyticsStats | undefined }) {
 
     const { platformRevenue, totalCustomers, totalSubscribers, totalVendors } = data || {};
-    // console.log(data);
 
     return (
         <div>

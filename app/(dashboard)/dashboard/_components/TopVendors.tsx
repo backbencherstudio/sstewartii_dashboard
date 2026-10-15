@@ -41,8 +41,6 @@ export default function TopVendors() {
 
 
 
-  console.log(dashboardRevenue, "dashboardRevenue");
-  console.log(dashboardSales, "dashboardSales");
 
   
 

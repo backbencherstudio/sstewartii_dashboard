@@ -17,6 +17,7 @@ function isPreAuthRequest(config: { url?: string } | undefined) {
     url.includes("/auth/login") ||
     url.includes("/2fa/verify") ||
     url.includes("/two-factor/verify") ||
+    url.includes("/2fa/setup") ||
     url.includes("/auth/verify-otp") ||
     url.includes("/auth/forgot-password") ||
     url.includes("/auth/reset-password")

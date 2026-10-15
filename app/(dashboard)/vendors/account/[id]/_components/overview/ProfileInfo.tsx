@@ -8,7 +8,6 @@ import { formatDate } from '@/lib/utils';
 
 export default function ProfileInfo({ vendor, contactInfo, businessProfile }: { vendor: VendorOverviewVendor, contactInfo: ContactInfo, businessProfile: BusinessProfile }) {
 
-    console.log("businessProfile", businessProfile);
     return (
         // <section className="bg-white p-8 rounded-3xl border border-[#ECEFF3] shadow-sm flex flex-col lg:flex-row gap-8">
 
