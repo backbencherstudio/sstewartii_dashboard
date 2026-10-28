@@ -48,9 +48,11 @@ export const breadcrumbConfig: Record<string, string[]> = {
       "Create Plan",
     ],
     "/team-permission": [
+      "Teams",
       "Team Permission",
     ],
     "/members": [
+      "Teams",
       "Member Management",
     ],
   };
