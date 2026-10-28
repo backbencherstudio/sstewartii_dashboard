@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import {
   Users,
   Shield,
@@ -16,6 +15,7 @@ import {
 } from "lucide-react";
 import { TeamMember } from "@/types/member.types";
 import { formatDateSafe } from "../../team-permission/_components/permissionHelpers";
+import MemberAvatar from "./MemberAvatar";
 
 interface MemberTableProps {
   members?: TeamMember[] | null;
@@ -26,15 +26,6 @@ interface MemberTableProps {
   onViewMember: (member: TeamMember) => void;
   onEditMember: (member: TeamMember) => void;
   onDeleteMember: (member: TeamMember) => void;
-}
-
-function getInitials(name?: string): string {
-  if (!name) return "TM";
-  const parts = name.trim().split(" ");
-  if (parts.length >= 2) {
-    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-  }
-  return name.slice(0, 2).toUpperCase();
 }
 
 export default function MemberTable({
@@ -152,20 +143,11 @@ export default function MemberTable({
                   {/* Member Name + Avatar */}
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      {member?.avatar ? (
-                        <div className="relative w-9 h-9 rounded-full overflow-hidden shrink-0 border border-gray-200">
-                          <Image
-                            src={member.avatar}
-                            alt={member?.name || "Avatar"}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-400 to-amber-600 text-white font-semibold flex items-center justify-center text-xs shadow-xs shrink-0">
-                          {getInitials(member?.name)}
-                        </div>
-                      )}
+                      <MemberAvatar
+                        avatar={member?.avatar}
+                        name={member?.name}
+                        size="md"
+                      />
 
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">

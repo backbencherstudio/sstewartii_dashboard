@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useMemo } from "react";
-import Image from "next/image";
 import {
   X,
   Shield,
@@ -19,21 +18,13 @@ import {
   groupPermissionsByResource,
   getActionBadgeInfo,
 } from "../../team-permission/_components/permissionHelpers";
+import MemberAvatar from "./MemberAvatar";
 
 interface MemberDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
   member: TeamMember | null;
   onEditClick: (member: TeamMember) => void;
-}
-
-function getInitials(name?: string): string {
-  if (!name) return "TM";
-  const parts = name.trim().split(" ");
-  if (parts.length >= 2) {
-    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-  }
-  return name.slice(0, 2).toUpperCase();
 }
 
 export default function MemberDetailsModal({
@@ -73,20 +64,11 @@ export default function MemberDetailsModal({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100 bg-[#FCFDFE]">
           <div className="flex items-center gap-3">
-            {activeMember?.avatar ? (
-              <div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-200 shrink-0">
-                <Image
-                  src={activeMember.avatar}
-                  alt={activeMember?.name || "Avatar"}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            ) : (
-              <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-amber-400 to-amber-600 text-white font-bold flex items-center justify-center text-sm shadow-xs shrink-0">
-                {getInitials(activeMember?.name)}
-              </div>
-            )}
+            <MemberAvatar
+              avatar={activeMember?.avatar}
+              name={activeMember?.name}
+              size="lg"
+            />
 
             <div>
               <div className="flex items-center gap-2">

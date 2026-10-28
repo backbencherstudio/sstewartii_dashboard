@@ -28,6 +28,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "atliss.anikstudio.com",
+      },
+      {
+        protocol: "https",
         hostname: "i.pravatar.cc",
       },
       {
