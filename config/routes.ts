@@ -50,4 +50,7 @@ export const breadcrumbConfig: Record<string, string[]> = {
     "/team-permission": [
       "Team Permission",
     ],
+    "/members": [
+      "Member Management",
+    ],
   };

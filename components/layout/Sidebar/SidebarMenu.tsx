@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Home, Store, Settings, LogOut, User, ShieldCheck } from 'lucide-react';
+import { Home, Store, Settings, LogOut, User, ShieldCheck, Users } from 'lucide-react';
 import SidebarItem from './SidebarItem';
 import useAuth from '@/hooks/useAuth';
 import SidebarIcons from '@/components/icons/SidebarIcons';
@@ -45,6 +45,11 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ collapsed, onRequestExpand, o
       label: 'Team Permission',
       href: '/team-permission',
       icon: <ShieldCheck size={16} />,
+    },
+    {
+      label: 'Member Management',
+      href: '/members',
+      icon: <Users size={16} />,
     },
     // {
     //   label: 'Subscription Management',
