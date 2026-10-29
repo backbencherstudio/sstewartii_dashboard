@@ -28,6 +28,7 @@ import {
 import { AdminLog, AuditLogQueryParams } from "@/types/settings.types";
 import AuditLogDetailsModal from "../_components/AuditLogDetailsModal";
 import AuditLogStats from "../_components/AuditLogStats";
+import AppSelect from "@/components/reusable/AppSelect";
 
 // ==================== Helpers ====================
 
@@ -418,19 +419,22 @@ export default function AuditLogTable() {
                   <User className="w-3 h-3 text-[#E28611]" />
                   <span>Staff / Actor</span>
                 </label>
-                <select
+                <AppSelect
                   value={actorUserId}
-                  onChange={(e) => setActorUserId(e.target.value)}
+                  onValueChange={(val) => {
+                    setActorUserId(val);
+                    setPage(1);
+                  }}
                   disabled={isLoadingStaff}
-                  className="w-full bg-white border border-[#E0E2E7] rounded-xl px-2.5 py-2 text-xs font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#E28611]/30 hover:border-gray-300 transition-colors"
-                >
-                  <option value="">All Staff / Actors</option>
-                  {staffList.map((st) => (
-                    <option key={st.id} value={st.id}>
-                      {st.name} ({st.role || "Staff"})
-                    </option>
-                  ))}
-                </select>
+                  placeholder="All Staff / Actors"
+                  options={[
+                    { value: "", label: "All Staff / Actors" },
+                    ...staffList.map((st) => ({
+                      value: st.id,
+                      label: `${st.name} (${st.role || "Staff"})`,
+                    })),
+                  ]}
+                />
               </div>
 
               {/* 2. Action Filter (GET /admin/audit-logs/actions -> action) */}
@@ -439,19 +443,22 @@ export default function AuditLogTable() {
                   <Shield className="w-3 h-3 text-[#E28611]" />
                   <span>Action</span>
                 </label>
-                <select
+                <AppSelect
                   value={action}
-                  onChange={(e) => setAction(e.target.value)}
+                  onValueChange={(val) => {
+                    setAction(val);
+                    setPage(1);
+                  }}
                   disabled={isLoadingActions}
-                  className="w-full bg-white border border-[#E0E2E7] rounded-xl px-2.5 py-2 text-xs font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#E28611]/30 hover:border-gray-300 transition-colors"
-                >
-                  <option value="">All Actions</option>
-                  {actionsList.map((act) => (
-                    <option key={act} value={act}>
-                      {formatAction(act)}
-                    </option>
-                  ))}
-                </select>
+                  placeholder="All Actions"
+                  options={[
+                    { value: "", label: "All Actions" },
+                    ...actionsList.map((act) => ({
+                      value: act,
+                      label: formatAction(act),
+                    })),
+                  ]}
+                />
               </div>
 
               {/* 3. Entity Type Filter (entityType) */}
