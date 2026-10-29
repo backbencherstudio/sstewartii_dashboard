@@ -5,6 +5,7 @@ import type {
   LoginResponseBody,
   MeResponseBody,
   ResetPasswordResponseBody,
+  SidebarMenuItemData,
   TwoFactorSetupResponseBody,
   TwoFactorVerifyResponseBody,
   User,
@@ -70,6 +71,27 @@ export const authService = {
       throw new Error(data?.message ?? "Failed to load profile");
     } catch (e) {
       throw new Error(messageFromAxiosError(e));
+    }
+  },
+
+  async getSidebarMenu(): Promise<SidebarMenuItemData[]> {
+    try {
+      const response = await api.get<{
+        success?: boolean;
+        data?: SidebarMenuItemData[];
+      }>("/auth/me/sidebar");
+
+      const res = response?.data;
+      if (Array.isArray(res)) {
+        return res;
+      }
+      if (Array.isArray(res?.data)) {
+        return res.data;
+      }
+      return [];
+    } catch (e) {
+      console.error("Error fetching /auth/me/sidebar:", e);
+      return [];
     }
   },
 

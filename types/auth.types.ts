@@ -6,6 +6,33 @@ export interface UserRoleObject {
   isSystem?: boolean;
 }
 
+export interface SidebarMenuItemChild {
+  key: string;
+  label: string;
+  href?: string;
+  icon?: string | null;
+  actions?: string[];
+  children?: SidebarMenuItemChild[];
+}
+
+export interface SidebarMenuItemData {
+  key: string;
+  label: string;
+  href?: string;
+  icon?: string | null;
+  action?: string | null;
+  isBottom?: boolean;
+  actions?: string[];
+  children?: SidebarMenuItemChild[];
+}
+
+export interface SidebarMenuResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: SidebarMenuItemData[];
+}
+
 export interface User {
   id: string;
   name: string;
