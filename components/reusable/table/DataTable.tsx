@@ -30,9 +30,20 @@ export default function DataTable<T>({
     idKey
 }: DataTableProps<T>) {
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = Math.ceil(data.length / pageSize);
+    const safeData: T[] = Array.isArray(data)
+        ? data
+        : Array.isArray((data as unknown as { items?: T[] })?.items)
+        ? ((data as unknown as { items: T[] }).items)
+        : Array.isArray((data as unknown as { logs?: T[] })?.logs)
+        ? ((data as unknown as { logs: T[] }).logs)
+        : Array.isArray((data as unknown as { auditLogs?: T[] })?.auditLogs)
+        ? ((data as unknown as { auditLogs: T[] }).auditLogs)
+        : Array.isArray((data as unknown as { data?: T[] })?.data)
+        ? ((data as unknown as { data: T[] }).data)
+        : [];
+    const totalPages = Math.ceil(safeData.length / pageSize);
 
-    const paginatedData = data.slice(
+    const paginatedData = safeData.slice(
         (currentPage - 1) * pageSize,
         currentPage * pageSize
     );
