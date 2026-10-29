@@ -116,14 +116,12 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
           <div className="ml-6 flex flex-col relative">
             <div className="absolute left-0 top-0 bottom-6 w-px bg-gray-600 h-[calc(100%-2rem)]" />
             {children.map((child) => (
-              <>
-                <ChildItem
-                  key={child.label}
-                  label={child.label}
-                  href={child.href}
-                  isActive={isRouteActive(pathname, child.href)}
-                />
-              </>
+              <ChildItem
+                key={child.label || child.href}
+                label={child.label}
+                href={child.href}
+                isActive={isRouteActive(pathname, child.href)}
+              />
             ))}
           </div>
         </div>
@@ -133,9 +131,9 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
 
   if (label === "Profile") {
     return (
-      <button onClick={onClick} className={baseClass}>
+      <Link href="/settings" className={baseClass}>
         <ProfileItem />
-      </button>
+      </Link>
     );
   }
 
