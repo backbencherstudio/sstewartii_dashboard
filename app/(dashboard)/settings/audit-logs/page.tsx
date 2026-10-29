@@ -260,16 +260,29 @@ export default function AuditLogTable() {
     const res = data as unknown as Record<string, unknown>;
     const nestedData = res?.data as Record<string, unknown> | undefined;
 
-    if (Array.isArray(res)) return res as AdminLog[];
-    if (Array.isArray(nestedData?.items)) return nestedData.items as AdminLog[];
-    if (Array.isArray(res?.items)) return res.items as AdminLog[];
-    if (Array.isArray(res?.data)) return res.data as AdminLog[];
-    if (Array.isArray(nestedData?.logs)) return nestedData.logs as AdminLog[];
-    if (Array.isArray(res?.logs)) return res.logs as AdminLog[];
-    if (Array.isArray(nestedData?.auditLogs)) return nestedData.auditLogs as AdminLog[];
-    if (Array.isArray(res?.auditLogs)) return res.auditLogs as AdminLog[];
-    return [];
-  }, [data]);
+    let items: AdminLog[] = [];
+    if (Array.isArray(res)) items = res as AdminLog[];
+    else if (Array.isArray(nestedData?.items)) items = nestedData.items as AdminLog[];
+    else if (Array.isArray(res?.items)) items = res.items as AdminLog[];
+    else if (Array.isArray(res?.data)) items = res.data as AdminLog[];
+    else if (Array.isArray(nestedData?.logs)) items = nestedData.logs as AdminLog[];
+    else if (Array.isArray(res?.logs)) items = res.logs as AdminLog[];
+    else if (Array.isArray(nestedData?.auditLogs)) items = nestedData.auditLogs as AdminLog[];
+    else if (Array.isArray(res?.auditLogs)) items = res.auditLogs as AdminLog[];
+
+    // Client-side fallback filter: In case the server ignores actorUserId or doesn't filter
+    if (actorUserId) {
+      items = items.filter(
+        (log) =>
+          log.actorUserId === actorUserId ||
+          log.adminId === actorUserId ||
+          log.admin?.id === actorUserId ||
+          log.actorUser?.id === actorUserId,
+      );
+    }
+
+    return items;
+  }, [data, actorUserId]);
 
   // Extract pagination info from API response
   const paginationInfo = useMemo(() => {
