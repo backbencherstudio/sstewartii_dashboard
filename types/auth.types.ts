@@ -1,3 +1,11 @@
+export interface UserRoleObject {
+  id: string;
+  name: string;
+  slug?: string | null;
+  description?: string | null;
+  isSystem?: boolean;
+}
+
 export interface User {
   id: string;
   name: string;
@@ -5,7 +13,7 @@ export interface User {
   avatar: string | null;
   country_code: string | null;
   phone_number: string | null;
-  role: string;
+  role: string | UserRoleObject;
   gender: string | null;
   date_of_birth: string | null;
   created_at: string;
