@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
+import { getImageUrl } from "@/lib/utils";
 
 interface ChildItem {
   label: string;
@@ -189,28 +190,38 @@ const ChildItem: React.FC<ChildItemProps> = ({ label, href, isActive }) => {
 const ProfileItem = () => {
   const { user } = useAuth();
 
+  // Handle role whether it is a string or an object { id, name, slug, isSystem }
+  const roleName =
+    typeof user?.role === "string"
+      ? user.role
+      : typeof (user?.role as { name?: string } | undefined)?.name === "string"
+        ? (user?.role as { name: string }).name
+        : "Staff";
+
+  const avatarUrl = getImageUrl(user?.avatar);
+
   return (
     <div className="flex items-center gap-3">
-      <div className="flex w-9 h-9 justify-center items-center border border-gray-200 rounded-full relative overflow-hidden">
-        {user?.avatar ? (
+      <div className="flex w-9 h-9 justify-center items-center border border-gray-200 rounded-full relative overflow-hidden bg-gray-50 shrink-0">
+        {avatarUrl ? (
           <Image
-            src={user.avatar}
-            alt="profile"
+            src={avatarUrl}
+            alt={user?.name || "profile"}
             fill
             className="absolute w-full h-full object-cover rounded-full"
           />
         ) : (
-          <User />
+          <User className="w-5 h-5 text-gray-500" />
         )}
       </div>
 
-      <div>
-        <p className="text-(--Button-text,#070707) font-[Inter] text-sm font-medium leading-[160%]">
-          {user?.name || "Admin"}
+      <div className="min-w-0 text-left">
+        <p className="text-(--Button-text,#070707) font-[Inter] text-sm font-medium leading-[160%] truncate max-w-[130px]">
+          {user?.name || "User"}
         </p>
 
-        <p className="inline-flex justify-center items-center gap-2 [background:var(--Mid-Orange,#FFCD71)] px-1.5 py-0 rounded-3xl text-[color:var(--Button-text,#070707)] [font-family:Inter] text-[10px] font-normal leading-4 tracking-[-0.5px]">
-          {user?.role || "Admin"}
+        <p className="inline-flex justify-center items-center gap-2 [background:var(--Mid-Orange,#FFCD71)] px-1.5 py-0 rounded-3xl text-[color:var(--Button-text,#070707)] [font-family:Inter] text-[10px] font-normal leading-4 tracking-[-0.5px] truncate max-w-[120px]">
+          {roleName}
         </p>
       </div>
     </div>
