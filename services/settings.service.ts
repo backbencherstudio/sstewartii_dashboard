@@ -4,7 +4,19 @@ import {
   NotificationSettingsApiResponse,
   NotificationSettingsData,
 } from "@/types/notifications.types";
-import { AdminLog, AdminLogsResponse, ChangePasswordPayload, SingleAuditLogResponse, UpdateProfilePayload } from "@/types/settings.types";
+import {
+  AdminLog,
+  AdminLogsResponse,
+  AuditLogActionsResponse,
+  AuditLogQueryParams,
+  AuditLogStaffMember,
+  AuditLogStaffResponse,
+  AuditLogSummaryData,
+  AuditLogSummaryResponse,
+  ChangePasswordPayload,
+  SingleAuditLogResponse,
+  UpdateProfilePayload,
+} from "@/types/settings.types";
 
 
 export const settingsService = {
@@ -67,11 +79,22 @@ export const settingsService = {
     return res.data.data;
   },
 
-  async getAuditLogs(): Promise<AdminLog[]> {
-    const response = await api.get<AdminLogsResponse>(
-      "/admin/audit-logs",
-    );
-    return response.data.data;
+  async getAuditLogs(
+    params?: AuditLogQueryParams
+  ): Promise<AdminLogsResponse> {
+    const cleanParams: Record<string, string | number> = {};
+    if (params) {
+      Object.entries(params).forEach(([key, val]) => {
+        if (val !== undefined && val !== null && val !== "" && val !== "ALL") {
+          cleanParams[key] = val;
+        }
+      });
+    }
+
+    const response = await api.get<AdminLogsResponse>("/admin/audit-logs", {
+      params: cleanParams,
+    });
+    return response.data;
   },
 
   async getAuditLogById(id: string): Promise<AdminLog> {
@@ -79,6 +102,27 @@ export const settingsService = {
       `/admin/audit-logs/${id}`,
     );
 
+    return response.data.data;
+  },
+
+  async getAuditLogStaff(): Promise<AuditLogStaffMember[]> {
+    const response = await api.get<AuditLogStaffResponse>(
+      "/admin/audit-logs/staff"
+    );
+    return response.data?.data || [];
+  },
+
+  async getAuditLogActions(): Promise<string[]> {
+    const response = await api.get<AuditLogActionsResponse>(
+      "/admin/audit-logs/actions"
+    );
+    return response.data?.data?.actions || [];
+  },
+
+  async getAuditLogSummary(): Promise<AuditLogSummaryData> {
+    const response = await api.get<AuditLogSummaryResponse>(
+      "/admin/audit-logs/summary"
+    );
     return response.data.data;
   },
 

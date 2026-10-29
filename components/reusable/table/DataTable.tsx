@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 export type Column<T> = {
     header: string;
@@ -19,6 +18,13 @@ type DataTableProps<T> = {
     selectedId?: string | null; // Changed to single string
     onSelectionChange?: (id: string | null) => void;
     idKey?: keyof T;
+    // Server-side pagination support (optional)
+    serverPagination?: {
+        currentPage: number;
+        totalPages: number;
+        totalCount?: number;
+        onPageChange: (page: number) => void;
+    };
 };
 
 export default function DataTable<T>({
@@ -27,7 +33,8 @@ export default function DataTable<T>({
     pageSize = 5,
     selectedId,
     onSelectionChange,
-    idKey
+    idKey,
+    serverPagination
 }: DataTableProps<T>) {
     const [currentPage, setCurrentPage] = useState(1);
     const safeData: T[] = Array.isArray(data)
@@ -41,12 +48,21 @@ export default function DataTable<T>({
         : Array.isArray((data as unknown as { data?: T[] })?.data)
         ? ((data as unknown as { data: T[] }).data)
         : [];
-    const totalPages = Math.ceil(safeData.length / pageSize);
 
-    const paginatedData = safeData.slice(
-        (currentPage - 1) * pageSize,
-        currentPage * pageSize
-    );
+    const isServerPagination = Boolean(serverPagination);
+    const effectiveTotalPages = isServerPagination
+        ? serverPagination!.totalPages
+        : Math.ceil(safeData.length / pageSize);
+    const effectiveCurrentPage = isServerPagination
+        ? serverPagination!.currentPage
+        : currentPage;
+
+    const paginatedData = isServerPagination
+        ? safeData
+        : safeData.slice(
+            (currentPage - 1) * pageSize,
+            currentPage * pageSize
+        );
 
 
     const handleRowClick = (id: string) => {
@@ -102,13 +118,49 @@ export default function DataTable<T>({
                 </Table>
             </div>
 
-            {/* 2. Simple Pagination */}
-            {totalPages > 1 && (
-                <div className="flex items-center justify-between p-2">
-                    <p className="text-xs text-neutral-400">Page {currentPage} of {totalPages}</p>
-                    <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>Prev</Button>
-                        <Button variant="outline" size="sm" onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}>Next</Button>
+            {/* 2. Pagination */}
+            {effectiveTotalPages > 1 && (
+                <div className="flex items-center justify-between p-3 border-t border-[#ECEFF3] bg-white">
+                    <p className="text-xs text-neutral-500 font-medium">
+                        Page <span className="font-semibold text-neutral-800">{effectiveCurrentPage}</span> of{" "}
+                        <span className="font-semibold text-neutral-800">{effectiveTotalPages}</span>
+                        {isServerPagination && serverPagination?.totalCount !== undefined && (
+                            <span className="ml-2 text-neutral-400">
+                                ({serverPagination.totalCount} total records)
+                            </span>
+                        )}
+                    </p>
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={effectiveCurrentPage <= 1}
+                            onClick={() => {
+                                if (isServerPagination) {
+                                    serverPagination!.onPageChange(Math.max(effectiveCurrentPage - 1, 1));
+                                } else {
+                                    setCurrentPage((prev) => Math.max(prev - 1, 1));
+                                }
+                            }}
+                            className="h-8 px-3 text-xs font-semibold rounded-lg border-gray-200 hover:bg-gray-50 disabled:opacity-40"
+                        >
+                            Previous
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={effectiveCurrentPage >= effectiveTotalPages}
+                            onClick={() => {
+                                if (isServerPagination) {
+                                    serverPagination!.onPageChange(Math.min(effectiveCurrentPage + 1, effectiveTotalPages));
+                                } else {
+                                    setCurrentPage((prev) => Math.min(prev + 1, effectiveTotalPages));
+                                }
+                            }}
+                            className="h-8 px-3 text-xs font-semibold rounded-lg border-gray-200 hover:bg-gray-50 disabled:opacity-40"
+                        >
+                            Next
+                        </Button>
                     </div>
                 </div>
             )}

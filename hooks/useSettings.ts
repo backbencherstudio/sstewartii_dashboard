@@ -89,17 +89,38 @@ export const useUpdateUser = () => {
 
 //   audit logs 
 
+import { AuditLogQueryParams } from "@/types/settings.types";
 
-export const useAuditLogs = () => {
-
+export const useAuditLogs = (params?: AuditLogQueryParams) => {
     const getAuditLogsList = useQuery({
-        queryKey: ["audit-logs"],
-        queryFn: () => settingsService.getAuditLogs(),
+        queryKey: ["audit-logs", params],
+        queryFn: () => settingsService.getAuditLogs(params),
     });
 
     return {
         getAuditLogsList,
     };
+};
+
+export const useAuditLogStaff = () => {
+    return useQuery({
+        queryKey: ["audit-logs-staff"],
+        queryFn: () => settingsService.getAuditLogStaff(),
+    });
+};
+
+export const useAuditLogActions = () => {
+    return useQuery({
+        queryKey: ["audit-logs-actions"],
+        queryFn: () => settingsService.getAuditLogActions(),
+    });
+};
+
+export const useAuditLogSummary = () => {
+    return useQuery({
+        queryKey: ["audit-logs-summary"],
+        queryFn: () => settingsService.getAuditLogSummary(),
+    });
 };
 
 export const useAuditLog = (id: string) => {
